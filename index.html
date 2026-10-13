@@ -1,28 +1,28 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="uk">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Quiet Room — принты для дома и души</title>
-<meta name="description" content="The Quiet Room — Тихая Комната. Принты на одежду и предметы дома: уют, медленная мода, тишина, которую хочется носить.">
+<title>The Quiet Room — принти для дому й душі</title>
+<meta name="description" content="The Quiet Room — Тиха Кімната. Принти на одяг і предмети дому: затишок, повільна мода, тиша, яку хочеться носити.">
 <meta property="og:title" content="The Quiet Room">
-<meta property="og:description" content="Тихая комната, в которой висят ваши работы. Принты на одежду и дом.">
+<meta property="og:description" content="Тиха кімната, в якій висять ваші роботи. Принти на одяг і дім.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://eugene55555.github.io/the-quiet-room/">
 <meta property="og:image" content="https://eugene55555.github.io/the-quiet-room/assets/logo.svg">
 <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500;1,600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 
-<div class="ticker" id="top">Скоро открытие коллекции — первые принты уже в работе</div>
+<div class="promo" data-i18n="promo"></div>
 
 <header class="site-header">
   <div class="container header-inner">
-    <a class="brand" href="index.html#top" aria-label="The Quiet Room — на главную">
+    <a class="brand" href="index.html" aria-label="The Quiet Room — на головну">
       <svg viewBox="0 0 200 240" class="brand-mark" aria-hidden="true">
         <path class="arch" d="M 40 195 A 60 60 0 0 1 160 195"/>
         <path class="moon" d="M 100 84 A 32 32 0 1 0 100 148 A 24 24 0 1 1 100 84 Z"/>
@@ -31,118 +31,172 @@
       </svg>
       <span class="wordmark">The <em>Quiet</em> Room</span>
     </a>
-    <nav class="site-nav" id="site-nav" aria-label="Основная навигация">
-      <a href="collection.html">Коллекция</a>
-      <a href="about.html">О бренде</a>
-      <a href="contact.html">Контакты</a>
-    </nav>
-    <button class="burger" id="burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-nav">
+
+    <form class="search" id="search-form" role="search">
+      <input type="search" data-i18n-ph="search_ph" aria-label="Пошук дизайну">
+      <button type="submit" aria-label="Шукати">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      </button>
+    </form>
+
+    <div class="header-tools">
+      <div class="lang-switch">
+        <button class="lang-btn" data-lang="uk">UA</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
+      <button class="cart-btn" id="cart-btn">
+        <svg viewBox="0 0 24 24"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+        <span class="cart-label" data-i18n="cart"></span>
+        <span class="cart-count">0</span>
+      </button>
+    </div>
+
+    <button class="burger" id="burger" aria-label="Відкрити меню" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
   </div>
+
+  <nav class="site-nav-mobile" id="site-nav-mobile" aria-label="Мобільне меню">
+    <a href="collection.html" data-i18n="nav_collection"></a>
+    <a href="about.html" data-i18n="nav_about"></a>
+    <a href="contact.html" data-i18n="nav_contact"></a>
+    <div class="lang-row">
+      <button class="lang-btn" data-lang="uk">UA</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+  </nav>
 </header>
+
+<nav class="nav-strip" aria-label="Основна навігація">
+  <div class="container">
+    <a href="collection.html" data-i18n="nav_collection"></a>
+    <a href="about.html" data-i18n="nav_about"></a>
+    <a href="contact.html" data-i18n="nav_contact"></a>
+  </div>
+</nav>
 
 <main>
 
-  <!-- Hero -->
+  <!-- Hero: промо-баннер -->
   <section class="hero">
     <div class="container hero-inner">
-      <div class="hero-copy">
-        <p class="eyebrow">Принты · Одежда · Дом</p>
-        <h1>Тихая комната,<br>в которой висят<br>ваши работы</h1>
-        <p class="hero-sub">The Quiet Room — принты про уют и тишину: спокойные образы, тёплая палитра, вещи, которые хочется носить, рассматривать и не снимать.</p>
+      <div>
+        <span class="hero-eyebrow" data-i18n="hero_eyebrow"></span>
+        <h1 data-i18n-html="hero_h1"></h1>
+        <p class="hero-sub" data-i18n="hero_sub"></p>
         <div class="hero-actions">
-          <a class="btn terra" href="collection.html">Смотреть коллекцию</a>
-          <a class="btn ghost" href="about.html">О бренде</a>
+          <a class="btn btn-black" href="collection.html" data-i18n="cta_shop"></a>
+          <a class="btn btn-ghost" href="about.html" data-i18n="cta_about"></a>
         </div>
       </div>
       <div class="hero-visual">
-        <img src="assets/img/tee-cream.svg" alt="Кремовая футболка The Quiet Room с принтом-полумесяцем" width="400" height="500">
+        <img src="assets/img/tee-cream.svg" alt="Кремова футболка The Quiet Room із принтом-півмісяцем" width="400" height="500">
       </div>
     </div>
   </section>
 
-  <!-- Коллекция -->
-  <section id="collection" class="section section-alt">
+  <!-- Категорії -->
+  <section class="cats">
     <div class="container">
-      <p class="eyebrow">Коллекция 01</p>
-      <h2 class="section-title">Первые принты — уже скоро</h2>
-      <p class="section-lead">Четыре знака «тихой комнаты»: полумесяц, арка, ночник и луна. Каждый — маленькая дверь в спокойствие.</p>
+      <p class="cats-title" data-i18n="cats_title"></p>
+      <div class="cats-list">
+        <a class="cat-item" href="collection.html#shirts">
+          <span class="cat-circle">
+            <svg viewBox="0 0 200 240"><path class="moon" d="M 100 84 A 32 32 0 1 0 100 148 A 24 24 0 1 1 100 84 Z"/><path class="star" d="M 130 88 L 133.5 96 L 142 99.5 L 133.5 103 L 130 111 L 126.5 103 L 118 99.5 L 126.5 96 Z"/></svg>
+          </span>
+          <span class="cat-label" data-i18n="cat_tshirts"></span>
+        </a>
+        <a class="cat-item" href="collection.html#hoodies">
+          <span class="cat-circle">
+            <svg viewBox="0 0 200 240"><path class="arch" d="M 40 195 A 60 60 0 0 1 160 195"/><circle class="light" cx="100" cy="195" r="5.5"/></svg>
+          </span>
+          <span class="cat-label" data-i18n="cat_hoodies"></span>
+        </a>
+        <a class="cat-item" href="collection.html#mugs">
+          <span class="cat-circle">
+            <svg viewBox="0 0 200 240"><path class="moon" d="M 100 84 A 32 32 0 1 0 100 148 A 24 24 0 1 1 100 84 Z"/></svg>
+          </span>
+          <span class="cat-label" data-i18n="cat_mugs"></span>
+        </a>
+        <a class="cat-item" href="collection.html">
+          <span class="cat-circle">
+            <svg viewBox="0 0 200 240"><path class="arch" d="M 40 195 A 60 60 0 0 1 160 195"/><path class="moon" d="M 100 84 A 32 32 0 1 0 100 148 A 24 24 0 1 1 100 84 Z"/><path class="star" d="M 130 88 L 133.5 96 L 142 99.5 L 133.5 103 L 130 111 L 126.5 103 L 118 99.5 L 126.5 96 Z"/><circle class="light" cx="100" cy="195" r="5.5"/></svg>
+          </span>
+          <span class="cat-label" data-i18n="cat_all"></span>
+        </a>
+      </div>
+    </div>
+  </section>
 
+  <!-- Хіти бренду -->
+  <section class="section section-gray" id="collection">
+    <div class="container">
+      <div class="sec-head">
+        <h2 class="sec-title" data-i18n="best_title"></h2>
+        <a class="sec-link" href="collection.html" data-i18n="cat_all">→</a>
+      </div>
+      <p style="color:var(--gray); font-size:14px; margin:-10px 0 22px" data-i18n="best_sub"></p>
       <div class="grid">
-        <a class="card" href="product.html?p=moon">
-          <div class="card-media"><img src="assets/img/tee-cream.svg" alt="Кремовая футболка с принтом-полумесяцем" width="400" height="500"></div>
+
+        <a class="card" href="product.html?p=moon" data-name="Півмісяць Crescent" data-tag="Футболка T-Shirt" data-cat="clothes" data-price="24.90">
+          <div class="card-media">
+            <img src="assets/img/tee-cream.svg" alt="Кремова футболка з принтом-півмісяцем" width="400" height="500">
+            <span class="badge" data-i18n="card_soon"></span>
+          </div>
           <div class="card-body">
-            <p class="card-tag">Футболка · Хлопок</p>
-            <h3 class="card-title">Полумесяц</h3>
-            <p class="card-desc">Луна и звезда — принт для тех, кто любит тишину.</p>
-            <p class="card-price"><span class="from">от</span> €24,90</p>
-            <span class="badge">Скоро</span>
+            <p class="card-tag" data-i18n="p_moon_tag"></p>
+            <h3 class="card-title" data-i18n="p_moon_name"></h3>
+            <p class="card-by" data-i18n="card_by"></p>
+            <p class="card-price"><span class="from" data-i18n="card_from"></span> €24,90</p>
           </div>
         </a>
-        <a class="card" href="product.html?p=arch">
-          <div class="card-media"><img src="assets/img/tee-white.svg" alt="Белая футболка с принтом-аркой" width="400" height="500"></div>
+
+        <a class="card" href="product.html?p=arch" data-name="Арка Arch" data-tag="Футболка T-Shirt" data-cat="clothes" data-price="24.90">
+          <div class="card-media">
+            <img src="assets/img/tee-white.svg" alt="Біла футболка з принтом-аркою" width="400" height="500">
+            <span class="badge" data-i18n="card_soon"></span>
+          </div>
           <div class="card-body">
-            <p class="card-tag">Футболка · Хлопок</p>
-            <h3 class="card-title">Арка</h3>
-            <p class="card-desc">Дверной проём со светом на пороге — приглашение внутрь.</p>
-            <p class="card-price"><span class="from">от</span> €24,90</p>
-            <span class="badge">Скоро</span>
+            <p class="card-tag" data-i18n="p_arch_tag"></p>
+            <h3 class="card-title" data-i18n="p_arch_name"></h3>
+            <p class="card-by" data-i18n="card_by"></p>
+            <p class="card-price"><span class="from" data-i18n="card_from"></span> €24,90</p>
           </div>
         </a>
-        <a class="card" href="product.html?p=night">
-          <div class="card-media dark"><img src="assets/img/hoodie-dark.svg" alt="Тёмное худи с принтом «тихая комната»" width="400" height="500"></div>
+
+        <a class="card" href="product.html?p=night" data-name="Нічник Nightlight" data-tag="Худі Hoodie" data-cat="clothes" data-price="39.90">
+          <div class="card-media dark">
+            <img src="assets/img/hoodie-dark.svg" alt="Темне худі з принтом «тиха кімната»" width="400" height="500">
+            <span class="badge" data-i18n="card_soon"></span>
+          </div>
           <div class="card-body">
-            <p class="card-tag">Худи · Флис</p>
-            <h3 class="card-title">Ночник</h3>
-            <p class="card-desc">Полный знак комнаты — худи для долгих вечеров.</p>
-            <p class="card-price"><span class="from">от</span> €39,90</p>
-            <span class="badge">Скоро</span>
+            <p class="card-tag" data-i18n="p_night_tag"></p>
+            <h3 class="card-title" data-i18n="p_night_name"></h3>
+            <p class="card-by" data-i18n="card_by"></p>
+            <p class="card-price"><span class="from" data-i18n="card_from"></span> €39,90</p>
           </div>
         </a>
-        <a class="card" href="product.html?p=mug">
-          <div class="card-media"><img src="assets/img/mug.svg" alt="Кружка с принтом-полумесяцем" width="400" height="500"></div>
+
+        <a class="card" href="product.html?p=mug" data-name="Місяць Moon" data-tag="Кухоль Mug" data-cat="home" data-price="16.90">
+          <div class="card-media">
+            <img src="assets/img/mug.svg" alt="Кухоль з принтом-півмісяцем" width="400" height="500">
+            <span class="badge" data-i18n="card_soon"></span>
+          </div>
           <div class="card-body">
-            <p class="card-tag">Кружка · Керамика</p>
-            <h3 class="card-title">Луна</h3>
-            <p class="card-desc">Кружка с полумесяцем — утро начинается с тишины.</p>
-            <p class="card-price"><span class="from">от</span> €16,90</p>
-            <span class="badge">Скоро</span>
+            <p class="card-tag" data-i18n="p_mug_tag"></p>
+            <h3 class="card-title" data-i18n="p_mug_name"></h3>
+            <p class="card-by" data-i18n="card_by"></p>
+            <p class="card-price"><span class="from" data-i18n="card_from"></span> €16,90</p>
           </div>
         </a>
+
       </div>
     </div>
   </section>
 
-  <!-- Три обещания -->
-  <section id="why" class="section section-dark">
-    <div class="container">
-      <p class="eyebrow">Почему мы</p>
-      <h2 class="section-title">Три обещания</h2>
-      <p class="section-lead">Мы строим бренд медленно и честно — как строится дом, в который хочется возвращаться.</p>
-      <div class="pillars">
-        <div class="pillar">
-          <span class="pillar-num">01</span>
-          <h3>Печать под заказ</h3>
-          <p>Каждое изделие печатается после заказа — никаких складов и залежавшихся партий.</p>
-        </div>
-        <div class="pillar">
-          <span class="pillar-num">02</span>
-          <h3>Принт, который живёт</h3>
-          <p>Проверяем материалы и печать на образцах, чтобы рисунок не боялся стирок.</p>
-        </div>
-        <div class="pillar">
-          <span class="pillar-num">03</span>
-          <h3>Каждая вещь — история</h3>
-          <p>Принты про уют, дом и тишину — образы, которые работают на любой ткани.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- О бренде -->
-  <section id="about" class="section">
-    <div class="container about-inner">
+  <!-- Про бренд (анонс) -->
+  <section class="section">
+    <div class="container about-grid">
       <div class="about-mark">
         <svg viewBox="0 0 200 240" aria-hidden="true">
           <path class="arch" d="M 40 195 A 60 60 0 0 1 160 195"/>
@@ -151,25 +205,13 @@
           <circle class="light" cx="100" cy="195" r="5.5"/>
         </svg>
       </div>
-      <div class="about-copy">
-        <p class="eyebrow">О бренде</p>
-        <h2 class="section-title">Что такое <em>The Quiet Room</em></h2>
-        <p class="about-lead">Тихая Комната — это метафора домашнего уюта, в котором висят ваши работы.</p>
-        <p>Место, где можно остановиться, выдохнуть и рассмотреть детали. Мы делаем принты для одежды, которая со временем становится любимой: спокойные образы, тёплая палитра, вещи для дома, прогулок и тихих вечеров. Дальше — кружки и другие предметы для той самой комнаты.</p>
-        <p style="margin-top:18px"><a class="btn terra" href="about.html">Узнать больше</a></p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Как купить -->
-  <section id="how" class="section section-alt">
-    <div class="container">
-      <p class="eyebrow">Как это работает</p>
-      <h2 class="section-title">Три простых шага</h2>
-      <div class="steps">
-        <div class="step"><span class="step-num">1</span><h3>Выбираете принт</h3><p>Находите «свой» образ в коллекции.</p></div>
-        <div class="step"><span class="step-num">2</span><h3>Заказ на Etsy</h3><p>Кнопка ведёт в наш магазин, где оформляется заказ и оплата.</p></div>
-        <div class="step"><span class="step-num">3</span><h3>Печать и доставка</h3><p>Изделие печатается под заказ и едет к вам.</p></div>
+      <div>
+        <p class="about-lead" data-i18n="about_lead"></p>
+        <div class="about-text">
+          <p data-i18n="about_p1"></p>
+          <p data-i18n="about_p2"></p>
+        </div>
+        <p style="margin-top:6px"><a class="btn btn-black" href="about.html" data-i18n="cta_about">→</a></p>
       </div>
     </div>
   </section>
@@ -177,40 +219,44 @@
 </main>
 
 <footer class="site-footer">
-  <div class="container footer-inner">
-    <svg viewBox="0 0 200 240" class="footer-mark" aria-hidden="true">
-      <path class="arch" d="M 40 195 A 60 60 0 0 1 160 195"/>
-      <path class="moon" d="M 100 84 A 32 32 0 1 0 100 148 A 24 24 0 1 1 100 84 Z"/>
-      <path class="star" d="M 130 88 L 133.5 96 L 142 99.5 L 133.5 103 L 130 111 L 126.5 103 L 118 99.5 L 126.5 96 Z"/>
-      <circle class="light" cx="100" cy="195" r="5.5"/>
-    </svg>
-    <p class="footer-brand">The <em>Quiet</em> Room</p>
-    <p class="footer-tag">Принты · Дом · Медленная мода</p>
-    <nav class="footer-nav" aria-label="Навигация в подвале">
-      <a href="collection.html">Коллекция</a>
-      <a href="about.html">О бренде</a>
-      <a href="contact.html">Контакты</a>
-    </nav>
-    <p class="footer-note">© 2026 The Quiet Room</p>
+  <div class="container footer-grid">
+    <div>
+      <div class="footer-brand">
+        <svg viewBox="0 0 200 240" aria-hidden="true">
+          <path class="arch" d="M 40 195 A 60 60 0 0 1 160 195"/>
+          <path class="moon" d="M 100 84 A 32 32 0 1 0 100 148 A 24 24 0 1 1 100 84 Z"/>
+          <path class="star" d="M 130 88 L 133.5 96 L 142 99.5 L 133.5 103 L 130 111 L 126.5 103 L 118 99.5 L 126.5 96 Z"/>
+          <circle class="light" cx="100" cy="195" r="5.5"/>
+        </svg>
+        <span>The <em>Quiet</em> Room</span>
+      </div>
+      <p class="footer-tag" data-i18n="f_tag"></p>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="footer_shop"></h4>
+      <a href="collection.html" data-i18n="f_col"></a>
+      <a href="contact.html" data-i18n="f_ship"></a>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="footer_about"></h4>
+      <a href="about.html" data-i18n="f_about"></a>
+      <a href="contact.html" data-i18n="f_contact"></a>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="footer_support"></h4>
+      <a href="contact.html" data-i18n="f_returns"></a>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <span data-i18n="f_rights"></span>
+    <div class="lang-switch">
+      <button class="lang-btn" data-lang="uk">UA</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
   </div>
 </footer>
 
-<script>
-  var burger = document.getElementById('burger');
-  var nav = document.getElementById('site-nav');
-  burger.addEventListener('click', function () {
-    var open = nav.classList.toggle('open');
-    burger.classList.toggle('open', open);
-    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
-  });
-  nav.addEventListener('click', function (e) {
-    if (e.target.tagName === 'A' && nav.classList.contains('open')) {
-      nav.classList.remove('open');
-      burger.classList.remove('open');
-      burger.setAttribute('aria-expanded', 'false');
-    }
-  });
-</script>
-
+<script src="assets/i18n.js"></script>
+<script src="assets/main.js"></script>
 </body>
 </html>

@@ -1,23 +1,23 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="uk">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Контакты — The Quiet Room</title>
-<meta name="description" content="Связаться с The Quiet Room: вопросы о коллекции, открытии магазина и доставке.">
+<title>Контакти — The Quiet Room</title>
+<meta name="description" content="Зв'язатися з The Quiet Room: питання про колекцію, відкриття магазину та доставку.">
 <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500;1,600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 
-<div class="ticker">Скоро открытие коллекции — первые принты уже в работе</div>
+<div class="promo" data-i18n="promo"></div>
 
 <header class="site-header">
   <div class="container header-inner">
-    <a class="brand" href="index.html" aria-label="The Quiet Room — на главную">
+    <a class="brand" href="index.html" aria-label="The Quiet Room — на головну">
       <svg viewBox="0 0 200 240" class="brand-mark" aria-hidden="true">
         <path class="arch" d="M 40 195 A 60 60 0 0 1 160 195"/>
         <path class="moon" d="M 100 84 A 32 32 0 1 0 100 148 A 24 24 0 1 1 100 84 Z"/>
@@ -26,62 +26,83 @@
       </svg>
       <span class="wordmark">The <em>Quiet</em> Room</span>
     </a>
-    <nav class="site-nav" id="site-nav" aria-label="Основная навигация">
-      <a href="collection.html">Коллекция</a>
-      <a href="about.html">О бренде</a>
-      <a href="contact.html" class="active">Контакты</a>
-    </nav>
-    <button class="burger" id="burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-nav">
+
+    <form class="search" id="search-form" role="search">
+      <input type="search" data-i18n-ph="search_ph" aria-label="Пошук дизайну">
+      <button type="submit" aria-label="Шукати">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      </button>
+    </form>
+
+    <div class="header-tools">
+      <div class="lang-switch">
+        <button class="lang-btn" data-lang="uk">UA</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
+      <button class="cart-btn" id="cart-btn">
+        <svg viewBox="0 0 24 24"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+        <span class="cart-label" data-i18n="cart"></span>
+        <span class="cart-count">0</span>
+      </button>
+    </div>
+
+    <button class="burger" id="burger" aria-label="Відкрити меню" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
   </div>
+
+  <nav class="site-nav-mobile" id="site-nav-mobile" aria-label="Мобільне меню">
+    <a href="collection.html" data-i18n="nav_collection"></a>
+    <a href="about.html" data-i18n="nav_about"></a>
+    <a href="contact.html" data-i18n="nav_contact"></a>
+    <div class="lang-row">
+      <button class="lang-btn" data-lang="uk">UA</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+  </nav>
 </header>
+
+<nav class="nav-strip" aria-label="Основна навігація">
+  <div class="container">
+    <a href="collection.html" data-i18n="nav_collection"></a>
+    <a href="about.html" data-i18n="nav_about"></a>
+    <a href="contact.html" class="active" data-i18n="nav_contact"></a>
+  </div>
+</nav>
 
 <main>
 
   <div class="page-head">
     <div class="container">
-      <p class="eyebrow">Контакты</p>
-      <h1>Напишите нам</h1>
-      <p>Вопросы о коллекции, открытии магазина или совместном принте — мы читаем всё.</p>
+      <h1 data-i18n="contact_h1"></h1>
+      <p class="sub" data-i18n="contact_sub"></p>
     </div>
   </div>
 
-  <section class="section" style="padding-top:0">
+  <section class="section" style="padding-top:34px">
     <div class="container contact-grid">
 
       <form class="contact-form" id="contact-form">
-        <label for="f-name">Имя</label>
-        <input id="f-name" name="name" type="text" placeholder="Как к вам обращаться" autocomplete="name">
-        <label for="f-email">Email</label>
-        <input id="f-email" name="email" type="email" placeholder="you@example.com" autocomplete="email">
-        <label for="f-msg">Сообщение</label>
-        <textarea id="f-msg" name="message" rows="5" placeholder="Что хочется сказать?"></textarea>
-        <button class="btn terra" type="submit">Отправить</button>
-        <p class="form-note">Форма подключится вместе с магазином — пока это кнопка-заглушка, чтобы ничего не терялось.</p>
-        <p class="form-status" id="form-status">Спасибо! Как только откроемся — свяжемся с вами 😊</p>
+        <label for="f-name" data-i18n="f_name"></label>
+        <input id="f-name" name="name" type="text" autocomplete="name">
+        <label for="f-email" data-i18n="f_email"></label>
+        <input id="f-email" name="email" type="email" autocomplete="email">
+        <label for="f-msg" data-i18n="f_msg"></label>
+        <textarea id="f-msg" name="message" rows="5"></textarea>
+        <button class="btn btn-black" type="submit" data-i18n="f_send"></button>
+        <p class="form-note" data-i18n="f_note"></p>
+        <p class="form-status" id="form-status" data-i18n="f_ok"></p>
       </form>
 
       <div>
-        <p class="eyebrow">Вопросы и ответы</p>
-        <h2 class="section-title">FAQ</h2>
+        <div class="sec-head">
+          <h2 class="sec-title" data-i18n="faq_title"></h2>
+        </div>
         <div class="faq">
-          <div class="faq-item">
-            <h3>Когда откроется магазин?</h3>
-            <p>Готовим первую коллекцию: выбираем поставщика печати и шьём образцы. Дату объявим в топ-полоске сайта.</p>
-          </div>
-          <div class="faq-item">
-            <h3>Где покупать?</h3>
-            <p>Планируем Etsy — там будет оформление заказов и оплата. Ссылка появится на сайте и в карточках товаров.</p>
-          </div>
-          <div class="faq-item">
-            <h3>Какие принты будут?</h3>
-            <p>Наши знаки тихой комнаты: полумесяц, арка, ночник и луна. Потом расширимся — идеи уже есть.</p>
-          </div>
-          <div class="faq-item">
-            <h3>Как с доставкой?</h3>
-            <p>Условия зависят от поставщика и страны. Опубликуем точные цены и сроки до открытия магазина.</p>
-          </div>
+          <div class="faq-item"><h3 data-i18n="faq1_q"></h3><p data-i18n="faq1_a"></p></div>
+          <div class="faq-item"><h3 data-i18n="faq2_q"></h3><p data-i18n="faq2_a"></p></div>
+          <div class="faq-item"><h3 data-i18n="faq3_q"></h3><p data-i18n="faq3_a"></p></div>
+          <div class="faq-item"><h3 data-i18n="faq4_q"></h3><p data-i18n="faq4_a"></p></div>
         </div>
       </div>
 
@@ -91,40 +112,44 @@
 </main>
 
 <footer class="site-footer">
-  <div class="container footer-inner">
-    <svg viewBox="0 0 200 240" class="footer-mark" aria-hidden="true">
-      <path class="arch" d="M 40 195 A 60 60 0 0 1 160 195"/>
-      <path class="moon" d="M 100 84 A 32 32 0 1 0 100 148 A 24 24 0 1 1 100 84 Z"/>
-      <path class="star" d="M 130 88 L 133.5 96 L 142 99.5 L 133.5 103 L 130 111 L 126.5 103 L 118 99.5 L 126.5 96 Z"/>
-      <circle class="light" cx="100" cy="195" r="5.5"/>
-    </svg>
-    <p class="footer-brand">The <em>Quiet</em> Room</p>
-    <p class="footer-tag">Принты · Дом · Медленная мода</p>
-    <nav class="footer-nav" aria-label="Навигация в подвале">
-      <a href="collection.html">Коллекция</a>
-      <a href="about.html">О бренде</a>
-      <a href="contact.html">Контакты</a>
-    </nav>
-    <p class="footer-note">© 2026 The Quiet Room</p>
+  <div class="container footer-grid">
+    <div>
+      <div class="footer-brand">
+        <svg viewBox="0 0 200 240" aria-hidden="true">
+          <path class="arch" d="M 40 195 A 60 60 0 0 1 160 195"/>
+          <path class="moon" d="M 100 84 A 32 32 0 1 0 100 148 A 24 24 0 1 1 100 84 Z"/>
+          <path class="star" d="M 130 88 L 133.5 96 L 142 99.5 L 133.5 103 L 130 111 L 126.5 103 L 118 99.5 L 126.5 96 Z"/>
+          <circle class="light" cx="100" cy="195" r="5.5"/>
+        </svg>
+        <span>The <em>Quiet</em> Room</span>
+      </div>
+      <p class="footer-tag" data-i18n="f_tag"></p>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="footer_shop"></h4>
+      <a href="collection.html" data-i18n="f_col"></a>
+      <a href="contact.html" data-i18n="f_ship"></a>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="footer_about"></h4>
+      <a href="about.html" data-i18n="f_about"></a>
+      <a href="contact.html" data-i18n="f_contact"></a>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="footer_support"></h4>
+      <a href="contact.html" data-i18n="f_returns"></a>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <span data-i18n="f_rights"></span>
+    <div class="lang-switch">
+      <button class="lang-btn" data-lang="uk">UA</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
   </div>
 </footer>
 
-<script>
-  var burger = document.getElementById('burger');
-  var nav = document.getElementById('site-nav');
-  burger.addEventListener('click', function () {
-    var open = nav.classList.toggle('open');
-    burger.classList.toggle('open', open);
-    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
-  });
-
-  var form = document.getElementById('contact-form');
-  var statusEl = document.getElementById('form-status');
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    statusEl.classList.add('show');
-  });
-</script>
-
+<script src="assets/i18n.js"></script>
+<script src="assets/main.js"></script>
 </body>
 </html>

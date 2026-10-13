@@ -3,6 +3,7 @@ import { structureTool } from 'sanity/structure'
 import { visionTool } from '@sanity/vision'
 import { product } from './schemas/product'
 import { siteSettings, wearCard, faqItem } from './schemas/siteSettings'
+import { sectionBlock, pairItem } from './schemas/sectionBlock'
 
 export default defineConfig({
   name: 'quiet-room',
@@ -13,6 +14,6 @@ export default defineConfig({
   studioHost: 'quiet-room',
   plugins: [structureTool(), visionTool()],
   schema: {
-    types: [siteSettings, product, wearCard, faqItem]
+    types: [siteSettings, product, wearCard, faqItem, sectionBlock, pairItem]
   }
 })

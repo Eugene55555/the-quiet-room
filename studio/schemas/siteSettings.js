@@ -55,6 +55,11 @@ export const siteSettings = {
       description: 'Картки секції «Куди друкуємо» на головній. Іконки задані кодом — тут тільки тексти.'
     },
     {
+      name: 'sections', title: 'Блоки головної сторінки (порядок — перетягуванням)',
+      type: 'array', of: [{ type: 'sectionBlock' }],
+      description: 'Повний конструктор головної: додавай блоки, переставляй, змінюй типи. Зберегти → Publish, і головна перебудується.'
+    },
+    {
       name: 'faqs', title: 'Питання-відповіді (FAQ)', type: 'array', of: [{ type: 'faqItem' }],
       description: 'Блок FAQ на головній сторінці.'
     }

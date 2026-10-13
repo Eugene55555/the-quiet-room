@@ -32,7 +32,7 @@
     var base = 'https://' + pid + '.apicdn.sanity.io/v2023-01-01/data/query/production?query=';
     var enc = function (q) { return encodeURIComponent(q); };
     var prodQ = '*[_type=="product" && visible != false]|order(order asc){_id,name_uk,name_en,tag_uk,tag_en,desc_uk,desc_en,price,img_url,"img":image.asset->url,category,blacksea_link,order}';
-    var setQ = '*[_type=="siteSettings"][0]{brand,banner_uk,banner_en,discount_note,color_wine,color_wine_deep,color_cream,color_gold,font_pair,social_instagram,social_tiktok,social_facebook,social_telegram,wear[]{title_uk,title_en,desc_uk,desc_en},faqs[]{q_uk,q_en,a_uk,a_en}}';
+    var setQ = '*[_type=="siteSettings"][0]{brand,banner_uk,banner_en,discount_note,color_wine,color_wine_deep,color_cream,color_gold,font_pair,social_instagram,social_tiktok,social_facebook,social_telegram,wear[]{title_uk,title_en,desc_uk,desc_en},faqs[]{q_uk,q_en,a_uk,a_en},sections[]{variant,bg,title_uk,title_en,sub_uk,sub_en,body_uk,body_en,items[]{t_uk,t_en,d_uk,d_en},image,btn_label_uk,btn_label_en,btn_link}}';
     return Promise.all([
       fetch(base + enc(prodQ)).then(function (r) { return r.ok ? r.json() : null; }),
       fetch(base + enc(setQ)).then(function (r) { return r.ok ? r.json() : null; })
@@ -62,6 +62,7 @@
         cfg.social = { instagram: set.social_instagram || '', tiktok: set.social_tiktok || '', facebook: set.social_facebook || '', telegram: set.social_telegram || '' };
         cfg.wear = set.wear || null;
         cfg.faqs = set.faqs || null;
+        cfg.sections = set.sections || null;
       }
       return cfg;
     }).catch(function () { return null; });
@@ -77,8 +78,156 @@
     return window.TQR_I18N ? TQR_I18N.detect() : 'uk';
   }
 
+  /* ---- Блочний конструктор головної (Sanity sections) ---- */
+  var TRUST_ICONS = [
+    '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 20h16"/></svg>',
+    '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="1"/><rect x="13.5" y="3.5" width="7" height="7" rx="1"/><rect x="3.5" y="13.5" width="7" height="7" rx="1"/><rect x="13.5" y="13.5" width="7" height="7" rx="1"/></svg>',
+    '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10.5 12h6M10.5 16h4"/></svg>',
+    '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><path d="M6 18H4v-6h16v6h-2"/><path d="M6 14h12v7H6z"/></svg>'
+  ];
+  function ptToHtml(blocks, L) {
+    if (!Array.isArray(blocks)) return '';
+    var pid = (CFG.sanity && CFG.sanity.id) || 'ns9lwdrh';
+    var esc = function (s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;'); };
+    var out = '', list = null;
+    blocks.forEach(function (b) {
+      if (b._type === 'image') {
+        var m = (b.asset && b.asset._ref || '').match(/^image-(.+)-(\d+)x(\d+)-([a-z]+)$/);
+        if (m) out += '<img loading="lazy" src="https://cdn.sanity.io/images/' + pid + '/production/' + m[1] + '-' + m[2] + 'x' + m[3] + '.' + m[4] + '" alt="" style="max-width:420px;height:auto;border-radius:14px;margin:10px 0">';
+        return;
+      }
+      var style = b.style || 'normal';
+      var text = (b.children || []).map(function (c) {
+        var t = esc(c.text || '');
+        if (c.marks) {
+          if (c.marks.indexOf('strong') !== -1) t = '<b>' + t + '</b>';
+          if (c.marks.indexOf('em') !== -1) t = '<i>' + t + '</i>';
+          c.marks.forEach(function (mk) {
+            if (mk && mk.indexOf('link') === 0 && b.markDefs) {
+              var def = b.markDefs.filter(function (d) { return d._key === mk; })[0];
+              if (def && def.href) t = '<a href="' + esc(def.href) + '" target="_blank" rel="noopener">' + t + '</a>';
+            }
+          });
+        }
+        return t;
+      }).join('');
+      if (b.listItem === 'bullet') {
+        if (list === null) { list = '<ul>'; }
+        list += '<li>' + text + '</li>';
+        return;
+      }
+      if (list !== null) { out += list + '</ul>'; list = null; }
+      if (style === 'h2') out += '<h2>' + text + '</h2>';
+      else if (style === 'h3') out += '<h3>' + text + '</h3>';
+      else if (style === 'blockquote') out += '<blockquote>' + text + '</blockquote>';
+      else out += '<p>' + text + '</p>';
+    });
+    if (list !== null) out += list + '</ul>';
+    return out;
+  }
+  function secBtn(s, L, cls) {
+    if (!s.btn_label_uk && !s.btn_label_en && !s.btn_link) return '';
+    var label = (L === 'uk' ? s.btn_label_uk : s.btn_label_en) || t('buy_on');
+    return '<a class="btn ' + (cls || 'btn-wine') + '" href="' + (s.btn_link || 'https://6820536600065.blacksea.in.ua/l/eaq') + '" target="_blank" rel="noopener">' + label + '</a>';
+  }
+  function buildSection(s, i, L) {
+    var dark = s.bg === 'dark' ? ' section-dark grain' : '';
+    var esc = function (x) { return String(x == null ? '' : x).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;'); };
+    var T = function (uk, en) { return esc(L === 'uk' ? uk : en); };
+    var title = T(s.title_uk, s.title_en);
+    var sub = T(s.sub_uk, s.sub_en);
+    var v = s.variant;
+    if (v === 'hero') {
+      var h1 = (L === 'uk' ? s.title_uk : s.title_en) || t('hero_h1');
+      return '<section class="hero grain" id="top"><div class="hero-bg"><div class="hero-glow-gold"></div><div class="hero-glow-rose"></div><div class="hero-outline">QUIET ROOM</div></div><div class="hero-moon" aria-hidden="true"></div>'
+        + '<div class="container hero-inner"><div class="reveal in"><p class="hero-eyebrow">' + esc('Prints · Apparel · Home') + '</p>'
+        + '<h1>' + esc(String(h1).replace(/<br\s*\/?>/g, ' ')) + '</h1>'
+        + '<p class="hero-sub">' + sub + '</p>'
+        + '<div class="hero-actions"><a class="btn btn-gold btn-shine" href="https://6820536600065.blacksea.in.ua/l/eaq" target="_blank" rel="noopener">' + esc(t('buy_on')) + '</a>'
+        + '<a class="btn btn-ghost" href="collection.html">' + esc(t('cta_shop')) + '</a></div></div>'
+        + '<div class="hero-visual reveal in" data-delay="2"><img src="assets/img/tee-cream.svg" alt="The Quiet Room print" width="400" height="500"><span class="hero-files">' + esc(t('file_note')) + '</span></div></div></section>';
+    }
+    if (v === 'trust') {
+      var items = s.items && s.items.length ? s.items : [1, 2, 3, 4].map(function (n) { return { t_uk: t('trust_' + n + '_t'), t_en: t('trust_' + n + '_t'), d_uk: t('trust_' + n + '_d'), d_en: t('trust_' + n + '_d') }; });
+      var html = '<section class="section section-dark grain" style="padding:52px 0"><div class="container" style="position:relative;z-index:1"><div class="trust-bar">';
+      items.forEach(function (it, k) {
+        html += '<div class="trust-item reveal"' + (k > 0 ? ' data-delay="' + k + '"' : '') + '><span class="trust-icon">' + (TRUST_ICONS[k] || TRUST_ICONS[0]) + '</span><div><b>' + T(it.t_uk, it.t_en) + '</b><span>' + T(it.d_uk, it.d_en) + '</span></div></div>';
+      });
+      return html + '</div></div></section>';
+    }
+    if (v === 'catalog') {
+      return '<section class="section" id="collection"><div class="container"><div class="sec-head"><h2 class="section-title">' + (title || esc(t('best_title'))) + '</h2><a class="sec-link" href="collection.html">' + esc(t('cat_all')) + ' →</a></div>'
+        + (sub ? '<p class="section-lead">' + sub + '</p>' : '<p class="section-lead">' + esc(t('best_sub')) + '</p>')
+        + '<div class="grid" id="catalog"></div></div></section>';
+    }
+    if (v === 'wear') {
+      return '<section class="section" id="wear" style="padding-top:10px"><div class="container">'
+        + '<h2 class="section-title reveal">' + (title || esc(t('wear_title'))) + '</h2>'
+        + '<p class="section-lead reveal" style="margin-bottom:30px">' + (sub || esc(t('wear_sub'))) + '</p>'
+        + '<div class="wear-grid"></div></div></section>';
+    }
+    if (v === 'how') {
+      var steps = s.items && s.items.length ? s.items : [1, 2, 3].map(function (n) { return { t_uk: t('step' + n), t_en: t('step' + n), d_uk: t('step' + n + '_d'), d_en: t('step' + n + '_d') }; });
+      var h = '<section class="section section-dark grain" id="how"><div class="glow" style="width:520px;height:520px;left:-140px;top:-140px;background:radial-gradient(circle,rgba(201,162,74,.2),transparent 65%)"></div><div class="glow" style="width:460px;height:460px;right:-120px;bottom:-120px;background:radial-gradient(circle,rgba(200,122,136,.16),transparent 65%)"></div><div class="container" style="position:relative;z-index:1">'
+        + '<p class="section-lead reveal">' + (title || esc(t('how_title'))) + '</p>'
+        + '<h2 class="section-title reveal" style="margin-top:-30px"><span class="gold">' + (sub || esc(t('how_title_sub'))) + '</span></h2><div class="steps">';
+      steps.forEach(function (st, k) {
+        var num = String(k + 1); if (num.length < 2) num = '0' + num;
+        h += '<div class="step reveal"' + (k > 0 ? ' data-delay="' + k + '"' : '') + '><span class="step-num">' + num + '</span><h3>' + T(st.t_uk, st.t_en) + '</h3><p>' + T(st.d_uk, st.d_en) + '</p></div>';
+      });
+      return h + '</div></div></section>';
+    }
+    if (v === 'text') {
+      var body = ptToHtml(L === 'uk' ? s.body_uk : s.body_en, L);
+      return '<section class="section' + dark + '"><div class="container">'
+        + (title ? '<h2 class="section-title reveal">' + title + '</h2>' : '')
+        + (sub ? '<p class="section-lead reveal">' + sub + '</p>' : '')
+        + '<div class="about-text reveal">' + body + '</div>'
+        + (s.btn_label_uk || s.btn_label_en ? '<p style="margin-top:18px">' + secBtn(s, L, 'btn-wine') + '</p>' : '')
+        + '</div></section>';
+    }
+    if (v === 'faq') {
+      return '<section class="section' + dark + '" style="padding-top:0"><div class="container">'
+        + '<h2 class="section-title reveal" style="margin-bottom:24px">' + (title || esc(t('faq_title'))) + '</h2>'
+        + '<div class="mini-faq"></div>'
+        + (s.btn_label_uk || s.btn_label_en ? '<a class="btn btn-wine reveal" style="margin-top:26px" href="' + (s.btn_link || 'contact.html') + '">' + esc(L === 'uk' ? s.btn_label_uk : s.btn_label_en) + '</a>' : '')
+        + '</div></section>';
+    }
+    if (v === 'about') {
+      return '<section class="section" id="about"><div class="container about-grid"><div class="about-mark reveal">'
+        + '<svg viewBox="0 0 300 270" aria-hidden="true"><path class="arch" d="M 40 190 A 110 110 0 0 1 260 190"/><path class="drop" d="M 40 190 C 29 206 49 224 63 209 C 74 198 62 187 40 190 Z"/><path class="moon" d="M 122 116 A 26 26 0 1 0 122 162 A 19 19 0 1 1 122 116 Z"/><path class="star" d="M 160 112 L 162.6 119.4 L 170 122 L 162.6 124.6 L 160 132 L 157.4 124.6 L 150 122 L 157.4 119.4 Z"/><circle class="star" cx="150" cy="190" r="6.5"/></svg></div>'
+        + '<div class="reveal" data-delay="1"><p class="about-lead"><span class="script">' + esc(CFG.site && CFG.site.brand || 'The Quiet Room') + '</span> — ' + sub + '</p>'
+        + '<div class="about-text">' + ptToHtml(L === 'uk' ? s.body_uk : s.body_en, L) + '</div>'
+        + (s.btn_label_uk || s.btn_label_en ? '<p style="margin-top:8px">' + secBtn(s, L, 'btn-wine') + '</p>' : '')
+        + '</div></div></section>';
+    }
+    if (v === 'cta') {
+      return '<section class="section section-dark grain"><div class="container" style="text-align:center;position:relative;z-index:1">'
+        + (title ? '<h2 class="section-title reveal">' + title + '</h2>' : '')
+        + (sub ? '<p class="section-lead reveal">' + sub + '</p>' : '')
+        + '<p style="margin-top:14px">' + secBtn(s, L, 'btn-gold btn-shine') + '</p>'
+        + '</div></section>';
+    }
+    return '';
+  }
+  function renderSections() {
+    var main = document.getElementById('page-root');
+    if (!main || !CFG.sections || !CFG.sections.length) return;
+    var L = lang();
+    var html = '';
+    CFG.sections.forEach(function (s) {
+      if (s && s.variant) html += buildSection(s, L);
+    });
+    if (!html) return;
+    main.innerHTML = html;
+    main.dataset.src = 'sanity';
+    var extra = document.getElementById('static-extra');
+    if (extra) extra.style.display = 'none';
+    main.querySelectorAll('.reveal').forEach(function (el) { if (window.__io) window.__io.observe(el); else el.classList.add('in'); });
+  }
   function applyConfig() {
     var root = document.documentElement.style;
+    renderSections();
     if (CFG.colors) {
       if (CFG.colors.wine) root.setProperty('--wine', CFG.colors.wine);
       if (CFG.colors.wine_deep) root.setProperty('--wine-deep', CFG.colors.wine_deep);

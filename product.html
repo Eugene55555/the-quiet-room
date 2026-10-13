@@ -54,8 +54,8 @@
         <p class="price-note">Ориентир — финальная цена утвердим с поставщиком печати.</p>
         <p class="product-desc" id="product-desc">Луна и звезда на груди — принт для тех, кто любит тишину. Печать в терракоте, наш фирменный знак.</p>
 
-        <p style="font-size:13px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--muted)">Размеры</p>
-        <div class="size-row">
+        <p id="size-label" style="font-size:13px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--muted)">Размеры</p>
+        <div class="size-row" id="size-row">
           <span class="size">S</span><span class="size">M</span><span class="size">L</span>
           <span class="size">XL</span><span class="size dim">XXL</span>
         </div>
@@ -131,11 +131,16 @@
     moon:  { name: 'Полумесяц', tag: 'Футболка · Хлопок', img: 'assets/img/tee-cream.svg',  alt: 'Кремовая футболка с принтом-полумесяцем', price: '€24,90', desc: 'Луна и звезда на груди — принт для тех, кто любит тишину. Печать в терракоте, наш фирменный знак.', dark: false },
     arch:  { name: 'Арка',       tag: 'Футболка · Хлопок', img: 'assets/img/tee-white.svg',  alt: 'Белая футболка с принтом-аркой',           price: '€24,90', desc: 'Дверной проём со светом на пороге — приглашение внутрь. Тонкий графический принт.', dark: false },
     night: { name: 'Ночник',     tag: 'Худи · Флис',       img: 'assets/img/hoodie-dark.svg', alt: 'Тёмное худи с принтом «тихая комната»',   price: '€39,90', desc: 'Полный знак тихой комнаты: арка, полумесяц, звезда и свет. Худи для долгих вечеров.', dark: true },
-    mug:   { name: 'Луна',       tag: 'Кружка · Керамика', img: 'assets/img/mug.svg',         alt: 'Кружка с принтом-полумесяцем',             price: '€16,90', desc: 'Утро начинается с тишины: полумесяц и звезда на керамической кружке.', dark: false }
+    mug:   { name: 'Луна',       tag: 'Кружка · Керамика', img: 'assets/img/mug.svg',         alt: 'Кружка с принтом-полумесяцем',             price: '€16,90', desc: 'Утро начинается с тишины: полумесяц и звезда на керамической кружке.', dark: false, mug: true }
   };
 
   var id = new URLSearchParams(window.location.search).get('p') || 'moon';
   var item = catalog[id] || catalog.moon;
+  if (item.mug) {
+    document.getElementById('size-label').textContent = 'Объём';
+    var row = document.getElementById('size-row');
+    row.innerHTML = '<span class="size">350 мл</span>';
+  }
   document.title = item.name + ' — The Quiet Room';
   document.getElementById('crumb-name').textContent = item.name;
   document.getElementById('product-name').textContent = item.name;

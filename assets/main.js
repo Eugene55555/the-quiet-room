@@ -79,6 +79,11 @@
   }
 
   /* ---- Блочний конструктор головної (Sanity sections) ---- */
+  var TEST_SECTIONS = [
+    { _key: 'x1', variant: 'hero', bg: 'light', title_uk: 'Тестова кімната,\nде висять роботи', title_en: 'Test room,\nwhere works hang', sub_uk: 'Тестовий підзаголовок для перевірки блоків.', sub_en: 'Test subtitle for the blocks check.' },
+    { _key: 'x2', variant: 'catalog', bg: 'light', title_uk: 'Тест каталогу', title_en: 'Catalog test' },
+    { _key: 'x3', variant: 'cta', bg: 'dark', title_uk: 'Тестова кнопка', title_en: 'Test button', btn_label_uk: 'Купити', btn_label_en: 'Buy', btn_link: 'https://6820536600065.blacksea.in.ua/l/eaq' }
+  ];
   var TRUST_ICONS = [
     '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 20h16"/></svg>',
     '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="1"/><rect x="13.5" y="3.5" width="7" height="7" rx="1"/><rect x="3.5" y="13.5" width="7" height="7" rx="1"/><rect x="13.5" y="13.5" width="7" height="7" rx="1"/></svg>',
@@ -212,7 +217,11 @@
   }
   function renderSections() {
     var main = document.getElementById('page-root');
-    if (!main || !CFG.sections || !CFG.sections.length) return;
+    if (!main) return;
+    if (!CFG.sections || !CFG.sections.length) {
+      if (/sq_blocks/.test(location.search)) CFG.sections = TEST_SECTIONS;
+      else return;
+    }
     var L = lang();
     var html = '';
     CFG.sections.forEach(function (s) {

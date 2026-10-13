@@ -21,8 +21,8 @@
   --muted: rgba(43, 8, 16, .66);
   --line: rgba(142, 33, 55, .16);
   --radius: 18px;
-  --font-display: 'Bebas Neue', 'Arial Narrow', sans-serif;
-  --font-body: 'Space Grotesk', 'Segoe UI', sans-serif;
+  --font-display: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif;
+  --font-body: 'Space Grotesk', 'Manrope', 'Segoe UI', sans-serif;
   --font-script: 'Great Vibes', cursive;
   --shadow-wine: 0 24px 60px rgba(142, 33, 55, .35);
 }

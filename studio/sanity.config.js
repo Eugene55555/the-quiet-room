@@ -10,6 +10,7 @@ export default defineConfig({
   projectId: process.env.SANITY_STUDIO_PROJECT_ID || 'ns9lwdrh',
   dataset: 'production',
   basePath: '/studio',
+  studioHost: 'quiet-room',
   plugins: [structureTool(), visionTool()],
   schema: {
     types: [siteSettings, product]

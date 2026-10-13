@@ -7,6 +7,7 @@
      власника сайту (редагується через адмінку), не користувацький ввід. */
   var CFG = {
     "site": { "brand": "The Quiet Room", "logo": "", "banner_uk": "Перші принти вже в продажу на BlackSea", "banner_en": "First prints are now live on BlackSea" },
+    "sanity": { "id": "ns9lwdrh" },
     "colors": { "wine": "#8E2137", "wine_deep": "#400D18", "cream": "#F6EFE0", "gold": "#C9A24A" },
     "fonts": { "pair": "bebas" },
     "social": { "instagram": "", "tiktok": "", "facebook": "", "telegram": "" },
@@ -24,21 +25,47 @@
     russo: { display: "'Russo One'", displayCyr: "'Russo One'", body: "'Inter'", bodyCyr: "'Inter'", script: "'Great Vibes'", link: "family=Russo+One&family=Inter:wght@400;500;600;700&family=Great+Vibes" }
   };
 
-  /* ---- Завантаження: спершу Supabase-хмара (якщо налаштована), потім config.json ---- */
-  function loadCloud() {
-    if (!CFG.cloud || !CFG.cloud.url) return Promise.resolve(null);
-    return fetch(CFG.cloud.url.replace(/\/+$/, '') + '/rest/v1/store?select=data&id=eq.1', {
-      headers: { apikey: CFG.cloud.anon, Authorization: 'Bearer ' + CFG.cloud.anon }
-    })
-      .then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (rows) {
-        if (rows && rows[0] && rows[0].data && rows[0].data.config && rows[0].data.config.products) return rows[0].data.config;
-        return null;
-      })
-      .catch(function () { return null; });
+  /* ---- Завантаження: спершу Sanity (хмара принтів), потім config.json, далі статика ---- */
+  function loadSanity() {
+    var pid = (CFG.sanity && CFG.sanity.id) || 'ns9lwdrh';
+    if (!pid) return Promise.resolve(null);
+    var base = 'https://' + pid + '.apicdn.sanity.io/v2023-01-01/data/query/production?query=';
+    var enc = function (q) { return encodeURIComponent(q); };
+    var prodQ = '*[_type=="product" && visible != false]|order(order asc){_id,name_uk,name_en,tag_uk,tag_en,desc_uk,desc_en,price,img_url,"img":image.asset->url,category,blacksea_link,order}';
+    var setQ = '*[_type=="siteSettings"][0]{brand,banner_uk,banner_en,color_wine,color_wine_deep,color_cream,color_gold,font_pair,social_instagram,social_tiktok,social_facebook,social_telegram}';
+    return Promise.all([
+      fetch(base + enc(prodQ)).then(function (r) { return r.ok ? r.json() : null; }),
+      fetch(base + enc(setQ)).then(function (r) { return r.ok ? r.json() : null; })
+    ]).then(function (rs) {
+      var prods = rs[0] && rs[0].result;
+      var set = rs[1] && rs[1].result;
+      if (!Array.isArray(prods) || !prods.length) return null;
+      var cfg = {
+        products: prods.map(function (p, i) {
+          return {
+            id: p._id || 'p' + i,
+            cat: p.category || 'clothes',
+            img: p.img_url || p.img || 'assets/img/tee-cream.svg',
+            price: String(p.price || 55),
+            link: p.blacksea_link || 'https://6820536600065.blacksea.in.ua/l/eaq',
+            name_uk: p.name_uk || '', name_en: p.name_en || '',
+            tag_uk: p.tag_uk || '', tag_en: p.tag_en || '',
+            desc_uk: p.desc_uk || '', desc_en: p.desc_en || '',
+            hide: false
+          };
+        })
+      };
+      if (set) {
+        cfg.site = { brand: set.brand || 'The Quiet Room', logo: '', banner_uk: set.banner_uk || '', banner_en: set.banner_en || '' };
+        cfg.colors = { wine: set.color_wine || '#8E2137', wine_deep: set.color_wine_deep || '#400D18', cream: set.color_cream || '#F6EFE0', gold: set.color_gold || '#C9A24A' };
+        cfg.fonts = { pair: set.font_pair || 'bebas' };
+        cfg.social = { instagram: set.social_instagram || '', tiktok: set.social_tiktok || '', facebook: set.social_facebook || '', telegram: set.social_telegram || '' };
+      }
+      return cfg;
+    }).catch(function () { return null; });
   }
-  loadCloud().then(function (cloudCfg) {
-    return cloudCfg || fetch('config.json?v=' + Date.now()).then(function (r) { return r.ok ? r.json() : null; });
+  loadSanity().then(function (sanityCfg) {
+    return sanityCfg || fetch('config.json?v=' + Date.now()).then(function (r) { return r.ok ? r.json() : null; });
   }).then(function (cfg) {
     if (cfg && cfg.products) { CFG = cfg; applyConfig(); }
     /* якщо конфиг не прийшов — залишаємо статичні картки в HTML */

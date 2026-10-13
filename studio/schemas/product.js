@@ -11,6 +11,7 @@ export const product = {
     { name: 'desc_en', title: 'Опис (eng)', type: 'text', rows: 3 },
     { name: 'price', title: 'Ціна, грн', type: 'number', validation: r => r.required().min(0) },
     { name: 'image', title: "Картинка (прев'ю)", type: 'image', options: { hotspot: true } },
+    { name: 'img_url', title: 'Або шлях до макета (assets/img/...svg)', type: 'string' },
     { name: 'blacksea_link', title: 'Посилання покупки (BlackSea)', type: 'url', validation: r => r.uri({ scheme: ['https'] }) },
     {
       name: 'category', title: 'Категорія', type: 'string',

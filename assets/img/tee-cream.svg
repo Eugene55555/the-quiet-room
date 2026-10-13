@@ -1,20 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="400" height="500">
-  <!-- Мокап 1: кремовая футболка + золотая корона -->
+  <!-- Мокап 1: кремовая футболка «Полумесяц» -->
   <defs>
     <style>
-      .tee { fill: #F5EEE1; stroke: rgba(46,42,38,.12); stroke-width: 3; stroke-linejoin: round; }
-      .crown { fill: none; stroke: #A98A4B; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
-      .jewel { fill: #A98A4B; }
+      .tee { fill: #F5EEE1; stroke: rgba(34,30,25,.14); stroke-width: 3; stroke-linejoin: round; }
+      .print { fill: none; stroke: #C4572F; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+      .star { fill: #C4572F; }
     </style>
   </defs>
 
   <path class="tee" d="M 152 86 L 118 108 L 74 166 L 66 190 L 112 184 L 122 152 L 128 440 Q 200 452 272 440 L 278 152 L 288 184 L 334 190 L 326 166 L 282 108 L 248 86 Q 200 120 152 86 Z"/>
 
-  <!-- Принт: корона -->
-  <g transform="translate(148 226) scale(0.5)">
-    <path class="crown" d="M 35 118 L 45 62 L 73 84 L 98 42 Q 104 32 110 42 L 135 84 L 163 62 L 173 118"/>
-    <circle class="jewel" cx="45" cy="58" r="5.5"/>
-    <circle class="jewel" cx="104" cy="35" r="6.5"/>
-    <circle class="jewel" cx="163" cy="58" r="5.5"/>
+  <!-- Принт: полумесяц + звезда -->
+  <g transform="translate(145 214) scale(0.55)">
+    <path class="print" d="M 100 84 A 32 32 0 1 0 100 148 A 24 24 0 1 1 100 84 Z"/>
+    <path class="star" d="M 130 88 L 133.5 96 L 142 99.5 L 133.5 103 L 130 111 L 126.5 103 L 118 99.5 L 126.5 96 Z"/>
   </g>
 </svg>

@@ -1,24 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 300" width="400" height="600">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" width="400" height="480">
   <defs>
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@700&amp;display=swap');
-      .crown { fill: none; stroke: #A98A4B; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
-      .jewel { fill: #A98A4B; }
-      .arch { fill: none; stroke: #A98A4B; stroke-width: 6; stroke-linecap: round; }
-      .light { fill: #A98A4B; }
-      .wordmark { font-family: 'Manrope', sans-serif; font-weight: 700; fill: #2E2A26; font-size: 34px; letter-spacing: 8px; }
+      @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;1,600&amp;display=swap');
+      .arch { fill: none; stroke: #C4572F; stroke-width: 6.5; stroke-linecap: round; stroke-linejoin: round; }
+      .moon { fill: none; stroke: #C4572F; stroke-width: 6.5; stroke-linecap: round; stroke-linejoin: round; }
+      .star { fill: #C4572F; }
+      .light { fill: #C4572F; }
+      .wordmark { font-family: 'Fraunces', serif; font-weight: 600; fill: #221E19; font-size: 30px; }
     </style>
   </defs>
 
-  <!-- Знак: корона над аркой-дверью («комната под короной») -->
-  <path class="crown" d="M 35 118 L 45 62 L 73 84 L 98 42 Q 104 32 110 42 L 135 84 L 163 62 L 173 118"/>
-  <circle class="jewel" cx="45" cy="58" r="5.5"/>
-  <circle class="jewel" cx="104" cy="35" r="6.5"/>
-  <circle class="jewel" cx="163" cy="58" r="5.5"/>
-
-  <path class="arch" d="M 50 205 A 50 50 0 0 1 150 205"/>
-  <circle class="light" cx="100" cy="205" r="6"/>
+  <!-- Тихая комната: проём, полумесяц, звезда, свет на пороге -->
+  <path class="arch" d="M 40 195 A 60 60 0 0 1 160 195"/>
+  <path class="moon" d="M 100 84 A 32 32 0 1 0 100 148 A 24 24 0 1 1 100 84 Z"/>
+  <path class="star" d="M 130 88 L 133.5 96 L 142 99.5 L 133.5 103 L 130 111 L 126.5 103 L 118 99.5 L 126.5 96 Z"/>
+  <circle class="light" cx="100" cy="195" r="5.5"/>
 
   <!-- Слово-марка -->
-  <text class="wordmark" x="100" y="272" text-anchor="middle">THE QUIET ROOM</text>
+  <text class="wordmark" x="100" y="232" text-anchor="middle">The Quiet Room</text>
 </svg>

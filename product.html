@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Товар — The Quiet Room</title>
+<meta name="description" content="Принты The Quiet Room: футболки, худи и кружки с фирменными знаками тихой комнаты.">
+<link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500;1,600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<div class="ticker">Скоро открытие коллекции — первые принты уже в работе</div>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html" aria-label="The Quiet Room — на главную">
+      <svg viewBox="0 0 200 240" class="brand-mark" aria-hidden="true">
+        <path class="arch" d="M 40 195 A 60 60 0 0 1 160 195"/>
+        <path class="moon" d="M 100 84 A 32 32 0 1 0 100 148 A 24 24 0 1 1 100 84 Z"/>
+        <path class="star" d="M 130 88 L 133.5 96 L 142 99.5 L 133.5 103 L 130 111 L 126.5 103 L 118 99.5 L 126.5 96 Z"/>
+        <circle class="light" cx="100" cy="195" r="5.5"/>
+      </svg>
+      <span class="wordmark">The <em>Quiet</em> Room</span>
+    </a>
+    <nav class="site-nav" id="site-nav" aria-label="Основная навигация">
+      <a href="collection.html" class="active">Коллекция</a>
+      <a href="about.html">О бренде</a>
+      <a href="contact.html">Контакты</a>
+    </nav>
+    <button class="burger" id="burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-nav">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main class="product">
+  <div class="container">
+
+    <p class="crumbs"><a href="index.html">Главная</a> / <a href="collection.html">Коллекция</a> / <span id="crumb-name">Полумесяц</span></p>
+
+    <div class="product-inner">
+      <div class="product-media" id="product-media">
+        <img id="product-img" src="assets/img/tee-cream.svg" alt="Кремовая футболка с принтом-полумесяцем" width="400" height="500">
+      </div>
+
+      <div class="product-info">
+        <p class="product-tag" id="product-tag">Футболка · Хлопок</p>
+        <h1 id="product-name">Полумесяц</h1>
+        <p class="price">от <span id="product-price">€24,90</span></p>
+        <p class="price-note">Ориентир — финальная цена утвердим с поставщиком печати.</p>
+        <p class="product-desc" id="product-desc">Луна и звезда на груди — принт для тех, кто любит тишину. Печать в терракоте, наш фирменный знак.</p>
+
+        <p style="font-size:13px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--muted)">Размеры</p>
+        <div class="size-row">
+          <span class="size">S</span><span class="size">M</span><span class="size">L</span>
+          <span class="size">XL</span><span class="size dim">XXL</span>
+        </div>
+
+        <a class="btn terra" href="#" disabled>Скоро в продаже</a>
+
+        <dl class="specs">
+          <dt>Состав</dt><dd id="spec-material">Уточняется с поставщиком — обещаем плотный хлопок, который не просвечивает.</dd>
+          <dt>Печать</dt><dd>Прямая печать по ткани (DTG), терракота — цвет проверяем на образцах до запуска.</dd>
+          <dt>Уход</dt><dd>Стирка наизнанку при 30°, без отбеливателей — рисунок будет жить долго.</dd>
+          <dt>Доставка</dt><dd>После открытия магазина на Etsy: печать под заказ, срок и стоимость — в карточке заказа.</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="section" style="padding-bottom:0">
+      <p class="eyebrow">Ещё из коллекции</p>
+      <h2 class="section-title">Вам может понравиться</h2>
+      <div class="grid">
+        <a class="card" href="product.html?p=arch">
+          <div class="card-media"><img src="assets/img/tee-white.svg" alt="Белая футболка с принтом-аркой" width="400" height="500"></div>
+          <div class="card-body">
+            <p class="card-tag">Футболка · Хлопок</p>
+            <h3 class="card-title">Арка</h3>
+            <p class="card-price"><span class="from">от</span> €24,90</p>
+            <span class="badge">Скоро</span>
+          </div>
+        </a>
+        <a class="card" href="product.html?p=night">
+          <div class="card-media dark"><img src="assets/img/hoodie-dark.svg" alt="Тёмное худи с принтом «тихая комната»" width="400" height="500"></div>
+          <div class="card-body">
+            <p class="card-tag">Худи · Флис</p>
+            <h3 class="card-title">Ночник</h3>
+            <p class="card-price"><span class="from">от</span> €39,90</p>
+            <span class="badge">Скоро</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <svg viewBox="0 0 200 240" class="footer-mark" aria-hidden="true">
+      <path class="arch" d="M 40 195 A 60 60 0 0 1 160 195"/>
+      <path class="moon" d="M 100 84 A 32 32 0 1 0 100 148 A 24 24 0 1 1 100 84 Z"/>
+      <path class="star" d="M 130 88 L 133.5 96 L 142 99.5 L 133.5 103 L 130 111 L 126.5 103 L 118 99.5 L 126.5 96 Z"/>
+      <circle class="light" cx="100" cy="195" r="5.5"/>
+    </svg>
+    <p class="footer-brand">The <em>Quiet</em> Room</p>
+    <p class="footer-tag">Принты · Дом · Медленная мода</p>
+    <nav class="footer-nav" aria-label="Навигация в подвале">
+      <a href="collection.html">Коллекция</a>
+      <a href="about.html">О бренде</a>
+      <a href="contact.html">Контакты</a>
+    </nav>
+    <p class="footer-note">© 2026 The Quiet Room</p>
+  </div>
+</footer>
+
+<script>
+  var burger = document.getElementById('burger');
+  var nav = document.getElementById('site-nav');
+  burger.addEventListener('click', function () {
+    var open = nav.classList.toggle('open');
+    burger.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+
+  var catalog = {
+    moon:  { name: 'Полумесяц', tag: 'Футболка · Хлопок', img: 'assets/img/tee-cream.svg',  alt: 'Кремовая футболка с принтом-полумесяцем', price: '€24,90', desc: 'Луна и звезда на груди — принт для тех, кто любит тишину. Печать в терракоте, наш фирменный знак.', dark: false },
+    arch:  { name: 'Арка',       tag: 'Футболка · Хлопок', img: 'assets/img/tee-white.svg',  alt: 'Белая футболка с принтом-аркой',           price: '€24,90', desc: 'Дверной проём со светом на пороге — приглашение внутрь. Тонкий графический принт.', dark: false },
+    night: { name: 'Ночник',     tag: 'Худи · Флис',       img: 'assets/img/hoodie-dark.svg', alt: 'Тёмное худи с принтом «тихая комната»',   price: '€39,90', desc: 'Полный знак тихой комнаты: арка, полумесяц, звезда и свет. Худи для долгих вечеров.', dark: true },
+    mug:   { name: 'Луна',       tag: 'Кружка · Керамика', img: 'assets/img/mug.svg',         alt: 'Кружка с принтом-полумесяцем',             price: '€16,90', desc: 'Утро начинается с тишины: полумесяц и звезда на керамической кружке.', dark: false }
+  };
+
+  var id = new URLSearchParams(window.location.search).get('p') || 'moon';
+  var item = catalog[id] || catalog.moon;
+  document.title = item.name + ' — The Quiet Room';
+  document.getElementById('crumb-name').textContent = item.name;
+  document.getElementById('product-name').textContent = item.name;
+  document.getElementById('product-tag').textContent = item.tag;
+  document.getElementById('product-price').textContent = item.price;
+  document.getElementById('product-desc').textContent = item.desc;
+  var img = document.getElementById('product-img');
+  img.src = item.img;
+  img.alt = item.alt;
+  var media = document.getElementById('product-media');
+  media.classList.toggle('dark', item.dark);
+</script>
+
+</body>
+</html>

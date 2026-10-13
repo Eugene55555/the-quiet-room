@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Контакты — The Quiet Room</title>
+<meta name="description" content="Связаться с The Quiet Room: вопросы о коллекции, открытии магазина и доставке.">
+<link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500;1,600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<div class="ticker">Скоро открытие коллекции — первые принты уже в работе</div>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html" aria-label="The Quiet Room — на главную">
+      <svg viewBox="0 0 200 240" class="brand-mark" aria-hidden="true">
+        <path class="arch" d="M 40 195 A 60 60 0 0 1 160 195"/>
+        <path class="moon" d="M 100 84 A 32 32 0 1 0 100 148 A 24 24 0 1 1 100 84 Z"/>
+        <path class="star" d="M 130 88 L 133.5 96 L 142 99.5 L 133.5 103 L 130 111 L 126.5 103 L 118 99.5 L 126.5 96 Z"/>
+        <circle class="light" cx="100" cy="195" r="5.5"/>
+      </svg>
+      <span class="wordmark">The <em>Quiet</em> Room</span>
+    </a>
+    <nav class="site-nav" id="site-nav" aria-label="Основная навигация">
+      <a href="collection.html">Коллекция</a>
+      <a href="about.html">О бренде</a>
+      <a href="contact.html" class="active">Контакты</a>
+    </nav>
+    <button class="burger" id="burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-nav">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main>
+
+  <div class="page-head">
+    <div class="container">
+      <p class="eyebrow">Контакты</p>
+      <h1>Напишите нам</h1>
+      <p>Вопросы о коллекции, открытии магазина или совместном принте — мы читаем всё.</p>
+    </div>
+  </div>
+
+  <section class="section" style="padding-top:0">
+    <div class="container contact-grid">
+
+      <form class="contact-form" id="contact-form">
+        <label for="f-name">Имя</label>
+        <input id="f-name" name="name" type="text" placeholder="Как к вам обращаться" autocomplete="name">
+        <label for="f-email">Email</label>
+        <input id="f-email" name="email" type="email" placeholder="you@example.com" autocomplete="email">
+        <label for="f-msg">Сообщение</label>
+        <textarea id="f-msg" name="message" rows="5" placeholder="Что хочется сказать?"></textarea>
+        <button class="btn terra" type="submit">Отправить</button>
+        <p class="form-note">Форма подключится вместе с магазином — пока это кнопка-заглушка, чтобы ничего не терялось.</p>
+        <p class="form-status" id="form-status">Спасибо! Как только откроемся — свяжемся с вами 😊</p>
+      </form>
+
+      <div>
+        <p class="eyebrow">Вопросы и ответы</p>
+        <h2 class="section-title">FAQ</h2>
+        <div class="faq">
+          <div class="faq-item">
+            <h3>Когда откроется магазин?</h3>
+            <p>Готовим первую коллекцию: выбираем поставщика печати и шьём образцы. Дату объявим в топ-полоске сайта.</p>
+          </div>
+          <div class="faq-item">
+            <h3>Где покупать?</h3>
+            <p>Планируем Etsy — там будет оформление заказов и оплата. Ссылка появится на сайте и в карточках товаров.</p>
+          </div>
+          <div class="faq-item">
+            <h3>Какие принты будут?</h3>
+            <p>Наши знаки тихой комнаты: полумесяц, арка, ночник и луна. Потом расширимся — идеи уже есть.</p>
+          </div>
+          <div class="faq-item">
+            <h3>Как с доставкой?</h3>
+            <p>Условия зависят от поставщика и страны. Опубликуем точные цены и сроки до открытия магазина.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <svg viewBox="0 0 200 240" class="footer-mark" aria-hidden="true">
+      <path class="arch" d="M 40 195 A 60 60 0 0 1 160 195"/>
+      <path class="moon" d="M 100 84 A 32 32 0 1 0 100 148 A 24 24 0 1 1 100 84 Z"/>
+      <path class="star" d="M 130 88 L 133.5 96 L 142 99.5 L 133.5 103 L 130 111 L 126.5 103 L 118 99.5 L 126.5 96 Z"/>
+      <circle class="light" cx="100" cy="195" r="5.5"/>
+    </svg>
+    <p class="footer-brand">The <em>Quiet</em> Room</p>
+    <p class="footer-tag">Принты · Дом · Медленная мода</p>
+    <nav class="footer-nav" aria-label="Навигация в подвале">
+      <a href="collection.html">Коллекция</a>
+      <a href="about.html">О бренде</a>
+      <a href="contact.html">Контакты</a>
+    </nav>
+    <p class="footer-note">© 2026 The Quiet Room</p>
+  </div>
+</footer>
+
+<script>
+  var burger = document.getElementById('burger');
+  var nav = document.getElementById('site-nav');
+  burger.addEventListener('click', function () {
+    var open = nav.classList.toggle('open');
+    burger.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+
+  var form = document.getElementById('contact-form');
+  var statusEl = document.getElementById('form-status');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    statusEl.classList.add('show');
+  });
+</script>
+
+</body>
+</html>

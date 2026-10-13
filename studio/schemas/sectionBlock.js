@@ -14,9 +14,6 @@ export const sectionBlock = {
   name: 'sectionBlock',
   title: 'Блок секції',
   type: 'object',
-  fieldsets: [
-    { name: 'content', title: 'Зміст (укр / eng)', options: { columns: 2 } }
-  ],
   fields: [
     {
       name: 'variant', title: 'Тип блоку', type: 'string',
@@ -45,10 +42,10 @@ export const sectionBlock = {
       },
       initialValue: 'light'
     },
-    { name: 'title_uk', title: 'Заголовок (укр)', group: 'content' },
-    { name: 'title_en', title: 'Заголовок (eng)', group: 'content' },
-    { name: 'sub_uk', title: 'Підзаголовок (укр)', group: 'content' },
-    { name: 'sub_en', title: 'Підзаголовок (eng)', group: 'content' },
+    { name: 'title_uk', title: 'Заголовок (укр)', type: 'string' },
+    { name: 'title_en', title: 'Заголовок (eng)', type: 'string' },
+    { name: 'sub_uk', title: 'Підзаголовок (укр)', type: 'string' },
+    { name: 'sub_en', title: 'Підзаголовок (eng)', type: 'string' },
     {
       name: 'body_uk', title: 'Текст (укр, з форматуванням)', type: 'array',
       of: [{ type: 'block', styles: [{ title: 'Абзац', value: 'normal' }, { title: 'Заголовок 2', value: 'h2' }, { title: 'Заголовок 3', value: 'h3' }], lists: [{ title: 'Список', value: 'bullet' }] }, { type: 'image' }]
@@ -65,8 +62,8 @@ export const sectionBlock = {
       name: 'image', title: 'Картинка (hero/текст)', type: 'image', options: { hotspot: true },
       description: 'Для hero — фото товару; для текстового блоку — ілюстрація поруч.'
     },
-    { name: 'btn_label_uk', title: 'Кнопка: текст (укр)', group: 'content' },
-    { name: 'btn_label_en', title: 'Кнопка: текст (eng)', group: 'content' },
+    { name: 'btn_label_uk', title: 'Кнопка: текст (укр)', type: 'string' },
+    { name: 'btn_label_en', title: 'Кнопка: текст (eng)', type: 'string' },
     { name: 'btn_link', title: 'Кнопка: посилання', type: 'url', description: 'Напр. https://6820536600065.blacksea.in.ua/l/eaq' }
   ],
   preview: {

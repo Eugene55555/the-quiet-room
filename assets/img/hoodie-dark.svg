@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="400" height="500">
+  <!-- Мокап 3: тёмное худи + золотой знак -->
+  <defs>
+    <style>
+      .tee { fill: #2E2A26; stroke: rgba(247,242,234,.16); stroke-width: 3; stroke-linejoin: round; }
+      .crown { fill: none; stroke: #A98A4B; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+      .jewel { fill: #A98A4B; }
+      .arch { fill: none; stroke: #A98A4B; stroke-width: 5; stroke-linecap: round; }
+      .light { fill: #A98A4B; }
+    </style>
+  </defs>
+
+  <!-- Капюшон -->
+  <path class="tee" d="M 148 96 Q 200 42 252 96 Q 200 76 148 96 Z"/>
+
+  <!-- Корпус худи -->
+  <path class="tee" d="M 152 86 L 118 108 L 74 166 L 66 190 L 112 184 L 122 152 L 128 440 Q 200 452 272 440 L 278 152 L 288 184 L 334 190 L 326 166 L 282 108 L 248 86 Q 200 120 152 86 Z"/>
+
+  <!-- Карман-кенгуру -->
+  <path class="tee" fill="none" d="M 130 336 L 192 312 L 208 312 L 270 336"/>
+
+  <!-- Принт: корона + арка (полный знак) -->
+  <g transform="translate(148 196) scale(0.5)">
+    <path class="crown" d="M 35 118 L 45 62 L 73 84 L 98 42 Q 104 32 110 42 L 135 84 L 163 62 L 173 118"/>
+    <circle class="jewel" cx="45" cy="58" r="5.5"/>
+    <circle class="jewel" cx="104" cy="35" r="6.5"/>
+    <circle class="jewel" cx="163" cy="58" r="5.5"/>
+    <path class="arch" d="M 50 205 A 50 50 0 0 1 150 205"/>
+    <circle class="light" cx="100" cy="205" r="6"/>
+  </g>
+</svg>

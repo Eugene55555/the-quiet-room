@@ -1,22 +1,24 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 230" width="600" height="575">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 300" width="400" height="600">
   <defs>
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&amp;family=Manrope:wght@400;600&amp;display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@700&amp;display=swap');
       .crown { fill: none; stroke: #A98A4B; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
       .jewel { fill: #A98A4B; }
-      .brand { font-family: 'Great Vibes', cursive; fill: #2E2A26; }
-      .tag { font-family: 'Manrope', sans-serif; font-size: 15px; letter-spacing: 6px; fill: #B47C4F; font-weight: 600; }
+      .arch { fill: none; stroke: #A98A4B; stroke-width: 6; stroke-linecap: round; }
+      .light { fill: #A98A4B; }
+      .wordmark { font-family: 'Manrope', sans-serif; font-weight: 700; fill: #2E2A26; font-size: 34px; letter-spacing: 8px; }
     </style>
   </defs>
 
-  <!-- Корона: три зубца, тонкая линия, шарики на концах -->
-  <path class="crown" d="M 30 118 L 40 62 L 68 84 L 98 42 Q 104 32 110 42 L 140 84 L 168 62 L 178 118"/>
-  <circle class="jewel" cx="40" cy="58" r="5.5"/>
+  <!-- Знак: корона над аркой-дверью («комната под короной») -->
+  <path class="crown" d="M 35 118 L 45 62 L 73 84 L 98 42 Q 104 32 110 42 L 135 84 L 163 62 L 173 118"/>
+  <circle class="jewel" cx="45" cy="58" r="5.5"/>
   <circle class="jewel" cx="104" cy="35" r="6.5"/>
-  <circle class="jewel" cx="168" cy="58" r="5.5"/>
+  <circle class="jewel" cx="163" cy="58" r="5.5"/>
 
-  <!-- Каллиграфия -->
-  <text class="brand" x="120" y="195" text-anchor="middle" font-size="58">The Quiet Room</text>
+  <path class="arch" d="M 50 205 A 50 50 0 0 1 150 205"/>
+  <circle class="light" cx="100" cy="205" r="6"/>
 
-  <text class="tag" x="120" y="222" text-anchor="middle">PRINTS · HOME · SLOW WEAR</text>
+  <!-- Слово-марка -->
+  <text class="wordmark" x="100" y="272" text-anchor="middle">THE QUIET ROOM</text>
 </svg>

@@ -4,107 +4,166 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Quiet Room — принты для дома и души</title>
-<meta name="description" content="The Quiet Room — Тихая Комната. Принты на одежду и не только: уют, дом, медленная мода.">
+<meta name="description" content="The Quiet Room — Тихая Комната. Принты на одежду и предметы дома: уют, медленная мода, истории, которые хочется носить.">
 <meta property="og:title" content="The Quiet Room">
-<meta property="og:description" content="Тихая комната, в которой висят ваши работы. Принты на одежду — скоро в продаже.">
+<meta property="og:description" content="Тихая комната, в которой висят ваши работы. Принты на одежду.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://eugene55555.github.io/the-quiet-room/">
 <meta property="og:image" content="https://eugene55555.github.io/the-quiet-room/assets/logo.svg">
 <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 
+<!-- Топ-полоска -->
+<div class="ticker">Скоро открытие коллекции — первые принты уже в работе</div>
+
 <header class="site-header">
   <div class="container header-inner">
     <a class="brand" href="#top" aria-label="The Quiet Room — на главную">
-      <svg viewBox="0 0 240 230" class="brand-mark" aria-hidden="true">
-        <path class="crown" d="M 30 118 L 40 62 L 68 84 L 98 42 Q 104 32 110 42 L 140 84 L 168 62 L 178 118"/>
-        <circle class="jewel" cx="40" cy="58" r="5.5"/>
+      <svg viewBox="0 0 200 300" class="brand-mark" aria-hidden="true">
+        <path class="crown" d="M 35 118 L 45 62 L 73 84 L 98 42 Q 104 32 110 42 L 135 84 L 163 62 L 173 118"/>
+        <circle class="jewel" cx="45" cy="58" r="5.5"/>
         <circle class="jewel" cx="104" cy="35" r="6.5"/>
-        <circle class="jewel" cx="168" cy="58" r="5.5"/>
-        <text class="brand-text" x="120" y="198" text-anchor="middle" font-size="58">The Quiet Room</text>
+        <circle class="jewel" cx="163" cy="58" r="5.5"/>
+        <path class="arch" d="M 50 205 A 50 50 0 0 1 150 205"/>
+        <circle class="light" cx="100" cy="205" r="6"/>
       </svg>
+      <span class="wordmark">The&nbsp;Quiet&nbsp;Room</span>
     </a>
-    <nav class="site-nav" aria-label="Основная навигация">
+    <nav class="site-nav" id="site-nav" aria-label="Основная навигация">
       <a href="#collection">Коллекция</a>
+      <a href="#why">Почему мы</a>
       <a href="#about">О бренде</a>
       <a href="#how">Как купить</a>
     </nav>
+    <button class="burger" id="burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-nav">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </header>
 
 <main id="top">
 
-  <!-- Hero -->
+  <!-- Hero: декларация + товар -->
   <section class="hero">
     <div class="container hero-inner">
-      <svg viewBox="0 0 240 140" class="hero-crown" aria-hidden="true">
-        <path class="crown" d="M 30 118 L 40 62 L 68 84 L 98 42 Q 104 32 110 42 L 140 84 L 168 62 L 178 118"/>
-        <circle class="jewel" cx="40" cy="58" r="5.5"/>
-        <circle class="jewel" cx="104" cy="35" r="6.5"/>
-        <circle class="jewel" cx="168" cy="58" r="5.5"/>
-      </svg>
-      <p class="hero-script">The Quiet Room</p>
-      <h1>Тихая комната,<br>в которой висят ваши работы</h1>
-      <p class="hero-sub">Принты на одежду — про уют, дом и вещи, которые хочется носить и рассматривать.</p>
-      <a class="btn" href="#collection">Смотреть коллекцию</a>
+      <div class="hero-copy">
+        <p class="eyebrow">Принты · Одежда · Дом</p>
+        <h1>Тихая комната, в&nbsp;которой висят ваши&nbsp;работы</h1>
+        <p class="hero-sub">The Quiet Room — это уют в виде принтов: спокойные образы, тёплая палитра и вещи, которые хочется носить, рассматривать и не снимать.</p>
+        <div class="hero-actions">
+          <a class="btn" href="#collection">Смотреть коллекцию</a>
+          <a class="btn ghost" href="#about">О бренде</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <img src="assets/img/tee-cream.svg" alt="Кремовая футболка The Quiet Room с золотым принтом-короной" width="400" height="500">
+      </div>
     </div>
   </section>
 
   <!-- Коллекция -->
   <section id="collection" class="section">
     <div class="container">
-      <p class="section-eyebrow">Коллекция</p>
-      <h2 class="section-title">Первые принты — уже скоро</h2>
-      <p class="section-lead">Мы готовим стартовую коллекцию. Каждый принт — отдельная маленькая «тихая комната»: образ, в который хочется зайти.</p>
+      <p class="eyebrow">Коллекция 01</p>
+      <h2 class="section-title">Первые принты — скоро</h2>
+      <p class="section-lead">Стартовая линейка: три знака бренда, три характера. Каждый принт — маленькая «тихая комната», в которую хочется зайти.</p>
+
       <div class="grid">
         <article class="card">
-          <div class="card-media"><svg viewBox="0 0 240 230" class="card-mark" aria-hidden="true"><path class="crown" d="M 30 118 L 40 62 L 68 84 L 98 42 Q 104 32 110 42 L 140 84 L 168 62 L 178 118"/><circle class="jewel" cx="40" cy="58" r="5.5"/><circle class="jewel" cx="104" cy="35" r="6.5"/><circle class="jewel" cx="168" cy="58" r="5.5"/><text class="brand-text" x="120" y="198" text-anchor="middle" font-size="58">The Quiet Room</text></svg></div>
-          <h3>Принт №&nbsp;01</h3>
-          <p>Скоро в продаже.</p>
-          <span class="badge">Скоро</span>
+          <div class="card-media"><img src="assets/img/tee-cream.svg" alt="Кремовая футболка с золотой короной на груди" width="400" height="500"></div>
+          <div class="card-body">
+            <p class="card-tag">Футболка · Хлопок</p>
+            <h3 class="card-title">Корона</h3>
+            <p class="card-desc">Тонкая золотая корона — знак вашей личной комнаты.</p>
+            <p class="card-price">от €24,90 <span class="price-note">цена уточняется</span></p>
+            <span class="badge">Скоро</span>
+          </div>
         </article>
         <article class="card">
-          <div class="card-media"><svg viewBox="0 0 240 230" class="card-mark" aria-hidden="true"><path class="crown" d="M 30 118 L 40 62 L 68 84 L 98 42 Q 104 32 110 42 L 140 84 L 168 62 L 178 118"/><circle class="jewel" cx="40" cy="58" r="5.5"/><circle class="jewel" cx="104" cy="35" r="6.5"/><circle class="jewel" cx="168" cy="58" r="5.5"/><text class="brand-text" x="120" y="198" text-anchor="middle" font-size="58">The Quiet Room</text></svg></div>
-          <h3>Принт №&nbsp;02</h3>
-          <p>Скоро в продаже.</p>
-          <span class="badge">Скоро</span>
+          <div class="card-media"><img src="assets/img/tee-white.svg" alt="Белая футболка с графитовым принтом-аркой" width="400" height="500"></div>
+          <div class="card-body">
+            <p class="card-tag">Футболка · Хлопок</p>
+            <h3 class="card-title">Арка</h3>
+            <p class="card-desc">Дверной проём со светом — приглашение внутрь.</p>
+            <p class="card-price">от €24,90 <span class="price-note">цена уточняется</span></p>
+            <span class="badge">Скоро</span>
+          </div>
         </article>
         <article class="card">
-          <div class="card-media"><svg viewBox="0 0 240 230" class="card-mark" aria-hidden="true"><path class="crown" d="M 30 118 L 40 62 L 68 84 L 98 42 Q 104 32 110 42 L 140 84 L 168 62 L 178 118"/><circle class="jewel" cx="40" cy="58" r="5.5"/><circle class="jewel" cx="104" cy="35" r="6.5"/><circle class="jewel" cx="168" cy="58" r="5.5"/><text class="brand-text" x="120" y="198" text-anchor="middle" font-size="58">The Quiet Room</text></svg></div>
-          <h3>Принт №&nbsp;03</h3>
-          <p>Скоро в продаже.</p>
-          <span class="badge">Скоро</span>
+          <div class="card-media dark"><img src="assets/img/hoodie-dark.svg" alt="Тёмное худи с золотым знаком бренда" width="400" height="500"></div>
+          <div class="card-body">
+            <p class="card-tag">Худи · Флис</p>
+            <h3 class="card-title">Знак</h3>
+            <p class="card-desc">Полный знак: корона над аркой — дом под короной.</p>
+            <p class="card-price">от €39,90 <span class="price-note">цена уточняется</span></p>
+            <span class="badge">Скоро</span>
+          </div>
         </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Почему мы -->
+  <section id="why" class="section section-alt">
+    <div class="container">
+      <p class="eyebrow">Почему мы</p>
+      <h2 class="section-title">Три обещания</h2>
+      <div class="pillars">
+        <div class="pillar">
+          <span class="pillar-num">01</span>
+          <h3>Печать под заказ</h3>
+          <p>Каждое изделие печатается после заказа — никаких складов и залежавшихся партий.</p>
+        </div>
+        <div class="pillar">
+          <span class="pillar-num">02</span>
+          <h3>Принт, который живёт</h3>
+          <p>Проверяем материалы и печать на образцах, чтобы рисунок не боялся стирок.</p>
+        </div>
+        <div class="pillar">
+          <span class="pillar-num">03</span>
+          <h3>Каждая вещь — история</h3>
+          <p>Принты про уют, дом и тишину — образы, которые работают на любой ткани.</p>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- О бренде -->
-  <section id="about" class="section section-alt">
-    <div class="container">
-      <p class="section-eyebrow">О бренде</p>
-      <h2 class="section-title">Почему «The Quiet Room»</h2>
-      <div class="about-body">
-        <p>The Quiet Room — «Тихая Комната» — это метафора домашнего уюта, в котором висят ваши работы. Место, где можно остановиться, выдохнуть и рассмотреть детали.</p>
-        <p>Мы делаем принты для одежды, которая со временем становится любимой: спокойные образы, тёплая палитра, вещи, которые хочется носить дома, гуляя и в путешествиях. Дальше — кружки и другие предметы для той самой тихой комнаты.</p>
+  <section id="about" class="section">
+    <div class="container about-inner">
+      <div class="about-mark">
+        <svg viewBox="0 0 200 300" aria-hidden="true">
+          <path class="crown" d="M 35 118 L 45 62 L 73 84 L 98 42 Q 104 32 110 42 L 135 84 L 163 62 L 173 118"/>
+          <circle class="jewel" cx="45" cy="58" r="5.5"/>
+          <circle class="jewel" cx="104" cy="35" r="6.5"/>
+          <circle class="jewel" cx="163" cy="58" r="5.5"/>
+          <path class="arch" d="M 50 205 A 50 50 0 0 1 150 205"/>
+          <circle class="light" cx="100" cy="205" r="6"/>
+        </svg>
+      </div>
+      <div class="about-copy">
+        <p class="eyebrow">О бренде</p>
+        <h2 class="section-title">Почему «The Quiet Room»</h2>
+        <p class="about-lead">Тихая Комната — метафора домашнего уюта, в котором висят ваши работы.</p>
+        <p>Место, где можно остановиться, выдохнуть и рассмотреть детали. Мы делаем принты для одежды, которая со временем становится любимой: спокойные образы, тёплая палитра, вещи для дома, прогулок и тихих вечеров. Дальше — кружки и другие предметы для той самой комнаты.</p>
       </div>
     </div>
   </section>
 
   <!-- Как купить -->
-  <section id="how" class="section">
+  <section id="how" class="section section-alt">
     <div class="container">
-      <p class="section-eyebrow">Как это работает</p>
+      <p class="eyebrow">Как это работает</p>
       <h2 class="section-title">Три простых шага</h2>
       <div class="steps">
-        <div class="step"><span class="step-num">1</span><h3>Выбираете принт</h3><p>Смотрите коллекцию, находите «свой» образ.</p></div>
+        <div class="step"><span class="step-num">1</span><h3>Выбираете принт</h3><p>Находите «свой» образ в коллекции.</p></div>
         <div class="step"><span class="step-num">2</span><h3>Заказ на Etsy</h3><p>Кнопка ведёт в наш магазин, где оформляется заказ и оплата.</p></div>
-        <div class="step"><span class="step-num">3</span><h3>Печать и доставка</h3><p>Каждое изделие печатается под заказ и едет к вам.</p></div>
+        <div class="step"><span class="step-num">3</span><h3>Печать и доставка</h3><p>Изделие печатается под заказ и едет к вам.</p></div>
       </div>
     </div>
   </section>
@@ -113,16 +172,41 @@
 
 <footer class="site-footer">
   <div class="container footer-inner">
-    <svg viewBox="0 0 240 140" class="footer-mark" aria-hidden="true">
-      <path class="crown" d="M 30 118 L 40 62 L 68 84 L 98 42 Q 104 32 110 42 L 140 84 L 168 62 L 178 118"/>
-      <circle class="jewel" cx="40" cy="58" r="5.5"/>
+    <svg viewBox="0 0 200 300" class="footer-mark" aria-hidden="true">
+      <path class="crown" d="M 35 118 L 45 62 L 73 84 L 98 42 Q 104 32 110 42 L 135 84 L 163 62 L 173 118"/>
+      <circle class="jewel" cx="45" cy="58" r="5.5"/>
       <circle class="jewel" cx="104" cy="35" r="6.5"/>
-      <circle class="jewel" cx="168" cy="58" r="5.5"/>
+      <circle class="jewel" cx="163" cy="58" r="5.5"/>
+      <path class="arch" d="M 50 205 A 50 50 0 0 1 150 205"/>
+      <circle class="light" cx="100" cy="205" r="6"/>
     </svg>
     <p class="footer-script">The Quiet Room</p>
-    <p class="footer-note">Принты · Дом · Медленная мода<br>© 2026 The Quiet Room</p>
+    <p class="footer-tag">Принты · Дом · Медленная мода</p>
+    <nav class="footer-nav" aria-label="Навигация в подвале">
+      <a href="#collection">Коллекция</a>
+      <a href="#about">О бренде</a>
+      <a href="#how">Как купить</a>
+    </nav>
+    <p class="footer-note">© 2026 The Quiet Room</p>
   </div>
 </footer>
+
+<script>
+  var burger = document.getElementById('burger');
+  var nav = document.getElementById('site-nav');
+  burger.addEventListener('click', function () {
+    var open = nav.classList.toggle('open');
+    burger.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  nav.addEventListener('click', function (e) {
+    if (e.target.tagName === 'A' && nav.classList.contains('open')) {
+      nav.classList.remove('open');
+      burger.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
+    }
+  });
+</script>
 
 </body>
 </html>

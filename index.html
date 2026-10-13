@@ -3,57 +3,58 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Quiet Room — принти для дому й душі</title>
-<meta name="description" content="The Quiet Room — Тиха Кімната. Принти на одяг і предмети дому: затишок, повільна мода, тиша, яку хочеться носити.">
+<title>The Quiet Room — принти для тиші</title>
+<meta name="description" content="The Quiet Room — Тиха Кімната. Принти-файли для одягу й дому: спокійні образи в теплій палітрі. Купівля на BlackSea, друк де зручно.">
 <meta property="og:title" content="The Quiet Room">
-<meta property="og:description" content="Тиха кімната, в якій висять ваші роботи. Принти на одяг і дім.">
+<meta property="og:description" content="Тиха кімната, в якій висять ваші роботи. Цифрові принти на BlackSea.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://eugene55555.github.io/the-quiet-room/">
 <meta property="og:image" content="https://eugene55555.github.io/the-quiet-room/assets/logo.svg">
 <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=5">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=6">
 </head>
 <body>
 
-<div class="promo" data-i18n="promo"></div>
+<div class="promo"><a href="https://6820536600065.blacksea.in.ua/l/eaq" target="_blank" rel="noopener" data-i18n="promo">→</a></div>
 
 <header class="site-header">
   <div class="container header-inner">
     <a class="brand" href="index.html" aria-label="The Quiet Room — на головну">
-      <svg viewBox="0 0 200 240" class="brand-mark" aria-hidden="true">
-        <path class="arch" d="M 40 195 A 60 60 0 0 1 160 195"/>
-        <path class="moon" d="M 100 84 A 32 32 0 1 0 100 148 A 24 24 0 1 1 100 84 Z"/>
-        <path class="star" d="M 130 88 L 133.5 96 L 142 99.5 L 133.5 103 L 130 111 L 126.5 103 L 118 99.5 L 126.5 96 Z"/>
-        <circle class="light" cx="100" cy="195" r="5.5"/>
+      <svg viewBox="0 0 300 270" class="brand-mark" aria-hidden="true">
+        <path class="arch" d="M 40 190 A 110 110 0 0 1 260 190"/>
+        <path class="drop" d="M 40 190 C 29 206 49 224 63 209 C 74 198 62 187 40 190 Z"/>
+        <path class="moon" d="M 122 116 A 26 26 0 1 0 122 162 A 19 19 0 1 1 122 116 Z"/>
+        <path class="star" d="M 160 112 L 162.6 119.4 L 170 122 L 162.6 124.6 L 160 132 L 157.4 124.6 L 150 122 L 157.4 119.4 Z"/>
+        <circle class="star" cx="150" cy="190" r="6.5"/>
       </svg>
-      <span class="wordmark">The <em>Quiet</em> Room</span>
+      <span class="brand-script">The <b>Quiet</b> Room</span>
     </a>
 
     <form class="search" id="search-form" role="search">
       <input type="search" data-i18n-ph="search_ph" aria-label="Пошук дизайну">
       <button type="submit" aria-label="Шукати">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
       </button>
     </form>
+
+    <nav class="nav-main" aria-label="Основна навігація">
+      <a href="collection.html" data-i18n="nav_collection"></a>
+      <a href="about.html" data-i18n="nav_about"></a>
+      <a href="contact.html" data-i18n="nav_contact"></a>
+    </nav>
 
     <div class="header-tools">
       <div class="lang-switch">
         <button class="lang-btn" data-lang="uk">UA</button>
         <button class="lang-btn" data-lang="en">EN</button>
       </div>
-      <button class="cart-btn" id="cart-btn">
-        <svg viewBox="0 0 24 24"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
-        <span class="cart-label" data-i18n="cart"></span>
-        <span class="cart-count">0</span>
+      <button class="burger" id="burger" aria-label="Відкрити меню" aria-expanded="false">
+        <span></span><span></span><span></span>
       </button>
     </div>
-
-    <button class="burger" id="burger" aria-label="Відкрити меню" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
   </div>
 
   <nav class="site-nav-mobile" id="site-nav-mobile" aria-label="Мобільне меню">
@@ -67,126 +68,122 @@
   </nav>
 </header>
 
-<nav class="nav-strip" aria-label="Основна навігація">
-  <div class="container">
-    <a href="collection.html" data-i18n="nav_collection"></a>
-    <a href="about.html" data-i18n="nav_about"></a>
-    <a href="contact.html" data-i18n="nav_contact"></a>
-  </div>
-</nav>
-
 <main>
 
-  <!-- Hero: промо-баннер -->
-  <section class="hero">
+  <!-- Hero з паралаксом -->
+  <section class="hero" id="top">
+    <div class="hero-bg">
+      <div class="hero-glow-gold"></div>
+      <div class="hero-glow-rose"></div>
+      <div class="hero-outline">QUIET ROOM</div>
+    </div>
+    <div class="hero-moon" aria-hidden="true"></div>
+
     <div class="container hero-inner">
-      <div>
-        <span class="hero-eyebrow" data-i18n="hero_eyebrow"></span>
+      <div class="reveal in">
+        <p class="hero-eyebrow" data-i18n="hero_eyebrow"></p>
         <h1 data-i18n-html="hero_h1"></h1>
         <p class="hero-sub" data-i18n="hero_sub"></p>
         <div class="hero-actions">
-          <a class="btn btn-black" href="collection.html" data-i18n="cta_shop"></a>
-          <a class="btn btn-ghost" href="about.html" data-i18n="cta_about"></a>
+          <a class="btn btn-gold btn-shine" href="https://6820536600065.blacksea.in.ua/l/eaq" target="_blank" rel="noopener" data-i18n="buy_on"></a>
+          <a class="btn btn-ghost" href="collection.html" data-i18n="cta_shop"></a>
         </div>
       </div>
-      <div class="hero-visual">
-        <img src="assets/img/tee-cream.svg" alt="Кремова футболка The Quiet Room із принтом-півмісяцем" width="400" height="500">
+      <div class="hero-visual reveal in" data-delay="2">
+        <img src="assets/img/tee-cream.svg" alt="Футболка з принтом-півмісяцем The Quiet Room" width="400" height="500">
+        <span class="hero-files" data-i18n="file_note"></span>
       </div>
     </div>
   </section>
 
-  <!-- Категорії -->
-  <section class="cats">
-    <div class="container">
-      <p class="cats-title" data-i18n="cats_title"></p>
-      <div class="cats-list">
-        <a class="cat-item" href="collection.html#shirts">
-          <span class="cat-circle">
-            <svg viewBox="0 0 200 240"><path class="moon" d="M 100 84 A 32 32 0 1 0 100 148 A 24 24 0 1 1 100 84 Z"/><path class="star" d="M 130 88 L 133.5 96 L 142 99.5 L 133.5 103 L 130 111 L 126.5 103 L 118 99.5 L 126.5 96 Z"/></svg>
-          </span>
-          <span class="cat-label" data-i18n="cat_tshirts"></span>
-        </a>
-        <a class="cat-item" href="collection.html#hoodies">
-          <span class="cat-circle">
-            <svg viewBox="0 0 200 240"><path class="arch" d="M 40 195 A 60 60 0 0 1 160 195"/><circle class="light" cx="100" cy="195" r="5.5"/></svg>
-          </span>
-          <span class="cat-label" data-i18n="cat_hoodies"></span>
-        </a>
-        <a class="cat-item" href="collection.html#mugs">
-          <span class="cat-circle">
-            <svg viewBox="0 0 200 240"><path class="moon" d="M 100 84 A 32 32 0 1 0 100 148 A 24 24 0 1 1 100 84 Z"/></svg>
-          </span>
-          <span class="cat-label" data-i18n="cat_mugs"></span>
-        </a>
-        <a class="cat-item" href="collection.html">
-          <span class="cat-circle">
-            <svg viewBox="0 0 200 240"><path class="arch" d="M 40 195 A 60 60 0 0 1 160 195"/><path class="moon" d="M 100 84 A 32 32 0 1 0 100 148 A 24 24 0 1 1 100 84 Z"/><path class="star" d="M 130 88 L 133.5 96 L 142 99.5 L 133.5 103 L 130 111 L 126.5 103 L 118 99.5 L 126.5 96 Z"/><circle class="light" cx="100" cy="195" r="5.5"/></svg>
-          </span>
-          <span class="cat-label" data-i18n="cat_all"></span>
-        </a>
-      </div>
+  <!-- Marquee -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>The Quiet Room <span class="gold-msg">Prints</span></span>
+      <span>Тиха кімната <span class="gold-msg">Принти</span></span>
+      <span>Slow Fashion <span class="gold-msg">Друк де зручно</span></span>
+      <span>The Quiet Room <span class="gold-msg">Prints</span></span>
+      <span>Тиха кімната <span class="gold-msg">Принти</span></span>
+      <span>Slow Fashion <span class="gold-msg">Друк де зручно</span></span>
     </div>
-  </section>
+  </div>
 
-  <!-- Хіти бренду -->
-  <section class="section section-gray" id="collection">
+  <!-- Колекція -->
+  <section class="section" id="collection">
     <div class="container">
       <div class="sec-head">
-        <h2 class="sec-title" data-i18n="best_title"></h2>
+        <h2 class="section-title" data-i18n="best_title"></h2>
         <a class="sec-link" href="collection.html" data-i18n="cat_all">→</a>
       </div>
-      <p style="color:var(--gray); font-size:14px; margin:-10px 0 22px" data-i18n="best_sub"></p>
+      <p class="section-lead" data-i18n="best_sub"></p>
+
       <div class="grid">
 
-        <a class="card" href="product.html?p=moon" data-name="Півмісяць Crescent" data-tag="Футболка T-Shirt" data-cat="clothes" data-price="24.90">
+        <a class="card reveal" href="https://6820536600065.blacksea.in.ua/l/eaq" target="_blank" rel="noopener" data-name="Півмісяць crescent" data-desc="футболка місяць зірка" data-cat="clothes">
           <div class="card-media">
-            <img src="assets/img/tee-cream.svg" alt="Кремова футболка з принтом-півмісяцем" width="400" height="500">
-            <span class="badge" data-i18n="card_soon"></span>
+            <img src="assets/img/tee-cream.svg" alt="Принт «Півмісяць» — місяць і зірка" width="400" height="500">
+            <span class="card-badge" data-i18n="on_sale"></span>
+            <span class="card-files">55 ₴</span>
           </div>
           <div class="card-body">
             <p class="card-tag" data-i18n="p_moon_tag"></p>
             <h3 class="card-title" data-i18n="p_moon_name"></h3>
-            <p class="card-by" data-i18n="card_by"></p>
-            <p class="card-price"><span class="from" data-i18n="card_from"></span> €24,90</p>
+            <p class="card-desc" data-i18n="p_moon_desc"></p>
+            <div class="card-foot">
+              <span class="card-price"><span class="cur">₴</span>55</span>
+              <span class="btn-buy" data-i18n="buy_on">→</span>
+            </div>
           </div>
         </a>
 
-        <a class="card" href="product.html?p=arch" data-name="Арка Arch" data-tag="Футболка T-Shirt" data-cat="clothes" data-price="24.90">
+        <a class="card reveal" data-delay="1" href="https://6820536600065.blacksea.in.ua/l/eaq" target="_blank" rel="noopener" data-name="Арка arch" data-desc="футболка двері світло" data-cat="clothes">
           <div class="card-media">
-            <img src="assets/img/tee-white.svg" alt="Біла футболка з принтом-аркою" width="400" height="500">
-            <span class="badge" data-i18n="card_soon"></span>
+            <img src="assets/img/tee-white.svg" alt="Принт «Арка» — дверний отвір зі світлом" width="400" height="500">
+            <span class="card-badge" data-i18n="on_sale"></span>
+            <span class="card-files">55 ₴</span>
           </div>
           <div class="card-body">
             <p class="card-tag" data-i18n="p_arch_tag"></p>
             <h3 class="card-title" data-i18n="p_arch_name"></h3>
-            <p class="card-by" data-i18n="card_by"></p>
-            <p class="card-price"><span class="from" data-i18n="card_from"></span> €24,90</p>
+            <p class="card-desc" data-i18n="p_arch_desc"></p>
+            <div class="card-foot">
+              <span class="card-price"><span class="cur">₴</span>55</span>
+              <span class="btn-buy" data-i18n="buy_on">→</span>
+            </div>
           </div>
         </a>
 
-        <a class="card" href="product.html?p=night" data-name="Нічник Nightlight" data-tag="Худі Hoodie" data-cat="clothes" data-price="39.90">
+        <a class="card reveal" data-delay="2" href="https://6820536600065.blacksea.in.ua/l/eaq" target="_blank" rel="noopener" data-name="Нічник nightlight" data-desc="худі знак кімната" data-cat="clothes">
           <div class="card-media dark">
-            <img src="assets/img/hoodie-dark.svg" alt="Темне худі з принтом «тиха кімната»" width="400" height="500">
-            <span class="badge" data-i18n="card_soon"></span>
+            <img src="assets/img/hoodie-dark.svg" alt="Принт «Нічник» — повний знак тихої кімнати" width="400" height="500">
+            <span class="card-badge" data-i18n="on_sale"></span>
+            <span class="card-files">55 ₴</span>
           </div>
           <div class="card-body">
             <p class="card-tag" data-i18n="p_night_tag"></p>
             <h3 class="card-title" data-i18n="p_night_name"></h3>
-            <p class="card-by" data-i18n="card_by"></p>
-            <p class="card-price"><span class="from" data-i18n="card_from"></span> €39,90</p>
+            <p class="card-desc" data-i18n="p_night_desc"></p>
+            <div class="card-foot">
+              <span class="card-price"><span class="cur">₴</span>55</span>
+              <span class="btn-buy" data-i18n="buy_on">→</span>
+            </div>
           </div>
         </a>
 
-        <a class="card" href="product.html?p=mug" data-name="Місяць Moon" data-tag="Кухоль Mug" data-cat="home" data-price="16.90">
+        <a class="card reveal" data-delay="3" href="https://6820536600065.blacksea.in.ua/l/eaq" target="_blank" rel="noopener" data-name="Місяць moon" data-desc="кухоль дім ранок" data-cat="home">
           <div class="card-media">
-            <img src="assets/img/mug.svg" alt="Кухоль з принтом-півмісяцем" width="400" height="500">
-            <span class="badge" data-i18n="card_soon"></span>
+            <img src="assets/img/mug.svg" alt="Принт «Місяць» — півмісяць і зірка на кухлі" width="400" height="500">
+            <span class="card-badge" data-i18n="on_sale"></span>
+            <span class="card-files">55 ₴</span>
           </div>
           <div class="card-body">
             <p class="card-tag" data-i18n="p_mug_tag"></p>
             <h3 class="card-title" data-i18n="p_mug_name"></h3>
-            <p class="card-by" data-i18n="card_by"></p>
-            <p class="card-price"><span class="from" data-i18n="card_from"></span> €16,90</p>
+            <p class="card-desc" data-i18n="p_mug_desc"></p>
+            <div class="card-foot">
+              <span class="card-price"><span class="cur">₴</span>55</span>
+              <span class="btn-buy" data-i18n="buy_on">→</span>
+            </div>
           </div>
         </a>
 
@@ -194,24 +191,40 @@
     </div>
   </section>
 
-  <!-- Про бренд (анонс) -->
-  <section class="section">
+  <!-- Як це працює -->
+  <section class="section section-dark" id="how">
+    <div class="glow" style="width:520px;height:520px;left:-140px;top:-140px;background:radial-gradient(circle,rgba(201,162,74,.2),transparent 65%)"></div>
+    <div class="glow" style="width:460px;height:460px;right:-120px;bottom:-120px;background:radial-gradient(circle,rgba(200,122,136,.16),transparent 65%)"></div>
+    <div class="container" style="position:relative;z-index:1">
+      <p class="section-lead reveal" data-i18n="how_title"></p>
+      <h2 class="section-title reveal" style="margin-top:-30px"><span class="gold" data-i18n="how_title_sub"></span></h2>
+      <div class="steps">
+        <div class="step reveal"><span class="step-num">01</span><h3 data-i18n="step1"></h3><p data-i18n="step1_d"></p></div>
+        <div class="step reveal" data-delay="1"><span class="step-num">02</span><h3 data-i18n="step2"></h3><p data-i18n="step2_d"></p></div>
+        <div class="step reveal" data-delay="2"><span class="step-num">03</span><h3 data-i18n="step3"></h3><p data-i18n="step3_d"></p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Про бренд -->
+  <section class="section" id="about">
     <div class="container about-grid">
-      <div class="about-mark">
-        <svg viewBox="0 0 200 240" aria-hidden="true">
-          <path class="arch" d="M 40 195 A 60 60 0 0 1 160 195"/>
-          <path class="moon" d="M 100 84 A 32 32 0 1 0 100 148 A 24 24 0 1 1 100 84 Z"/>
-          <path class="star" d="M 130 88 L 133.5 96 L 142 99.5 L 133.5 103 L 130 111 L 126.5 103 L 118 99.5 L 126.5 96 Z"/>
-          <circle class="light" cx="100" cy="195" r="5.5"/>
+      <div class="about-mark reveal">
+        <svg viewBox="0 0 300 270" aria-hidden="true">
+          <path class="arch" d="M 40 190 A 110 110 0 0 1 260 190"/>
+          <path class="drop" d="M 40 190 C 29 206 49 224 63 209 C 74 198 62 187 40 190 Z"/>
+          <path class="moon" d="M 122 116 A 26 26 0 1 0 122 162 A 19 19 0 1 1 122 116 Z"/>
+          <path class="star" d="M 160 112 L 162.6 119.4 L 170 122 L 162.6 124.6 L 160 132 L 157.4 124.6 L 150 122 L 157.4 119.4 Z"/>
+          <circle class="star" cx="150" cy="190" r="6.5"/>
         </svg>
       </div>
-      <div>
-        <p class="about-lead" data-i18n="about_lead"></p>
+      <div class="reveal" data-delay="1">
+        <p class="about-lead"><span class="script">The Quiet Room</span> — <span data-i18n="about_lead_brief"></span></p>
         <div class="about-text">
           <p data-i18n="about_p1"></p>
           <p data-i18n="about_p2"></p>
         </div>
-        <p style="margin-top:6px"><a class="btn btn-black" href="about.html" data-i18n="cta_about">→</a></p>
+        <p style="margin-top:8px"><a class="btn btn-wine" href="about.html" data-i18n="cta_about">→</a></p>
       </div>
     </div>
   </section>
@@ -221,30 +234,19 @@
 <footer class="site-footer">
   <div class="container footer-grid">
     <div>
-      <div class="footer-brand">
-        <svg viewBox="0 0 200 240" aria-hidden="true">
-          <path class="arch" d="M 40 195 A 60 60 0 0 1 160 195"/>
-          <path class="moon" d="M 100 84 A 32 32 0 1 0 100 148 A 24 24 0 1 1 100 84 Z"/>
-          <path class="star" d="M 130 88 L 133.5 96 L 142 99.5 L 133.5 103 L 130 111 L 126.5 103 L 118 99.5 L 126.5 96 Z"/>
-          <circle class="light" cx="100" cy="195" r="5.5"/>
-        </svg>
-        <span>The <em>Quiet</em> Room</span>
-      </div>
+      <p class="footer-brand">The <b>Quiet</b> Room</p>
       <p class="footer-tag" data-i18n="f_tag"></p>
+      <a class="btn btn-gold" style="padding:12px 22px;font-size:13px" href="https://6820536600065.blacksea.in.ua/l/eaq" target="_blank" rel="noopener" data-i18n="buy_on"></a>
     </div>
     <div class="footer-col">
       <h4 data-i18n="footer_shop"></h4>
       <a href="collection.html" data-i18n="f_col"></a>
-      <a href="contact.html" data-i18n="f_ship"></a>
+      <a href="https://6820536600065.blacksea.in.ua/l/eaq" target="_blank" rel="noopener" data-i18n="buy_on"></a>
     </div>
     <div class="footer-col">
       <h4 data-i18n="footer_about"></h4>
       <a href="about.html" data-i18n="f_about"></a>
       <a href="contact.html" data-i18n="f_contact"></a>
-    </div>
-    <div class="footer-col">
-      <h4 data-i18n="footer_support"></h4>
-      <a href="contact.html" data-i18n="f_returns"></a>
     </div>
   </div>
   <div class="container footer-bottom">
@@ -256,7 +258,7 @@
   </div>
 </footer>
 
-<script src="assets/i18n.js?v=5"></script>
-<script src="assets/main.js?v=5"></script>
+<script src="assets/i18n.js?v=6"></script>
+<script src="assets/main.js?v=6"></script>
 </body>
 </html>

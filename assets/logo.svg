@@ -1,21 +1,26 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" width="400" height="480">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 270" width="600" height="540">
   <defs>
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;1,600&amp;display=swap');
-      .arch { fill: none; stroke: #C4572F; stroke-width: 6.5; stroke-linecap: round; stroke-linejoin: round; }
-      .moon { fill: none; stroke: #C4572F; stroke-width: 6.5; stroke-linecap: round; stroke-linejoin: round; }
-      .star { fill: #C4572F; }
-      .light { fill: #C4572F; }
-      .wordmark { font-family: 'Fraunces', serif; font-weight: 600; fill: #221E19; font-size: 30px; }
+      @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&amp;display=swap');
+      .arch-soft { fill: none; stroke: #8E2137; stroke-width: 15; stroke-linecap: round; opacity: .16; }
+      .arch-line { fill: none; stroke: #8E2137; stroke-width: 3.4; stroke-linecap: round; }
+      .arch-acc { fill: none; stroke: #C9A24A; stroke-width: 2; stroke-linecap: round; opacity: .85; }
+      .moon { fill: none; stroke: #C9A24A; stroke-width: 4.6; stroke-linecap: round; }
+      .star { fill: #C9A24A; }
+      .drop { fill: #8E2137; }
+      .wordmark { font-family: 'Great Vibes', cursive; font-size: 46px; fill: #8E2137; }
     </style>
   </defs>
 
-  <!-- Тихая комната: проём, полумесяц, звезда, свет на пороге -->
-  <path class="arch" d="M 40 195 A 60 60 0 0 1 160 195"/>
-  <path class="moon" d="M 100 84 A 32 32 0 1 0 100 148 A 24 24 0 1 1 100 84 Z"/>
-  <path class="star" d="M 130 88 L 133.5 96 L 142 99.5 L 133.5 103 L 130 111 L 126.5 103 L 118 99.5 L 126.5 96 Z"/>
-  <circle class="light" cx="100" cy="195" r="5.5"/>
+  <!-- Каліграфічний знак «тиха кімната»: мазок-арка, крапля туші, півмісяць, зірка, золотий світ на порозі -->
+  <path class="arch-soft" d="M 40 190 A 110 110 0 0 1 260 190"/>
+  <path class="arch-line" d="M 40 190 A 110 110 0 0 1 260 190"/>
+  <path class="arch-acc" d="M 52 190 A 98 98 0 0 1 248 190" opacity=".5"/>
+  <path class="drop" d="M 40 190 C 29 206 49 224 63 209 C 74 198 62 187 40 190 Z"/>
+  <path class="moon" d="M 122 116 A 26 26 0 1 0 122 162 A 19 19 0 1 1 122 116 Z"/>
+  <path class="star" d="M 160 112 L 162.6 119.4 L 170 122 L 162.6 124.6 L 160 132 L 157.4 124.6 L 150 122 L 157.4 119.4 Z"/>
+  <circle class="star" cx="150" cy="190" r="6.5"/>
 
-  <!-- Слово-марка -->
-  <text class="wordmark" x="100" y="232" text-anchor="middle">The Quiet Room</text>
+  <!-- Каліграфічна слово-марка -->
+  <text class="wordmark" x="150" y="252" text-anchor="middle">The Quiet Room</text>
 </svg>

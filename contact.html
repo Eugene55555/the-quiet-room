@@ -4,51 +4,52 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Контакти — The Quiet Room</title>
-<meta name="description" content="Зв'язатися з The Quiet Room: питання про колекцію, відкриття магазину та доставку.">
+<meta name="description" content="Питання про колекцію принтів The Quiet Room, покупку на BlackSea або спільний проєкт — напишіть нам.">
 <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=5">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=6">
 </head>
 <body>
 
-<div class="promo" data-i18n="promo"></div>
+<div class="promo"><a href="https://6820536600065.blacksea.in.ua/l/eaq" target="_blank" rel="noopener" data-i18n="promo">→</a></div>
 
 <header class="site-header">
   <div class="container header-inner">
     <a class="brand" href="index.html" aria-label="The Quiet Room — на головну">
-      <svg viewBox="0 0 200 240" class="brand-mark" aria-hidden="true">
-        <path class="arch" d="M 40 195 A 60 60 0 0 1 160 195"/>
-        <path class="moon" d="M 100 84 A 32 32 0 1 0 100 148 A 24 24 0 1 1 100 84 Z"/>
-        <path class="star" d="M 130 88 L 133.5 96 L 142 99.5 L 133.5 103 L 130 111 L 126.5 103 L 118 99.5 L 126.5 96 Z"/>
-        <circle class="light" cx="100" cy="195" r="5.5"/>
+      <svg viewBox="0 0 300 270" class="brand-mark" aria-hidden="true">
+        <path class="arch" d="M 40 190 A 110 110 0 0 1 260 190"/>
+        <path class="drop" d="M 40 190 C 29 206 49 224 63 209 C 74 198 62 187 40 190 Z"/>
+        <path class="moon" d="M 122 116 A 26 26 0 1 0 122 162 A 19 19 0 1 1 122 116 Z"/>
+        <path class="star" d="M 160 112 L 162.6 119.4 L 170 122 L 162.6 124.6 L 160 132 L 157.4 124.6 L 150 122 L 157.4 119.4 Z"/>
+        <circle class="star" cx="150" cy="190" r="6.5"/>
       </svg>
-      <span class="wordmark">The <em>Quiet</em> Room</span>
+      <span class="brand-script">The <b>Quiet</b> Room</span>
     </a>
 
     <form class="search" id="search-form" role="search">
       <input type="search" data-i18n-ph="search_ph" aria-label="Пошук дизайну">
       <button type="submit" aria-label="Шукати">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
       </button>
     </form>
+
+    <nav class="nav-main" aria-label="Основна навігація">
+      <a href="collection.html" data-i18n="nav_collection"></a>
+      <a href="about.html" data-i18n="nav_about"></a>
+      <a href="contact.html" class="active" data-i18n="nav_contact"></a>
+    </nav>
 
     <div class="header-tools">
       <div class="lang-switch">
         <button class="lang-btn" data-lang="uk">UA</button>
         <button class="lang-btn" data-lang="en">EN</button>
       </div>
-      <button class="cart-btn" id="cart-btn">
-        <svg viewBox="0 0 24 24"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
-        <span class="cart-label" data-i18n="cart"></span>
-        <span class="cart-count">0</span>
+      <button class="burger" id="burger" aria-label="Відкрити меню" aria-expanded="false">
+        <span></span><span></span><span></span>
       </button>
     </div>
-
-    <button class="burger" id="burger" aria-label="Відкрити меню" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
   </div>
 
   <nav class="site-nav-mobile" id="site-nav-mobile" aria-label="Мобільне меню">
@@ -62,16 +63,7 @@
   </nav>
 </header>
 
-<nav class="nav-strip" aria-label="Основна навігація">
-  <div class="container">
-    <a href="collection.html" data-i18n="nav_collection"></a>
-    <a href="about.html" data-i18n="nav_about"></a>
-    <a href="contact.html" class="active" data-i18n="nav_contact"></a>
-  </div>
-</nav>
-
 <main>
-
   <div class="page-head">
     <div class="container">
       <h1 data-i18n="contact_h1"></h1>
@@ -79,65 +71,52 @@
     </div>
   </div>
 
-  <section class="section" style="padding-top:34px">
+  <section class="section">
     <div class="container contact-grid">
-
-      <form class="contact-form" id="contact-form">
-        <label for="f-name" data-i18n="f_name"></label>
-        <input id="f-name" name="name" type="text" autocomplete="name">
-        <label for="f-email" data-i18n="f_email"></label>
-        <input id="f-email" name="email" type="email" autocomplete="email">
-        <label for="f-msg" data-i18n="f_msg"></label>
-        <textarea id="f-msg" name="message" rows="5"></textarea>
-        <button class="btn btn-black" type="submit" data-i18n="f_send"></button>
-        <p class="form-note" data-i18n="f_note"></p>
-        <p class="form-status" id="form-status" data-i18n="f_ok"></p>
-      </form>
-
-      <div>
-        <div class="sec-head">
-          <h2 class="sec-title" data-i18n="faq_title"></h2>
-        </div>
-        <div class="faq">
-          <div class="faq-item"><h3 data-i18n="faq1_q"></h3><p data-i18n="faq1_a"></p></div>
-          <div class="faq-item"><h3 data-i18n="faq2_q"></h3><p data-i18n="faq2_a"></p></div>
-          <div class="faq-item"><h3 data-i18n="faq3_q"></h3><p data-i18n="faq3_a"></p></div>
-          <div class="faq-item"><h3 data-i18n="faq4_q"></h3><p data-i18n="faq4_a"></p></div>
-        </div>
+      <div class="reveal">
+        <form class="contact-form" id="contact-form" novalidate>
+          <label for="f-name" data-i18n="f_name"></label>
+          <input id="f-name" name="name" required>
+          <label for="f-email" data-i18n="f_email"></label>
+          <input id="f-email" name="email" type="email" required>
+          <label for="f-msg" data-i18n="f_msg"></label>
+          <textarea id="f-msg" name="message" rows="5" required></textarea>
+          <button class="btn btn-wine" type="submit" data-i18n="f_send"></button>
+          <p class="form-note" data-i18n="f_note"></p>
+          <p class="form-status" id="form-status" data-i18n="f_ok"></p>
+        </form>
       </div>
 
+      <div>
+        <h2 class="section-title reveal" style="margin-bottom:22px;font-size:clamp(30px,4vw,44px)" data-i18n="faq_title"></h2>
+        <div class="faq">
+          <div class="faq-item reveal"><h3 data-i18n="faq1_q"></h3><p data-i18n="faq1_a"></p></div>
+          <div class="faq-item reveal" data-delay="1"><h3 data-i18n="faq2_q"></h3><p data-i18n="faq2_a"></p></div>
+          <div class="faq-item reveal" data-delay="2"><h3 data-i18n="faq3_q"></h3><p data-i18n="faq3_a"></p></div>
+          <div class="faq-item reveal" data-delay="3"><h3 data-i18n="faq4_q"></h3><p data-i18n="faq4_a"></p></div>
+        </div>
+        <a class="btn btn-gold btn-shine reveal" data-delay="3" style="margin-top:26px" href="https://6820536600065.blacksea.in.ua/l/eaq" target="_blank" rel="noopener" data-i18n="buy_on"></a>
+      </div>
     </div>
   </section>
-
 </main>
 
 <footer class="site-footer">
   <div class="container footer-grid">
     <div>
-      <div class="footer-brand">
-        <svg viewBox="0 0 200 240" aria-hidden="true">
-          <path class="arch" d="M 40 195 A 60 60 0 0 1 160 195"/>
-          <path class="moon" d="M 100 84 A 32 32 0 1 0 100 148 A 24 24 0 1 1 100 84 Z"/>
-          <path class="star" d="M 130 88 L 133.5 96 L 142 99.5 L 133.5 103 L 130 111 L 126.5 103 L 118 99.5 L 126.5 96 Z"/>
-          <circle class="light" cx="100" cy="195" r="5.5"/>
-        </svg>
-        <span>The <em>Quiet</em> Room</span>
-      </div>
+      <p class="footer-brand">The <b>Quiet</b> Room</p>
       <p class="footer-tag" data-i18n="f_tag"></p>
+      <a class="btn btn-gold" style="padding:12px 22px;font-size:13px" href="https://6820536600065.blacksea.in.ua/l/eaq" target="_blank" rel="noopener" data-i18n="buy_on"></a>
     </div>
     <div class="footer-col">
       <h4 data-i18n="footer_shop"></h4>
       <a href="collection.html" data-i18n="f_col"></a>
-      <a href="contact.html" data-i18n="f_ship"></a>
+      <a href="https://6820536600065.blacksea.in.ua/l/eaq" target="_blank" rel="noopener" data-i18n="buy_on"></a>
     </div>
     <div class="footer-col">
       <h4 data-i18n="footer_about"></h4>
       <a href="about.html" data-i18n="f_about"></a>
       <a href="contact.html" data-i18n="f_contact"></a>
-    </div>
-    <div class="footer-col">
-      <h4 data-i18n="footer_support"></h4>
-      <a href="contact.html" data-i18n="f_returns"></a>
     </div>
   </div>
   <div class="container footer-bottom">
@@ -149,7 +128,7 @@
   </div>
 </footer>
 
-<script src="assets/i18n.js?v=5"></script>
-<script src="assets/main.js?v=5"></script>
+<script src="assets/i18n.js?v=6"></script>
+<script src="assets/main.js?v=6"></script>
 </body>
 </html>

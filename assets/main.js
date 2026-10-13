@@ -135,4 +135,71 @@
       });
     });
   }
+
+  /* --- Прогрес-бар прокрутки --- */
+  var progress = document.getElementById('scroll-progress');
+  if (progress) {
+    var onScroll = function () {
+      var h = document.documentElement;
+      var max = h.scrollHeight - h.clientHeight;
+      progress.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
+  /* --- Сжатие шапки --- */
+  var header = document.querySelector('.site-header');
+  if (header) {
+    var hdrToggle = function () {
+      header.classList.toggle('scrolled', window.scrollY > 40);
+    };
+    window.addEventListener('scroll', hdrToggle, { passive: true });
+    hdrToggle();
+  }
+
+  /* --- Мобильная плавающая кнопка покупки --- */
+  var mCta = document.getElementById('mobile-cta');
+  if (mCta) {
+    var ctaToggle = function () {
+      var show = window.scrollY > 420;
+      mCta.classList.toggle('hidden', !show);
+      document.body.classList.toggle('cta-visible', show);
+    };
+    window.addEventListener('scroll', ctaToggle, { passive: true });
+    ctaToggle();
+  }
+
+  /* --- Кастомний курсор (desktop, exact pointer) --- */
+  if (fine && !reduced && !/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    var dot = document.createElement('div');
+    dot.className = 'cursor-dot';
+    var ring = document.createElement('div');
+    ring.className = 'cursor-ring';
+    document.body.appendChild(dot);
+    document.body.appendChild(ring);
+    document.body.classList.add('has-cursor');
+
+    var mx = -100, my = -100, rx = -100, ry = -100;
+    var raf = null;
+    window.addEventListener('mousemove', function (e) {
+      mx = e.clientX; my = e.clientY;
+      dot.style.left = (mx - 3) + 'px';
+      dot.style.top = (my - 3) + 'px';
+      ring.style.left = (rx - 17) + 'px';
+      ring.style.top = (ry - 17) + 'px';
+      if (!raf) {
+        raf = requestAnimationFrame(function loop() {
+          rx += (mx - rx) * 0.16;
+          ry += (my - ry) * 0.16;
+          ring.style.left = (rx - 17) + 'px';
+          ring.style.top = (ry - 17) + 'px';
+          raf = requestAnimationFrame(loop);
+        });
+      }
+      var t = e.target;
+      if (t && (t.closest('a') || t.closest('button') || t.closest('.chip'))) ring.classList.add('hover');
+      else ring.classList.remove('hover');
+    });
+  }
 })();

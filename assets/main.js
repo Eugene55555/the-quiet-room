@@ -152,7 +152,7 @@
     /* Підписи, що залежать від мови */
     document.querySelectorAll('#catalog .card-badge').forEach(function (b) { b.textContent = t('on_sale'); });
     document.querySelectorAll('#catalog .btn-buy').forEach(function (b) { b.textContent = t('buy_on'); });
-    document.querySelectorAll('#catalog .reveal').forEach(function (el) { if (window.__ioHas) el.classList.add('in'); });
+    document.querySelectorAll('#catalog .reveal').forEach(function (el) { if (window.__io) window.__io.observe(el); else el.classList.add('in'); });
     bindTilt();
     // пере-фільтри пошуку, якщо був запит
     var qp = new URLSearchParams(location.search).get('q');
@@ -283,6 +283,7 @@
         }
       });
     }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    window.__io = io;
     revealEls.forEach(function (el) { io.observe(el); });
   } else {
     revealEls.forEach(function (el) { el.classList.add('in'); });

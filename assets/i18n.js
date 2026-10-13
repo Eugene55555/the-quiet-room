@@ -132,9 +132,19 @@ var TQR_I18N = (function () {
 
   var LANG_KEY = 'tqr_lang';
   var supported = ['uk', 'en'];
+  var memoryLang = null;
+
+  function store(lang) {
+    try { localStorage.setItem(LANG_KEY, lang); } catch (e) { /* приватний режим */ }
+    memoryLang = lang;
+  }
+  function load() {
+    try { return localStorage.getItem(LANG_KEY); } catch (e) { return memoryLang; }
+    return memoryLang;
+  }
 
   function detect() {
-    var stored = localStorage.getItem(LANG_KEY);
+    var stored = load();
     if (stored && supported.indexOf(stored) !== -1) return stored;
     var nav = (navigator.language || 'uk').toLowerCase();
     if (nav.indexOf('uk') !== -1) return 'uk';
@@ -152,7 +162,7 @@ var TQR_I18N = (function () {
 
   function apply(lang) {
     document.documentElement.lang = lang;
-    localStorage.setItem(LANG_KEY, lang);
+    store(lang);
     var nodes = document.querySelectorAll('[data-i18n], [data-i18n-html]');
     for (var i = 0; i < nodes.length; i++) {
       var key = nodes[i].getAttribute('data-i18n') || nodes[i].getAttribute('data-i18n-html');

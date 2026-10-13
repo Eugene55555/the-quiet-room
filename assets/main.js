@@ -41,8 +41,8 @@
     return cloudCfg || fetch('config.json?v=' + Date.now()).then(function (r) { return r.ok ? r.json() : null; });
   }).then(function (cfg) {
     if (cfg && cfg.products) { CFG = cfg; applyConfig(); }
-    else applyConfig();
-  }).catch(function () { applyConfig(); });
+    /* якщо конфиг не прийшов — залишаємо статичні картки в HTML */
+  }).catch(function () { /* статика в HTML залишається */ });
 
   function lang() {
     return window.TQR_I18N ? TQR_I18N.detect() : 'uk';

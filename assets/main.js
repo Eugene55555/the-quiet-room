@@ -91,18 +91,19 @@
       var name = L === 'uk' ? p.name_uk : p.name_en;
       var tag = L === 'uk' ? p.tag_uk : p.tag_en;
       var desc = L === 'uk' ? p.desc_uk : p.desc_en;
-      out += '<a class="card reveal" data-delay="' + (i % 4) + '" href="' + p.link + '" target="_blank" rel="noopener" data-name="' + (p.name_uk + ' ' + p.name_en) + '" data-desc="' + (p.desc_uk + ' ' + p.desc_en) + '" data-cat="' + (p.cat || '') + '">'
+      var esc = function (s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;'); };
+      out += '<a class="card reveal" data-delay="' + (i % 4) + '" href="' + esc(p.link) + '" target="_blank" rel="noopener" data-name="' + esc(p.name_uk + ' ' + p.name_en) + '" data-desc="' + esc(p.desc_uk + ' ' + p.desc_en) + '" data-cat="' + esc(p.cat || '') + '">'
         + '<div class="card-media' + dark + '">'
         + '<span class="card-num">' + n + '</span>'
-        + '<img loading="lazy" src="' + p.img + '" alt="' + name + ' — принт The Quiet Room" width="400" height="500">'
+        + '<img loading="lazy" src="' + esc(p.img) + '" alt="' + esc(name + ' — принт The Quiet Room') + '" width="400" height="500">'
         + '<span class="card-badge"></span>'
-        + '<span class="card-files">' + p.price + ' ₴</span>'
+        + '<span class="card-files">' + esc(p.price) + ' ₴</span>'
         + '</div><div class="card-body">'
-        + '<p class="card-tag">' + tag + '</p>'
-        + '<h3 class="card-title">' + name + '</h3>'
-        + '<p class="card-desc">' + desc + '</p>'
+        + '<p class="card-tag">' + esc(tag) + '</p>'
+        + '<h3 class="card-title">' + esc(name) + '</h3>'
+        + '<p class="card-desc">' + esc(desc) + '</p>'
         + '<div class="card-foot">'
-        + '<span class="card-price"><span class="cur">₴</span>' + p.price + '</span>'
+        + '<span class="card-price"><span class="cur">₴</span>' + esc(p.price) + '</span>'
         + '<span class="btn-buy"></span>'
         + '</div></div></a>';
     });

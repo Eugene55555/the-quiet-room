@@ -5,287 +5,556 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Адмінка — The Quiet Room</title>
 <style>
-  :root { --wine:#8E2137; --cream:#F6EFE0; --gold:#C9A24A; --ink:#2B0810; }
   * { box-sizing: border-box; }
-  body { margin:0; font-family:'Segoe UI', system-ui, sans-serif; background:var(--cream); color:var(--ink); }
-  header { background:var(--wine); color:#fff; padding:18px 22px; }
-  header h1 { margin:0; font-size:20px; letter-spacing:.5px; }
-  header p { margin:4px 0 0; font-size:12.5px; opacity:.75; }
-  main { max-width: 1100px; margin: 0 auto; padding: 22px; }
-  .tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px; }
-  .tab { padding:9px 16px; border-radius:999px; border:1.5px solid var(--wine); background:transparent; color:var(--wine); font-weight:600; cursor:pointer; font-size:14px; }
-  .tab.active { background:var(--wine); color:#fff; }
-  .panel { display:none; }
-  .panel.active { display:block; }
-  .card { background:#fff; border:1px solid rgba(142,33,55,.15); border-radius:14px; padding:18px; margin-bottom:16px; }
-  .card h2 { margin:0 0 4px; font-size:16px; }
-  .card .hint { margin:0 0 14px; font-size:12.5px; color:#777; }
-  .row { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin-bottom:10px; }
-  label { display:block; font-size:11.5px; font-weight:600; text-transform:uppercase; letter-spacing:.4px; color:#8a6d52; margin-bottom:3px; }
-  input, select, textarea { width:100%; padding:8px 10px; border:1.5px solid #ddd; border-radius:8px; font-size:13.5px; font-family:inherit; background:#fff; }
-  input:focus, select:focus, textarea:focus { outline:none; border-color:var(--gold); }
-  textarea { min-height:52px; resize:vertical; }
-  .prod { border:1.5px solid rgba(142,33,55,.25); }
-  .prod-head { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
-  .prod-head b { flex:1; font-size:14px; }
-  .btn { border:0; border-radius:999px; padding:10px 20px; font-size:14px; font-weight:700; cursor:pointer; }
+  :root { --wine:#8E2137; --cream:#F6EFE0; --gold:#C9A24A; --ink:#2B0810; }
+  body { margin:0; font-family:'Segoe UI', system-ui, sans-serif; background:#f3ece0; color:var(--ink); }
+  .topbar { background:var(--wine); color:#fff; padding:14px 18px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; position:sticky; top:0; z-index:50; }
+  .topbar h1 { font-size:17px; margin:0; }
+  .topbar .sub { font-size:12px; opacity:.75; margin:2px 0 0; }
+  .topbar .spacer { flex:1; }
+  .btn { border:0; border-radius:999px; padding:10px 18px; font-size:13.5px; font-weight:700; cursor:pointer; }
   .btn-gold { background:var(--gold); color:var(--wine); }
   .btn-wine { background:var(--wine); color:#fff; }
-  .btn-ghost { background:transparent; border:1.5px solid var(--wine); color:var(--wine); }
-  .btn-sm { padding:6px 12px; font-size:12px; }
-  .actions { position:sticky; bottom:14px; display:flex; gap:10px; flex-wrap:wrap; background:rgba(246,239,224,.94); border:1.5px solid var(--wine); border-radius:14px; padding:12px; backdrop-filter:blur(6px); }
-  .out { display:none; margin-top:12px; }
-  .out pre { background:#2B0810; color:#F6EFE0; padding:14px; border-radius:10px; font-size:12px; overflow:auto; max-height:340px; }
-  .steps { background:#fff7ec; border:1px solid #e8d5b5; border-radius:14px; padding:16px 18px; font-size:13.5px; line-height:1.6; }
-  .steps ol { margin:8px 0 0; padding-left:20px; }
-  .steps code { background:#f0e6d8; padding:1px 6px; border-radius:5px; font-size:12.5px; }
-  .status { font-size:13px; margin-top:8px; }
-  .status.ok { color:#1a7f37; }
-  .swatches { display:flex; gap:12px; flex-wrap:wrap; }
-  .swatch { width:110px; }
-  .swatch input[type=color] { padding:2px; height:38px; cursor:pointer; }
-  .cat-row { display:flex; gap:14px; align-items:center; flex-wrap:wrap; }
-  .cat-row label { display:flex; align-items:center; gap:6px; font-size:13px; text-transform:none; letter-spacing:0; }
-  .del { color:#b3261e; }
-  @media (max-width:560px){ .actions{ position:static; } .row{ grid-template-columns:1fr 1fr; } }
+  .btn-soft { background:#fff; color:var(--wine); border:1.5px solid var(--wine); }
+  .btn-sm { padding:7px 13px; font-size:12.5px; }
+  main { max-width:1000px; margin:0 auto; padding:18px; }
+  .nav { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+  .nav button { padding:9px 15px; border-radius:999px; border:1.5px solid var(--wine); background:#fff; color:var(--wine); font-weight:600; font-size:13.5px; cursor:pointer; }
+  .nav button.active { background:var(--wine); color:#fff; }
+  .sec { display:none; }
+  .sec.active { display:block; }
+  .card { background:#fff; border:1.5px solid rgba(142,33,55,.14); border-radius:16px; padding:18px; margin-bottom:16px; }
+  .card h2 { margin:0 0 4px; font-size:16px; }
+  .card .hint { margin:0 0 14px; font-size:12.5px; color:#8a6d52; }
+  label { display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:#8a6d52; margin:0 0 4px; }
+  input[type=text], input[type=url], input[type=number], textarea, select { width:100%; padding:9px 11px; border:1.5px solid #ddd; border-radius:10px; font-size:14px; font-family:inherit; background:#fff; }
+  input:focus, textarea:focus, select:focus { outline:none; border-color:var(--gold); }
+  textarea { min-height:54px; resize:vertical; }
+  .prod { display:grid; grid-template-columns:150px 1fr; gap:16px; border:2px solid rgba(142,33,55,.18); }
+  .prod-img .ph { width:150px; height:185px; border-radius:12px; background:var(--cream); display:flex; align-items:center; justify-content:center; overflow:hidden; border:1px dashed #d8c9b4; }
+  .prod-img img { width:100%; height:100%; object-fit:contain; }
+  .prod-img .btn { width:100%; margin-top:8px; }
+  .row2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .row3 { display:grid; grid-template-columns:1fr 110px 1fr; gap:10px; align-items:end; }
+  .tools { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; align-items:center; }
+  .pill-row { display:flex; gap:7px; flex-wrap:wrap; }
+  .pill { padding:8px 15px; border-radius:999px; border:1.5px solid #ddd; background:#fff; font-size:13px; font-weight:600; cursor:pointer; }
+  .pill.active { border-color:var(--wine); background:var(--wine); color:#fff; }
+  .price-row { display:flex; align-items:stretch; }
+  .price-row button { width:38px; border:1.5px solid #ddd; background:#f7f1e6; font-size:18px; font-weight:800; cursor:pointer; }
+  .price-row button:first-child { border-radius:10px 0 0 10px; }
+  .price-row button:last-child { border-radius:0 10px 10px 0; }
+  .price-row input { border-radius:0; text-align:center; font-weight:800; padding:8px 4px; }
+  .switch { position:relative; display:inline-block; width:46px; height:26px; vertical-align:middle; }
+  .switch input { display:none; }
+  .slider { position:absolute; inset:0; background:#ccc; border-radius:999px; transition:.2s; cursor:pointer; }
+  .slider:before { content:""; position:absolute; width:20px; height:20px; left:3px; top:3px; background:#fff; border-radius:50%; transition:.2s; }
+  .switch input:checked + .slider { background:#2e7d32; }
+  .switch input:checked + .slider:before { transform:translateX(20px); }
+  .sw-label { font-size:12.5px; font-weight:600; color:#555; }
+  .pal { display:flex; gap:10px; flex-wrap:wrap; }
+  .pal-scheme { width:200px; border:2px solid #eee; border-radius:14px; padding:10px; cursor:pointer; text-align:center; transition:.15s; background:#fff; }
+  .pal-scheme:hover { border-color:var(--gold); transform:translateY(-2px); }
+  .pal-scheme.active { border-color:var(--wine); box-shadow:0 6px 18px rgba(142,33,55,.15); }
+  .pal-scheme .sw { display:flex; height:34px; border-radius:8px; overflow:hidden; margin-bottom:7px; }
+  .pal-scheme .sw i { flex:1; }
+  .pal-scheme b { font-size:13px; }
+  .custom-colors { display:flex; gap:14px; flex-wrap:wrap; margin-top:14px; }
+  .cc { text-align:center; }
+  .cc input[type=color] { width:56px; height:40px; border:0; padding:0; background:none; cursor:pointer; }
+  .cc span { display:block; font-size:11px; color:#999; margin-top:3px; }
+  .font-card { border:2px solid #eee; border-radius:14px; padding:16px 18px; cursor:pointer; margin-bottom:10px; transition:.15s; background:#fff; }
+  .font-card:hover { border-color:var(--gold); }
+  .font-card.active { border-color:var(--wine); box-shadow:0 6px 18px rgba(142,33,55,.15); }
+  .font-card .prev { font-size:26px; letter-spacing:1px; text-transform:uppercase; }
+  .font-card.f1 .prev { font-family:"Arial Narrow", sans-serif; font-weight:700; }
+  .font-card.f2 .prev { font-family:Georgia, serif; font-weight:700; }
+  .font-card.f3 .prev { font-family:"Arial Black", sans-serif; font-weight:900; }
+  .font-card .prev2 { font-size:14px; color:#777; margin-top:2px; }
+  .font-card .name { font-size:12px; color:#8a6d52; margin-top:6px; }
+  .send { background:linear-gradient(135deg,#8E2137,#400D18); color:#fff; border-radius:16px; padding:18px; }
+  .send h2 { margin:0 0 6px; color:#fff; }
+  .send .hint { color:#e8c9a0; }
+  .send .big { font-size:15.5px; background:rgba(255,255,255,.1); border-radius:12px; padding:12px 14px; margin:10px 0; line-height:1.55; }
+  .send .big b { color:var(--gold); }
+  .status { font-size:13px; margin-top:8px; min-height:18px; }
+  .status.ok { color:#1a7f37; font-weight:700; }
+  .status.err { color:#b3261e; font-weight:700; }
+  .hidden { display:none !important; }
+  @media (max-width:640px) {
+    .prod { grid-template-columns:1fr; }
+    .prod-img { width:100%; display:flex; gap:10px; align-items:center; }
+    .prod-img .ph { width:110px; height:135px; flex:none; }
+    .prod-img .btn { width:auto; margin:0; }
+    .row2, .row3 { grid-template-columns:1fr; }
+  }
 </style>
 </head>
 <body>
-<header>
-  <h1>🦋 Адмінка витрини «The Quiet Room»</h1>
-  <p>Редагуєш — копіюєш JSON — вставляєш у файл config.json на GitHub — сайт оновлюється. Без коду.</p>
-</header>
+
+<div class="topbar">
+  <div>
+    <h1>🦋 Адмінка «The Quiet Room»</h1>
+    <p class="sub">Все робиться мишкою — без коду. Наприкінці: «Скачати файл» → надіслати мені в чат.</p>
+  </div>
+  <div class="spacer"></div>
+  <button class="btn btn-soft btn-sm" id="draft-btn">💾 Чернетка</button>
+  <button class="btn btn-gold" id="send-btn">📤 Залити на сайт →</button>
+</div>
 
 <main>
-  <div class="tabs">
-    <button class="tab active" data-panel="p1">Товари</button>
-    <button class="tab" data-panel="p2">Оформлення</button>
-    <button class="tab" data-panel="p3">Соцмережі</button>
-    <button class="tab" data-panel="p4">Промо</button>
-    <button class="tab" data-panel="p5">Як викласти</button>
+  <div class="nav">
+    <button class="active" data-sec="s1">🖼 Принти</button>
+    <button data-sec="s2">🎨 Кольори</button>
+    <button data-sec="s3">🔤 Шрифти</button>
+    <button data-sec="s4">💬 Соцмережі</button>
+    <button data-sec="s5">📢 Промо</button>
+    <button data-sec="s6">🏷 Бренд</button>
+    <button data-sec="s7">📤 Залити</button>
   </div>
 
-  <div class="panel active" id="p1">
+  <!-- ПРИНТИ -->
+  <div class="sec active" id="s1">
     <div class="card">
-      <h2>Товари (принти)</h2>
-      <p class="hint">Кожен принт — це картка на витрині. Назва, опис, ціна (₴), картинка, посилання на BlackSea. Щоб сховати товар — зніми галочку «показувати».</p>
+      <h2>Принти (товари)</h2>
+      <p class="hint">Кожен блок — один принт на витрині. «＋ Додати принт» — і заповнюй. Картинку завантаж з телефону або комп'ютера кнопкою «📷 Картинка» — вона збережеться прямо у файлі.</p>
       <div id="products"></div>
-      <button class="btn btn-ghost btn-sm" id="add-product">+ Додати товар</button>
+      <button class="btn btn-wine" id="add-product" style="margin-top:4px">＋ Додати принт</button>
     </div>
   </div>
 
-  <div class="panel" id="p2">
+  <!-- КОЛЬОРИ -->
+  <div class="sec" id="s2">
     <div class="card">
-      <h2>Кольори</h2>
-      <p class="hint">Чотири головні кольори бренду. Вино — основний, глибоке вино — для футера, крем — фон, золото — акценти.</p>
-      <div class="swatches">
-        <div class="swatch"><label>Вино</label><input type="color" id="c-wine"></div>
-        <div class="swatch"><label>Глибоке вино</label><input type="color" id="c-wine_deep"></div>
-        <div class="swatch"><label>Крем</label><input type="color" id="c-cream"></div>
-        <div class="swatch"><label>Золото</label><input type="color" id="c-gold"></div>
+      <h2>Палітра сайту</h2>
+      <p class="hint">Обери готову схему одним натисканням — або налаштуй кожен колір вручну нижче.</p>
+      <div class="pal" id="palettes"></div>
+      <div class="custom-colors">
+        <div class="cc"><label>Вино</label><input type="color" id="c-wine"><span id="h-wine"></span></div>
+        <div class="cc"><label>Глибоке вино</label><input type="color" id="c-wine_deep"><span id="h-wine_deep"></span></div>
+        <div class="cc"><label>Крем (фон)</label><input type="color" id="c-cream"><span id="h-cream"></span></div>
+        <div class="cc"><label>Золото</label><input type="color" id="c-gold"><span id="h-gold"></span></div>
       </div>
     </div>
+  </div>
+
+  <!-- ШРИФТИ -->
+  <div class="sec" id="s3">
     <div class="card">
       <h2>Шрифти</h2>
-      <p class="hint">Готові пари шрифтів: плакатний заголовок + текстовий. Обидві підтримують українську.</p>
-      <label>Пара шрифтів</label>
-      <select id="font-pair">
-        <option value="bebas">Bebas Neue (заголовки) + Space Grotesk (текст) — зараз</option>
-        <option value="oswald">Oswald + Manrope — суворіше</option>
-        <option value="russo">Russo One + Inter — агресивніше</option>
-      </select>
-    </div>
-    <div class="card">
-      <h2>Бренд і логотип</h2>
-      <p class="hint">Назва бренду з'являється в шапці, в меню і в футері. Логотип: порожньо = каліграфічний знак за замовчуванням; вкажи шлях до свого SVG (наприклад assets/logo.svg або assets/logo2.svg) — і він замінить знак. Сам SVG можна завантажити на GitHub як файл.</p>
-      <div class="row">
-        <div><label>Назва бренду</label><input type="text" id="brand-name"></div>
-        <div style="min-width:260px"><label>Логотип (шлях до SVG, або порожньо)</label><input type="text" id="brand-logo" placeholder="assets/logo.svg"></div>
-      </div>
+      <p class="hint">Три готові стилі, всі підтримують українську.</p>
+      <div id="fonts"></div>
     </div>
   </div>
 
-  <div class="panel" id="p3">
+  <!-- СОЦМЕРЕЖІ -->
+  <div class="sec" id="s4">
     <div class="card">
       <h2>Соціальні мережі</h2>
-      <p class="hint">Встав повні посилання (https://...). Порожнє поле = іконки не буде. Іконки з'являться в футері і в мобільному меню.</p>
-      <div class="row">
-        <div><label>Instagram</label><input type="url" id="s-instagram" placeholder="https://instagram.com/..."></div>
-        <div><label>TikTok</label><input type="url" id="s-tiktok" placeholder="https://tiktok.com/@..."></div>
+      <p class="hint">Можна просто @нік — доповнимо самі. Порожнє поле = іконки не буде.</p>
+      <div class="row2">
+        <div><label>Instagram</label><input type="text" id="s-instagram" placeholder="instagram.com/ваш_нік"></div>
+        <div><label>TikTok</label><input type="text" id="s-tiktok" placeholder="tiktok.com/@ваш_нік"></div>
       </div>
-      <div class="row">
-        <div><label>Facebook</label><input type="url" id="s-facebook" placeholder="https://facebook.com/..."></div>
-        <div><label>Telegram</label><input type="url" id="s-telegram" placeholder="https://t.me/..."></div>
+      <div class="row2" style="margin-top:10px">
+        <div><label>Facebook</label><input type="text" id="s-facebook" placeholder="facebook.com/ваш_нік"></div>
+        <div><label>Telegram</label><input type="text" id="s-telegram" placeholder="t.me/ваш_нік"></div>
       </div>
     </div>
   </div>
 
-  <div class="panel" id="p4">
+  <!-- ПРОМО -->
+  <div class="sec" id="s5">
     <div class="card">
-      <h2>Промо-смуга вгорі</h2>
-      <p class="hint">Текст, який бачить кожен відвідувач у жовтій смузі над шапкою. Окремо українською та англійською. Порожньо — смуга зникне.</p>
-      <div class="row">
-        <div><label>Українською</label><input type="text" id="banner-uk"></div>
-        <div><label>English</label><input type="text" id="banner-en"></div>
+      <h2>Промо-смуга (верх сайту)</h2>
+      <p class="hint">Золота смуга над шапкою. Порожньо — смуги не буде.</p>
+      <div class="row2">
+        <div><label>Українською</label><input type="text" id="banner-uk" placeholder="Перші принти вже в продажу на BlackSea"></div>
+        <div><label>English</label><input type="text" id="banner-en" placeholder="First prints are now live on BlackSea"></div>
       </div>
     </div>
   </div>
 
-  <div class="panel" id="p5">
-    <div class="card steps">
-      <h2 style="margin-bottom:6px">Як викласти зміни на сайт (1 раз — 2 хвилини)</h2>
-      <ol>
-        <li>Натисни <b>«Скопіювати config.json»</b> внизу.</li>
-        <li>Відкрий <code>github.com/Eugene55555/the-quiet-room</code> → файл <code>config.json</code> → кнопка <b>✏️ Edit</b> (олівець).</li>
-        <li>Виділи все старе (Ctrl+A) і встав нове (Ctrl+V).</li>
-        <li>Натисни <b>Commit changes</b> → <b>Commit changes</b> ще раз.</li>
-        <li>Зачекай 1–2 хвилини і відкрий сайт — потягни стрічку вниз (оновлення). Готово!</li>
-      </ol>
-      <p style="margin-bottom:0;color:#8a6d52">Підказка: щоб додати нову картинку принта — завантаж її в ту саму папку <code>assets/img/</code> (Add file → Upload files) і вкажи шлях <code>assets/img/ім'я.svg</code> у товарі.</p>
+  <!-- БРЕНД -->
+  <div class="sec" id="s6">
+    <div class="card">
+      <h2>Назва бренду і логотип</h2>
+      <p class="hint">Логотип не обов'язковий: порожньо = каліграфічний знак. Завантаж свій SVG або PNG — і він замінить знак.</p>
+      <div class="row2">
+        <div><label>Назва бренду</label><input type="text" id="brand-name" placeholder="The Quiet Room"></div>
+        <div>
+          <label>Логотип (файл)</label>
+          <div style="display:flex; gap:10px; align-items:center">
+            <button class="btn btn-soft btn-sm" id="logo-pick">📷 Обрати файл</button>
+            <button class="btn btn-soft btn-sm hidden" id="logo-clear">✕ Прибрати</button>
+            <img id="logo-prev" class="hidden" style="height:40px" alt="">
+          </div>
+          <input type="file" id="logo-file" accept="image/*" class="hidden">
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="actions">
-    <button class="btn btn-gold" id="copy-btn">📋 Скопіювати config.json</button>
-    <button class="btn btn-wine" id="dl-btn">⬇ Скачати config.json</button>
-    <button class="btn btn-ghost" id="show-btn">👁 Показати JSON</button>
-    <span class="status" id="status"></span>
+  <!-- ЗАЛИТИ -->
+  <div class="sec" id="s7">
+    <div class="card send">
+      <h2>Залити зміни на сайт — без коду і без GitHub</h2>
+      <p class="hint">GitHub тобі не потрібен. Три кроки:</p>
+      <div class="big">
+        1️⃣ Натисни <b>«💾 Скачати файл»</b> нижче — завантажиться маленький файлик config.json.<br>
+        2️⃣ У цей чат зі мною відправ цей файл — як звичайне фото.<br>
+        3️⃣ Я за хвилину заллю його на сайт і відпишусь. Готово! ✅
+      </div>
+      <p class="hint" style="margin:8px 0 0">Немає можливості скачати? Натисни «📋 Скопіювати» і встав текст мені одним повідомленням.</p>
+    </div>
+    <div class="card">
+      <h2>Дії з файлом</h2>
+      <p class="hint">Файл — це весь твій магазин: товари, кольори, шрифти, соцмережі. Він маленький, навіть з картинками.</p>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center">
+        <button class="btn btn-gold" id="dl-btn">💾 Скачати файл (config.json)</button>
+        <button class="btn btn-wine" id="copy-btn">📋 Скопіювати текст</button>
+        <button class="btn btn-soft" id="show-btn">👁 Переглянути</button>
+        <button class="btn btn-soft" id="reset-btn">♻️ Скинути до заводських</button>
+      </div>
+      <div class="status" id="status"></div>
+      <div class="hidden" id="out"><pre id="json-out" style="background:#2B0810;color:#F6EFE0;padding:14px;border-radius:10px;font-size:11.5px;overflow:auto;max-height:300px;margin-top:10px"></pre></div>
+    </div>
+    <div class="card">
+      <h2>Корисне</h2>
+      <p class="hint" style="margin-bottom:0">«💾 Чернетка» вгорі — зберегти все на цьому пристрої і продовжити пізніше. Порядок принтів міняється кнопками ▲▼. Новий принт без картинки отримає мокап-футболку.</p>
+    </div>
   </div>
-
-  <div class="out" id="out"><pre id="json-out"></pre></div>
 </main>
 
 <script>
-  var DEFAULT = {"site":{"brand":"The Quiet Room","logo":"","banner_uk":"Перші принти вже в продажу на BlackSea","banner_en":"First prints are now live on BlackSea"},"colors":{"wine":"#8E2137","wine_deep":"#400D18","cream":"#F6EFE0","gold":"#C9A24A"},"fonts":{"pair":"bebas"},"social":{"instagram":"","tiktok":"","facebook":"","telegram":""},"products":[
-    {"id":"crescent","cat":"clothes","img":"assets/img/tee-cream.svg","price":"55","link":"https://6820536600065.blacksea.in.ua/l/eaq","name_uk":"Півмісяць","name_en":"Crescent","tag_uk":"Футболка · Бавовна","tag_en":"T-Shirt · Cotton","desc_uk":"Місяць і зірка на грудях — для тих, хто любить тишу. Файл для друку.","desc_en":"Moon and star on the chest — for those who love stillness. Print file.","hide":false},
-    {"id":"arch","cat":"clothes","img":"assets/img/tee-white.svg","price":"55","link":"https://6820536600065.blacksea.in.ua/l/eaq","name_uk":"Арка","name_en":"Arch","tag_uk":"Футболка · Бавовна","tag_en":"T-Shirt · Cotton","desc_uk":"Дверний отвір зі світлом на порозі — запрошення всередину. Файл для друку.","desc_en":"A doorway with light on the threshold — an invitation inside. Print file.","hide":false},
-    {"id":"night","cat":"clothes","img":"assets/img/hoodie-dark.svg","price":"55","link":"https://6820536600065.blacksea.in.ua/l/eaq","name_uk":"Нічник","name_en":"Nightlight","tag_uk":"Худі · Фліс","tag_en":"Hoodie · Fleece","desc_uk":"Повний знак тихої кімнати — арка, півмісяць, зірка і світло. Файл для друку.","desc_en":"The full quiet-room sign — arch, crescent, star and light. Print file.","hide":false},
-    {"id":"moon","cat":"home","img":"assets/img/mug.svg","price":"55","link":"https://6820536600065.blacksea.in.ua/l/eaq","name_uk":"Місяць","name_en":"Moon","tag_uk":"Кухоль · Кераміка","tag_en":"Mug · Ceramic","desc_uk":"Ранок починається з тиші: півмісяць і зірка. Файл для друку.","desc_en":"Mornings start with stillness: a crescent and a star. Print file.","hide":false}
-  ]};
+/* NOTE: innerHTML у цій адмінці будується з локальних даних власника
+   (конфіг і введені поля екрануються через esc() перед вставкою) —
+   користувацький ввід ззовні в HTML не потрапляє. */
+var SCHEMES = [
+  { id:'wine', name:'Вино (зараз)', c:['#8E2137','#400D18','#F6EFE0','#C9A24A'] },
+  { id:'terra', name:'Терракота', c:['#C4572F','#5E2412','#F5EFE6','#DFA05B'] },
+  { id:'night', name:'Ніч і зірки', c:['#1F2430','#0D1117','#EDEFF4','#E3B341'] },
+  { id:'sea', name:'Глибоке море', c:['#1B4D5F','#0B2A35','#F4F1E9','#C7A96A'] },
+  { id:'green', name:'Багно (хакі)', c:['#4A5240','#23281D','#F2EFE6','#D6B45C'] },
+  { id:'rose', name:'Пудрова троянда', c:['#B76E79','#5A2A31','#FBF6F2','#C9A24A'] }
+];
+var FONTS = [
+  { id:'bebas', name:'«Плакат» (зараз) · Bebas Neue + Space Grotesk', prev:'THE QUIET ROOM', prev2:'Тиха кімната, де висять ваші роботи', cls:'f1' },
+  { id:'oswald', name:'«Суворий» · Oswald + Manrope', prev:'THE QUIET ROOM', prev2:'Тиха кімната, де висять ваші роботи', cls:'f2' },
+  { id:'russo', name:'«Агресивний» · Russo One + Inter', prev:'THE QUIET ROOM', prev2:'Тиха кімната, де висять ваші роботи', cls:'f3' }
+];
+var MOCKS = { clothes:'assets/img/tee-cream.svg', hoodie:'assets/img/hoodie-dark.svg', home:'assets/img/mug.svg' };
+var BLACKSEA = 'https://6820536600065.blacksea.in.ua/l/eaq';
 
-  var cfg = JSON.parse(JSON.stringify(DEFAULT));
-  var prodBox = document.getElementById('products');
+var DEF = { site:{brand:'The Quiet Room', logo:'', banner_uk:'Перші принти вже в продажу на BlackSea', banner_en:'First prints are now live on BlackSea'}, colors:{wine:'#8E2137', wine_deep:'#400D18', cream:'#F6EFE0', gold:'#C9A24A'}, fonts:{pair:'bebas'}, social:{instagram:'', tiktok:'', facebook:'', telegram:''}, products:[
+  { id:'crescent', cat:'clothes', img:'assets/img/tee-cream.svg', price:'55', link:BLACKSEA, name_uk:'Півмісяць', name_en:'Crescent', tag_uk:'Футболка · Бавовна', tag_en:'T-Shirt · Cotton', desc_uk:'Місяць і зірка на грудях — для тих, хто любить тишу. Файл для друку.', desc_en:'Moon and star on the chest — for those who love stillness. Print file.', hide:false },
+  { id:'arch', cat:'clothes', img:'assets/img/tee-white.svg', price:'55', link:BLACKSEA, name_uk:'Арка', name_en:'Arch', tag_uk:'Футболка · Бавовна', tag_en:'T-Shirt · Cotton', desc_uk:'Дверний отвір зі світлом на порозі — запрошення всередину. Файл для друку.', desc_en:'A doorway with light on the threshold — an invitation inside. Print file.', hide:false },
+  { id:'night', cat:'clothes', img:'assets/img/hoodie-dark.svg', price:'55', link:BLACKSEA, name_uk:'Нічник', name_en:'Nightlight', tag_uk:'Худі · Фліс', tag_en:'Hoodie · Fleece', desc_uk:'Повний знак тихої кімнати — арка, півмісяць, зірка і світло. Файл для друку.', desc_en:'The full quiet-room sign — arch, crescent, star and light. Print file.', hide:false },
+  { id:'moon', cat:'home', img:'assets/img/mug.svg', price:'55', link:BLACKSEA, name_uk:'Місяць', name_en:'Moon', tag_uk:'Кухоль · Кераміка', tag_en:'Mug · Ceramic', desc_uk:'Ранок починається з тиші: півмісяць і зірка. Файл для друку.', desc_en:'Mornings start with stillness: a crescent and a star. Print file.', hide:false }
+]};
 
-  function prodCard(p, i) {
-    var d = document.createElement('div');
-    d.className = 'card prod';
-    d.innerHTML =
-      '<div class="prod-head"><b>#' + (i+1) + ' · ' + (p.name_uk || 'Новий принт') + '</b>' +
-      '<label style="margin:0"><input type="checkbox" class="p-hide" ' + (p.hide ? '' : 'checked') + '> показувати</label>' +
-      '<button class="btn btn-ghost btn-sm del" type="button">✕ Видалити</button></div>' +
-      '<div class="row">' +
-      '<div><label>Назва укр</label><input class="p-name_uk" value="' + esc(p.name_uk) + '"></div>' +
-      '<div><label>Назва eng</label><input class="p-name_en" value="' + esc(p.name_en) + '"></div>' +
-      '<div><label>Ціна, ₴</label><input class="p-price" type="number" min="0" value="' + esc(String(p.price)) + '"></div>' +
-      '<div><label>Категорія</label><select class="p-cat"><option value="clothes"' + (p.cat==='clothes'?' selected':'') + '>Одяг</option><option value="home"' + (p.cat==='home'?' selected':'') + '>Дім</option><option value="other"' + (p.cat==='other'?' selected':'') + '>Інше</option></select></div>' +
-      '</div>' +
-      '<div class="row"><div><label>Тег укр (місце друку)</label><input class="p-tag_uk" value="' + esc(p.tag_uk) + '"></div>' +
-      '<div><label>Тег eng</label><input class="p-tag_en" value="' + esc(p.tag_en) + '"></div></div>' +
-      '<div class="row"><div><label>Опис укр</label><textarea class="p-desc_uk">' + esc(p.desc_uk) + '</textarea></div>' +
-      '<div><label>Опис eng</label><textarea class="p-desc_en">' + esc(p.desc_en) + '</textarea></div></div>' +
-      '<div class="row"><div><label>Картинка (шлях)</label><input class="p-img" value="' + esc(p.img) + '"></div>' +
-      '<div><label>Посилання купівлі (BlackSea)</label><input class="p-link" value="' + esc(p.link) + '"></div></div>';
-    d.querySelector('.del').addEventListener('click', function () { d.remove(); });
-    return d;
-  }
-  function esc(s) { return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+var cfg = JSON.parse(JSON.stringify(DEF));
+try { var draft = JSON.parse(localStorage.getItem('tqr_admin_draft') || 'null'); if (draft && draft.products) cfg = draft; } catch(e) {}
 
-  function renderProducts() {
-    prodBox.innerHTML = '';
-    cfg.products.forEach(function (p, i) { prodBox.appendChild(prodCard(p, i)); });
-  }
-  document.getElementById('add-product').addEventListener('click', function () {
-    cfg.products.push({ id: 'new' + Date.now(), cat: 'clothes', img: 'assets/img/tee-cream.svg', price: '55', link: 'https://6820536600065.blacksea.in.ua/l/eaq', name_uk: 'Новий принт', name_en: 'New print', tag_uk: 'Футболка', tag_en: 'T-Shirt', desc_uk: '', desc_en: '', hide: false });
-    renderProducts();
-  });
+var prodBox = document.getElementById('products');
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
 
-  function collect() {
-    var out = { site: { brand: v('brand-name'), logo: v('brand-logo'), banner_uk: v('banner-uk'), banner_en: v('banner-en') },
-      colors: { wine: v('c-wine'), wine_deep: v('c-wine_deep'), cream: v('c-cream'), gold: v('c-gold') },
-      fonts: { pair: v('font-pair') },
-      social: { instagram: v('s-instagram').trim(), tiktok: v('s-tiktok').trim(), facebook: v('s-facebook').trim(), telegram: v('s-telegram').trim() },
-      products: [] };
-    prodBox.querySelectorAll('.prod').forEach(function (d) {
-      out.products.push({
-        id: (d.querySelector('.p-name_en').value || 'p').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'p' + Date.now(),
-        cat: d.querySelector('.p-cat').value,
-        img: d.querySelector('.p-img').value,
-        price: d.querySelector('.p-price').value,
-        link: d.querySelector('.p-link').value,
-        name_uk: d.querySelector('.p-name_uk').value,
-        name_en: d.querySelector('.p-name_en').value,
-        tag_uk: d.querySelector('.p-tag_uk').value,
-        tag_en: d.querySelector('.p-tag_en').value,
-        desc_uk: d.querySelector('.p-desc_uk').value,
-        desc_en: d.querySelector('.p-desc_en').value,
-        hide: !d.querySelector('.p-hide').checked
-      });
-    });
-    return out;
-  }
+function prodCard(p, i) {
+  var d = document.createElement('div');
+  d.className = 'card prod';
+  var phImg = p.img ? '<img src="' + esc(p.img) + '" alt="">' : '<span style="color:#b99d78;font-size:12px;text-align:center">немає<br>картинки</span>';
+  d.innerHTML =
+    '<div class="prod-img"><div class="ph">' + phImg + '</div>' +
+    '<button class="btn btn-soft btn-sm" type="button">📷 Картинка</button>' +
+    '<input type="file" accept="image/*" class="hidden"></div>' +
+    '<div class="prod-fields">' +
+    '<div class="row2">' +
+      '<div><label>Назва (укр)</label><input type="text" class="f-name_uk" value="' + esc(p.name_uk) + '"></div>' +
+      '<div><label>Назва (eng)</label><input type="text" class="f-name_en" value="' + esc(p.name_en) + '"></div>' +
+    '</div>' +
+    '<div class="row2" style="margin-top:10px">' +
+      '<div><label>Куди друкуємо (укр)</label><input type="text" class="f-tag_uk" value="' + esc(p.tag_uk) + '" placeholder="Футболка · Бавовна"></div>' +
+      '<div><label>Куди друкуємо (eng)</label><input type="text" class="f-tag_en" value="' + esc(p.tag_en) + '" placeholder="T-Shirt · Cotton"></div>' +
+    '</div>' +
+    '<div class="row2" style="margin-top:10px">' +
+      '<div><label>Опис (укр)</label><textarea class="f-desc_uk">' + esc(p.desc_uk) + '</textarea></div>' +
+      '<div><label>Опис (eng)</label><textarea class="f-desc_en">' + esc(p.desc_en) + '</textarea></div>' +
+    '</div>' +
+    '<div class="row3" style="margin-top:10px">' +
+      '<div><label>Категорія</label><div class="pill-row">' +
+        '<span class="pill' + (p.cat==='clothes'?' active':'') + '" data-v="clothes">👕 Одяг</span>' +
+        '<span class="pill' + (p.cat==='home'?' active':'') + '" data-v="home">🏠 Дім</span>' +
+        '<span class="pill' + (p.cat==='other'?' active':'') + '" data-v="other">✨ Інше</span>' +
+      '</div></div>' +
+      '<div><label>Ціна, грн</label><div class="price-row">' +
+        '<button type="button">−</button>' +
+        '<input type="number" class="f-price" min="0" step="1" value="' + esc(String(p.price)) + '">' +
+        '<button type="button">＋</button>' +
+      '</div></div>' +
+      '<div><label>Посилання «Купити»</label><input type="text" class="f-link" value="' + esc(p.link || BLACKSEA) + '" style="font-size:12px"></div>' +
+    '</div>' +
+    '<div class="tools">' +
+      '<label class="switch" title="Показувати на сайті"><input type="checkbox" class="f-hide"' + (p.hide?'':' checked') + '><span class="slider"></span></label>' +
+      '<span class="sw-label">показувати на витрині</span>' +
+      '<span style="flex:1"></span>' +
+      '<button class="btn btn-soft btn-sm up" type="button" title="Вище">▲</button>' +
+      '<button class="btn btn-soft btn-sm down" type="button" title="Нижче">▼</button>' +
+      '<button class="btn btn-soft btn-sm del" type="button" style="border-color:#c94f4f;color:#b3261e">✕ Видалити</button>' +
+    '</div>' +
+    '</div>';
 
-  function v(id) { return document.getElementById(id).value; }
-
-  function fill() {
-    document.getElementById('brand-name').value = cfg.site.brand || '';
-    document.getElementById('brand-logo').value = cfg.site.logo || '';
-    document.getElementById('banner-uk').value = cfg.site.banner_uk || '';
-    document.getElementById('banner-en').value = cfg.site.banner_en || '';
-    document.getElementById('c-wine').value = cfg.colors.wine;
-    document.getElementById('c-wine_deep').value = cfg.colors.wine_deep;
-    document.getElementById('c-cream').value = cfg.colors.cream;
-    document.getElementById('c-gold').value = cfg.colors.gold;
-    document.getElementById('font-pair').value = cfg.fonts.pair;
-    document.getElementById('s-instagram').value = cfg.social.instagram || '';
-    document.getElementById('s-tiktok').value = cfg.social.tiktok || '';
-    document.getElementById('s-facebook').value = cfg.social.facebook || '';
-    document.getElementById('s-telegram').value = cfg.social.telegram || '';
-    renderProducts();
-  }
-
-  var outBox = document.getElementById('out');
-  function showJson() {
-    outBox.style.display = 'block';
-    document.getElementById('json-out').textContent = JSON.stringify(collect(), null, 2);
-    outBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }
-  document.getElementById('show-btn').addEventListener('click', showJson);
-  document.getElementById('copy-btn').addEventListener('click', function () {
-    var txt = JSON.stringify(collect(), null, 2);
-    var st = document.getElementById('status');
-    function ok() { st.textContent = '✅ Скопійовано! Тепер встав у config.json на GitHub (вкладка «Як викласти»).'; st.className = 'status ok'; }
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(txt).then(ok, function () { fallback(txt); ok(); });
-    } else { fallback(txt); ok(); }
-  });
-  function fallback(txt) {
-    var ta = document.createElement('textarea');
-    ta.value = txt; document.body.appendChild(ta); ta.select();
-    try { document.execCommand('copy'); } catch (e) {}
-    ta.remove();
-  }
-  document.getElementById('dl-btn').addEventListener('click', function () {
-    var blob = new Blob([JSON.stringify(collect(), null, 2)], { type: 'application/json' });
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'config.json';
-    a.click();
-    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
-    var st = document.getElementById('status');
-    st.textContent = '⬇ Файл config.json скачано. Залиш і встав у GitHub (як у вкладці «Як викласти»).';
-    st.className = 'status ok';
-  });
-
-  document.querySelectorAll('.tab').forEach(function (t) {
-    t.addEventListener('click', function () {
-      document.querySelectorAll('.tab').forEach(function (x) { x.classList.remove('active'); });
-      document.querySelectorAll('.panel').forEach(function (p) { p.classList.remove('active'); });
-      t.classList.add('active');
-      document.getElementById(t.dataset.panel).classList.add('active');
+  var pickBtn = d.querySelector('.prod-img .btn');
+  var fileIn = d.querySelector('.prod-img input');
+  pickBtn.addEventListener('click', function(){ fileIn.click(); });
+  fileIn.addEventListener('change', function(ev){
+    var f = ev.target.files[0]; if (!f) return;
+    readImage(f, function(uri){
+      var ph = d.querySelector('.ph');
+      ph.innerHTML = '<img src="' + uri + '" alt="">';
     });
   });
+  d.querySelector('.price-row button:first-child').addEventListener('click', function(){
+    var inp = d.querySelector('.f-price');
+    inp.value = Math.max(0, (parseFloat(inp.value)||0) - 5);
+  });
+  d.querySelector('.price-row button:last-child').addEventListener('click', function(){
+    var inp = d.querySelector('.f-price');
+    inp.value = (parseFloat(inp.value)||0) + 5;
+  });
+  d.querySelector('.del').addEventListener('click', function(){ d.remove(); });
+  d.querySelector('.up').addEventListener('click', function(){
+    if (d.previousElementSibling) d.parentNode.insertBefore(d, d.previousElementSibling);
+  });
+  d.querySelector('.down').addEventListener('click', function(){
+    if (d.nextElementSibling) d.parentNode.insertBefore(d.nextElementSibling, d);
+  });
+  d.querySelectorAll('.pill').forEach(function(pill){
+    pill.addEventListener('click', function(){
+      d.querySelectorAll('.pill').forEach(function(x){ x.classList.remove('active'); });
+      pill.classList.add('active');
+    });
+  });
+  return d;
+}
 
-  fill();
+function renderProducts(){
+  prodBox.innerHTML = '';
+  cfg.products.forEach(function(p){ prodBox.appendChild(prodCard(p, p === p ? 0 : 0)); });
+}
+
+function readImage(file, cb){
+  var isSvg = /\.svg$/i.test(file.name) || file.type.indexOf('svg') !== -1;
+  if (isSvg) {
+    var r = new FileReader();
+    r.onload = function(){ cb('data:image/svg+xml;charset=utf-8,' + encodeURIComponent(r.result)); };
+    r.readAsText(file);
+    return;
+  }
+  var rd = new FileReader();
+  rd.onload = function(){
+    var img = new Image();
+    img.onload = function(){
+      var max = 760;
+      var w = img.width, h = img.height;
+      if (w > max) { h = Math.round(h * max / w); w = max; }
+      var c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      c.getContext('2d').drawImage(img, 0, 0, w, h);
+      cb(c.toDataURL('image/jpeg', 0.82));
+    };
+    img.src = rd.result;
+  };
+  rd.readAsDataURL(file);
+}
+
+document.getElementById('add-product').addEventListener('click', function(){
+  prodBox.appendChild(prodCard({ id:'new' + Date.now(), cat:'clothes', img:'', price:'55', link:BLACKSEA, name_uk:'Новий принт', name_en:'New print', tag_uk:'Футболка · Бавовна', tag_en:'T-Shirt · Cotton', desc_uk:'', desc_en:'', hide:false }, 0));
+});
+
+/* Палітри */
+var palBox = document.getElementById('palettes');
+SCHEMES.forEach(function(s){
+  var el = document.createElement('div');
+  el.className = 'pal-scheme';
+  el.innerHTML = '<div class="sw">' + s.c.map(function(c){ return '<i style="background:' + c + '"></i>'; }).join('') + '</div><b>' + s.name + '</b>';
+  el.addEventListener('click', function(){
+    cfg.colors.wine = s.c[0]; cfg.colors.wine_deep = s.c[1]; cfg.colors.cream = s.c[2]; cfg.colors.gold = s.c[3];
+    ['wine','wine_deep','cream','gold'].forEach(function(k, i){ document.getElementById('c-' + k).value = s.c[i]; });
+    palBox.querySelectorAll('.pal-scheme').forEach(function(x){ x.classList.remove('active'); });
+    el.classList.add('active');
+    flash('Схему «' + s.name + '» обрано ✓');
+  });
+  palBox.appendChild(el);
+});
+var currentScheme = cfg.colors.wine.toLowerCase();
+SCHEMES.forEach(function(s){ if (s.id === currentScheme) palBox.querySelectorAll('.pal-scheme')[SCHEMES.indexOf(s)].classList.add('active'); });
+
+/* Шрифти */
+var fontBox = document.getElementById('fonts');
+FONTS.forEach(function(f){
+  var el = document.createElement('div');
+  el.className = 'font-card ' + f.cls;
+  el.innerHTML = '<div class="prev">' + f.prev + '</div><div class="prev2">' + f.prev2 + '</div><div class="name">' + f.name + '</div>';
+  el.addEventListener('click', function(){
+    cfg.fonts.pair = f.id;
+    fontBox.querySelectorAll('.font-card').forEach(function(x){ x.classList.remove('active'); });
+    el.classList.add('active');
+    flash('Шрифт: ' + f.name + ' ✓');
+  });
+  fontBox.appendChild(el);
+});
+if (cfg.fonts.pair) {
+  FONTS.forEach(function(f){ if (f.id === cfg.fonts.pair) fontBox.querySelectorAll('.font-card')[FONTS.indexOf(f)].classList.add('active'); });
+}
+
+/* Збір даних */
+function v(id){ return document.getElementById(id).value; }
+function collect(){
+  var prods = [];
+  prodBox.querySelectorAll('.prod').forEach(function(d){
+    var name_uk = d.querySelector('.f-name_uk').value.trim();
+    var name_en = d.querySelector('.f-name_en').value.trim();
+    var catEl = d.querySelector('.pill.active');
+    var cat = catEl ? catEl.getAttribute('data-v') : 'clothes';
+    var imgEl = d.querySelector('.ph img');
+    var img = imgEl ? imgEl.getAttribute('src') : '';
+    if (!img || img.indexOf('data:') !== 0) img = img || MOCKS[cat] || '';
+    prods.push({
+      id: (name_en || name_uk || 'print').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') || 'print' + Date.now(),
+      cat: cat, img: img,
+      price: String(d.querySelector('.f-price').value || '55'),
+      link: d.querySelector('.f-link').value.trim() || BLACKSEA,
+      name_uk: name_uk || name_en || 'Принт',
+      name_en: name_en || name_uk || 'Print',
+      tag_uk: d.querySelector('.f-tag_uk').value.trim() || 'Друк на замовлення',
+      tag_en: d.querySelector('.f-tag_en').value.trim() || 'Print on demand',
+      desc_uk: d.querySelector('.f-desc_uk').value.trim() || 'Файл для друку.',
+      desc_en: d.querySelector('.f-desc_en').value.trim() || 'Print file.',
+      hide: !d.querySelector('.f-hide').checked
+    });
+  });
+  if (!prods.length) prods = JSON.parse(JSON.stringify(DEF.products));
+  var social = {};
+  ['instagram','tiktok','facebook','telegram'].forEach(function(k){
+    var val = v('s-' + k).trim();
+    social[k] = val ? (val.indexOf('http') === 0 ? val : 'https://' + val) : '';
+  });
+  return {
+    site: { brand: v('brand-name').trim() || 'The Quiet Room', logo: cfg.site.logo || '', banner_uk: v('banner-uk').trim(), banner_en: v('banner-en').trim() },
+    colors: { wine: v('c-wine'), wine_deep: v('c-wine_deep'), cream: v('c-cream'), gold: v('c-gold') },
+    fonts: { pair: cfg.fonts.pair },
+    social: social,
+    products: prods
+  };
+}
+
+function flash(msg, isErr){
+  var st = document.getElementById('status');
+  st.textContent = msg;
+  st.className = 'status ' + (isErr ? 'err' : 'ok');
+  clearTimeout(st._t);
+  st._t = setTimeout(function(){ st.textContent = ''; }, 6000);
+}
+
+/* Експорт */
+var outBox = document.getElementById('out');
+document.getElementById('show-btn').addEventListener('click', function(){
+  outBox.classList.remove('hidden');
+  document.getElementById('json-out').textContent = JSON.stringify(collect(), null, 1);
+});
+document.getElementById('copy-btn').addEventListener('click', function(){
+  var txt = JSON.stringify(collect(), null, 1);
+  var done = function(){ flash('📋 Скопійовано! Встав мені в чат одним повідомленням'); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(txt).then(done, function(){ fb(txt); done(); });
+  } else { fb(txt); done(); }
+});
+function fb(txt){
+  var ta = document.createElement('textarea');
+  ta.value = txt; document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); } catch(e){}
+  ta.remove();
+}
+document.getElementById('dl-btn').addEventListener('click', function(){
+  var json = JSON.stringify(collect(), null, 2);
+  var blob = new Blob([json], { type:'application/json' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'config.json';
+  a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1500);
+  flash('💾 Файл config.json скачано! Тепер відправ його мені в цей чат — як фото');
+});
+document.getElementById('reset-btn').addEventListener('click', function(){
+  if (confirm('Скинути всі зміни до заводських налаштувань?')) {
+    cfg = JSON.parse(JSON.stringify(DEF));
+    try { localStorage.removeItem('tqr_admin_draft'); } catch(e){}
+    fillAll();
+    flash('♻️ Скинуто до заводських');
+  }
+});
+document.getElementById('draft-btn').addEventListener('click', function(){
+  try {
+    localStorage.setItem('tqr_admin_draft', JSON.stringify(collect()));
+    flash('💾 Чернетку збережено на цьому пристрої');
+  } catch(e){ flash('Не вийшло (забагато картинок) — завантаж файл і надішли мені', true); }
+});
+
+/* Логотип */
+document.getElementById('logo-pick').addEventListener('click', function(){ document.getElementById('logo-file').click(); });
+document.getElementById('logo-file').addEventListener('change', function(ev){
+  var f = ev.target.files[0]; if (!f) return;
+  readImage(f, function(uri){
+    cfg.site.logo = uri;
+    var pv = document.getElementById('logo-prev');
+    pv.src = uri; pv.classList.remove('hidden');
+    document.getElementById('logo-clear').classList.remove('hidden');
+    flash('Логотип завантажено ✓');
+  });
+});
+document.getElementById('logo-clear').addEventListener('click', function(){
+  cfg.site.logo = '';
+  document.getElementById('logo-prev').classList.add('hidden');
+  document.getElementById('logo-clear').classList.add('hidden');
+});
+
+/* Навігація */
+document.querySelectorAll('.nav button').forEach(function(b){
+  b.addEventListener('click', function(){
+    document.querySelectorAll('.nav button').forEach(function(x){ x.classList.remove('active'); });
+    document.querySelectorAll('.sec').forEach(function(s){ s.classList.remove('active'); });
+    b.classList.add('active');
+    document.getElementById(b.dataset.sec).classList.add('active');
+  });
+});
+document.getElementById('send-btn').addEventListener('click', function(){
+  document.querySelectorAll('.nav button').forEach(function(x){ x.classList.remove('active'); });
+  document.querySelectorAll('.sec').forEach(function(s){ s.classList.remove('active'); });
+  document.querySelector('.nav button[data-sec="s7"]').classList.add('active');
+  document.getElementById('s7').classList.add('active');
+});
+
+/* Заповнення */
+function fillAll(){
+  document.getElementById('brand-name').value = cfg.site.brand || '';
+  document.getElementById('banner-uk').value = cfg.site.banner_uk || '';
+  document.getElementById('banner-en').value = cfg.site.banner_en || '';
+  document.getElementById('c-wine').value = cfg.colors.wine;
+  document.getElementById('c-wine_deep').value = cfg.colors.wine_deep;
+  document.getElementById('c-cream').value = cfg.colors.cream;
+  document.getElementById('c-gold').value = cfg.colors.gold;
+  document.getElementById('s-instagram').value = cfg.social.instagram || '';
+  document.getElementById('s-tiktok').value = cfg.social.tiktok || '';
+  document.getElementById('s-facebook').value = cfg.social.facebook || '';
+  document.getElementById('s-telegram').value = cfg.social.telegram || '';
+  if (cfg.site.logo && cfg.site.logo.indexOf('data:') === 0) {
+    var pv = document.getElementById('logo-prev');
+    pv.src = cfg.site.logo; pv.classList.remove('hidden');
+    document.getElementById('logo-clear').classList.remove('hidden');
+  }
+  renderProducts();
+}
+fillAll();
 </script>
 </body>
 </html>

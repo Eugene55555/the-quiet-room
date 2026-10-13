@@ -1,0 +1,81 @@
+{
+  "site": {
+    "brand": "The Quiet Room",
+    "discount_note": "",
+    "banner_uk": "Перші принти вже в продажу на BlackSea",
+    "banner_en": "First prints are now live on BlackSea"
+  },
+  "colors": {
+    "wine": "#8E2137",
+    "wine_deep": "#400D18",
+    "cream": "#F6EFE0",
+    "gold": "#C9A24A"
+  },
+  "fonts": {
+    "pair": "bebas"
+  },
+  "social": {
+    "instagram": "",
+    "tiktok": "",
+    "facebook": "",
+    "telegram": ""
+  },
+  "products": [
+    {
+      "id": "crescent",
+      "cat": "clothes",
+      "img": "assets/img/tee-cream.svg",
+      "price": "55",
+      "link": "https://6820536600065.blacksea.in.ua/l/eaq",
+      "name_uk": "Півмісяць",
+      "name_en": "Crescent",
+      "tag_uk": "Футболка · Бавовна",
+      "tag_en": "T-Shirt · Cotton",
+      "desc_uk": "Місяць і зірка на грудях — для тих, хто любить тишу. Файл для друку.",
+      "desc_en": "Moon and star on the chest — for those who love stillness. Print file.",
+      "hide": false
+    },
+    {
+      "id": "arch",
+      "cat": "clothes",
+      "img": "assets/img/tee-white.svg",
+      "price": "55",
+      "link": "https://6820536600065.blacksea.in.ua/l/eaq",
+      "name_uk": "Арка",
+      "name_en": "Arch",
+      "tag_uk": "Футболка · Бавовна",
+      "tag_en": "T-Shirt · Cotton",
+      "desc_uk": "Дверний отвір зі світлом на порозі — запрошення всередину. Файл для друку.",
+      "desc_en": "A doorway with light on the threshold — an invitation inside. Print file.",
+      "hide": false
+    },
+    {
+      "id": "night",
+      "cat": "clothes",
+      "img": "assets/img/hoodie-dark.svg",
+      "price": "55",
+      "link": "https://6820536600065.blacksea.in.ua/l/eaq",
+      "name_uk": "Нічник",
+      "name_en": "Nightlight",
+      "tag_uk": "Худі · Фліс",
+      "tag_en": "Hoodie · Fleece",
+      "desc_uk": "Повний знак тихої кімнати — арка, півмісяць, зірка і світло. Файл для друку.",
+      "desc_en": "The full quiet-room sign — arch, crescent, star and light. Print file.",
+      "hide": false
+    },
+    {
+      "id": "moon",
+      "cat": "home",
+      "img": "assets/img/mug.svg",
+      "price": "55",
+      "link": "https://6820536600065.blacksea.in.ua/l/eaq",
+      "name_uk": "Місяць",
+      "name_en": "Moon",
+      "tag_uk": "Кухоль · Кераміка",
+      "tag_en": "Mug · Ceramic",
+      "desc_uk": "Ранок починається з тиші: півмісяць і зірка. Файл для друку.",
+      "desc_en": "Mornings start with stillness: a crescent and a star. Print file.",
+      "hide": false
+    }
+  ]
+}

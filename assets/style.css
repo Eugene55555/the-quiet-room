@@ -118,7 +118,7 @@ body {
 .card-media.dark { background: linear-gradient(165deg, #3b3530, #241f1b); }
 .card-media img { width: 100%; height: auto; display: block; }
 .card-body { padding: 20px 20px 54px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
-.card-tag { font-size: 11px; font-weight: 800; letter-spacing: 2.4px; text-transform: uppercase; color: var(--sage); }
+.card-tag { font-size: 12px; font-weight: 800; letter-spacing: 2.2px; text-transform: uppercase; color: var(--sage); }
 .card-title { font-size: 22px; font-weight: 800; letter-spacing: .5px; text-transform: uppercase; }
 .card-desc { font-size: 14px; color: rgba(46, 42, 38, .68); }
 .card-price { margin-top: auto; padding-top: 8px; font-weight: 800; font-size: 16px; }
@@ -126,7 +126,7 @@ body {
 .badge {
   position: absolute; right: 18px; bottom: 18px;
   background: rgba(124, 139, 114, .16); color: var(--sage);
-  font-size: 11px; font-weight: 800; letter-spacing: 1.6px; text-transform: uppercase;
+  font-size: 12px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase;
   padding: 7px 14px; border-radius: 99px;
 }
 

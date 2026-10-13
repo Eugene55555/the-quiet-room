@@ -2,7 +2,7 @@ import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { visionTool } from '@sanity/vision'
 import { product } from './schemas/product'
-import { siteSettings } from './schemas/siteSettings'
+import { siteSettings, wearCard, faqItem } from './schemas/siteSettings'
 
 export default defineConfig({
   name: 'quiet-room',
@@ -13,6 +13,6 @@ export default defineConfig({
   studioHost: 'quiet-room',
   plugins: [structureTool(), visionTool()],
   schema: {
-    types: [siteSettings, product]
+    types: [siteSettings, product, wearCard, faqItem]
   }
 })

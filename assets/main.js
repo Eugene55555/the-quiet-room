@@ -32,7 +32,7 @@
     var base = 'https://' + pid + '.apicdn.sanity.io/v2023-01-01/data/query/production?query=';
     var enc = function (q) { return encodeURIComponent(q); };
     var prodQ = '*[_type=="product" && visible != false]|order(order asc){_id,name_uk,name_en,tag_uk,tag_en,desc_uk,desc_en,price,img_url,"img":image.asset->url,category,blacksea_link,order}';
-    var setQ = '*[_type=="siteSettings"][0]{brand,banner_uk,banner_en,color_wine,color_wine_deep,color_cream,color_gold,font_pair,social_instagram,social_tiktok,social_facebook,social_telegram}';
+    var setQ = '*[_type=="siteSettings"][0]{brand,banner_uk,banner_en,discount_note,color_wine,color_wine_deep,color_cream,color_gold,font_pair,social_instagram,social_tiktok,social_facebook,social_telegram,wear[]{title_uk,title_en,desc_uk,desc_en},faqs[]{q_uk,q_en,a_uk,a_en}}';
     return Promise.all([
       fetch(base + enc(prodQ)).then(function (r) { return r.ok ? r.json() : null; }),
       fetch(base + enc(setQ)).then(function (r) { return r.ok ? r.json() : null; })
@@ -60,6 +60,8 @@
         cfg.colors = { wine: set.color_wine || '#8E2137', wine_deep: set.color_wine_deep || '#400D18', cream: set.color_cream || '#F6EFE0', gold: set.color_gold || '#C9A24A' };
         cfg.fonts = { pair: set.font_pair || 'bebas' };
         cfg.social = { instagram: set.social_instagram || '', tiktok: set.social_tiktok || '', facebook: set.social_facebook || '', telegram: set.social_telegram || '' };
+        cfg.wear = set.wear || null;
+        cfg.faqs = set.faqs || null;
       }
       return cfg;
     }).catch(function () { return null; });
@@ -96,6 +98,8 @@
     applyBrand();
     renderCatalog();
     renderSocial();
+    renderWear();
+    renderFaq();
     applyBanner();
   }
 
@@ -182,6 +186,45 @@
     boxes.forEach(function (b) { b.innerHTML = out; b.classList.toggle('empty', !out); });
   }
 
+  /* ---- «Куди друкуємо» з Sanity ---- */
+  var WEAR_ICONS = [
+    '<svg width="31" height="31" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 3.5L4 7l2.2 4.2c.5-1 1.6-1.3 2.6-.9V21h6.4v-10.7c1-.4 2.1-.1 2.6.9L20 7l-4.5-3.5c-1.2 1.4-3 1.4-4.2 0-1.2 1.4-3 1.4-4.2 0z"/></svg>',
+    '<svg width="31" height="31" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 3.5L4 7l2.2 4.2c.5-1 1.6-1.3 2.6-.9V21h6.4v-10.7c1-.4 2.1-.1 2.6.9L20 7l-4.5-3.5c-1.2 1.4-3 1.4-4.2 0-1.2 1.4-3 1.4-4.2 0z"/><path d="M12 3.2V21"/></svg>',
+    '<svg width="31" height="31" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11h11v4a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4v-4z"/><path d="M16 12h1.5a2.5 2.5 0 0 1 0 5H16"/><path d="M3 14v-1.5"/></svg>',
+    '<svg width="31" height="31" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="15" rx="1.5"/><path d="M3.5 16l4.5-4 3.5 3 4-4 5 5"/></svg>'
+  ];
+  function renderWear() {
+    var grid = document.querySelector('.wear-grid');
+    if (!grid || !CFG.wear || !CFG.wear.length) return;
+    var L = lang();
+    var esc = function (s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;'); };
+    var out = '';
+    CFG.wear.forEach(function (w, i) {
+      out += '<a class="wear-card reveal" data-delay="' + (i % 4) + '" href="collection.html">'
+        + '<span class="wear-ico">' + (WEAR_ICONS[i] || WEAR_ICONS[0]) + '</span>'
+        + '<b>' + esc(L === 'uk' ? w.title_uk : w.title_en) + '</b>'
+        + '<span>' + esc(L === 'uk' ? w.desc_uk : w.desc_en) + '</span></a>';
+    });
+    grid.dataset.src = 'sanity';
+    grid.innerHTML = out;
+    grid.querySelectorAll('.reveal').forEach(function (el) { if (window.__io) window.__io.observe(el); else el.classList.add('in'); });
+  }
+
+  /* ---- FAQ з Sanity ---- */
+  function renderFaq() {
+    var box = document.querySelector('.mini-faq');
+    if (!box || !CFG.faqs || !CFG.faqs.length) return;
+    var L = lang();
+    var esc = function (s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;'); };
+    var out = '';
+    CFG.faqs.forEach(function (f, i) {
+      out += '<div class="faq-item reveal"' + (i > 0 ? ' data-delay="' + i + '"' : '') + '><h3>' + esc(L === 'uk' ? f.q_uk : f.q_en) + '</h3><p>' + esc(L === 'uk' ? f.a_uk : f.a_en) + '</p></div>';
+    });
+    box.dataset.src = 'sanity';
+    box.innerHTML = out;
+    box.querySelectorAll('.reveal').forEach(function (el) { if (window.__io) window.__io.observe(el); else el.classList.add('in'); });
+  }
+
   /* ---- Промо-смуга з конфігу ---- */
   function applyBanner() {
     if (!CFG.site) return;
@@ -192,6 +235,8 @@
 
   document.addEventListener('tqr:lang', function () {
     if (document.querySelector('#catalog .card')) renderCatalog();
+    if (document.querySelector('.wear-grid')) renderWear();
+    if (document.querySelector('.mini-faq')) renderFaq();
     applyBanner();
   });
 

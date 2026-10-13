@@ -7,7 +7,7 @@ import { siteSettings } from './schemas/siteSettings'
 export default defineConfig({
   name: 'quiet-room',
   title: 'The Quiet Room — принти',
-  projectId: process.env.SANITY_STUDIO_PROJECT_ID || 'ВАШ_PROJECT_ID',
+  projectId: process.env.SANITY_STUDIO_PROJECT_ID || 'ns9lwdrh',
   dataset: 'production',
   basePath: '/studio',
   plugins: [structureTool(), visionTool()],

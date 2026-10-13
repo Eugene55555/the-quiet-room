@@ -1,0 +1,14 @@
+{
+  "name": "quiet-room-studio",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "sanity dev",
+    "build": "sanity build",
+    "deploy": "sanity deploy"
+  },
+  "dependencies": {
+    "sanity": "^3.44.0",
+    "@sanity/vision": "3.44.0"
+  }
+}

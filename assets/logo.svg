@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 230" width="600" height="575">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&amp;family=Manrope:wght@400;600&amp;display=swap');
+      .crown { fill: none; stroke: #A98A4B; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+      .jewel { fill: #A98A4B; }
+      .brand { font-family: 'Great Vibes', cursive; fill: #2E2A26; }
+      .tag { font-family: 'Manrope', sans-serif; font-size: 15px; letter-spacing: 6px; fill: #B47C4F; font-weight: 600; }
+    </style>
+  </defs>
+
+  <!-- Корона: три зубца, тонкая линия, шарики на концах -->
+  <path class="crown" d="M 30 118 L 40 62 L 68 84 L 98 42 Q 104 32 110 42 L 140 84 L 168 62 L 178 118"/>
+  <circle class="jewel" cx="40" cy="58" r="5.5"/>
+  <circle class="jewel" cx="104" cy="35" r="6.5"/>
+  <circle class="jewel" cx="168" cy="58" r="5.5"/>
+
+  <!-- Каллиграфия -->
+  <text class="brand" x="120" y="195" text-anchor="middle" font-size="58">The Quiet Room</text>
+
+  <text class="tag" x="120" y="222" text-anchor="middle">PRINTS · HOME · SLOW WEAR</text>
+</svg>

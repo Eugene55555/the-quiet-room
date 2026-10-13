@@ -111,6 +111,7 @@
     <button data-sec="s5">📢 Промо</button>
     <button data-sec="s6">🏷 Бренд</button>
     <button data-sec="s7">📤 Залити</button>
+    <button data-sec="s8">☁ Supabase</button>
   </div>
 
   <!-- ПРИНТИ -->
@@ -221,7 +222,41 @@
     </div>
     <div class="card">
       <h2>Корисне</h2>
-      <p class="hint" style="margin-bottom:0">«💾 Чернетка» вгорі — зберегти все на цьому пристрої і продовжити пізніше. Порядок принтів міняється кнопками ▲▼. Новий принт без картинки отримає мокап-футболку.</p>
+      <p class="hint" style="margin-bottom:0">«💾 Чернетка» вгорі — зберегти все на цьому пристрої і продовжити пізніше. Порядок принтів міняється кнопками ▲▼. Новий принт без картинки отримає мокап-футболку.<br><br>✨ Хочеш публікувати в один клік без файлів? Відкрий вкладку <b>«☁ Supabase»</b> — там хмарне збереження.</p>
+    </div>
+  </div>
+
+  <!-- SUPABASE -->
+  <div class="sec" id="s8">
+    <div class="card send">
+      <h2>☁ Хмара (Supabase) — публікація в один клік</h2>
+      <p class="hint">Один раз налаштуєш — і кнопка «🚀 Опублікувати» сама оновлює сайт миттєво. Без файлів, без Telegram, без GitHub.</p>
+      <div class="big">
+        <b>Налаштування (5 хвилин, один раз):</b><br>
+        1️⃣ Зайди на <b>supabase.com</b> → <b>Sign up</b> (будь-яка пошта) → підтверди листом.<br>
+        2️⃣ <b>New project</b> → назва (будь-яка, напр. quiet-room) → пароль бази (запиши!) → <b>Create project</b>, почекай ~1 хвилину.<br>
+        3️⃣ Зліва: <b>Settings → API</b>. Скопіюй звідти <b>Project URL</b> і <b>anon public key</b> — встав їх у поля нижче.<br>
+        4️⃣ Придумай <b>пароль адміна</b> (мін. 8 символів) — він буде тільки в твоєму браузері.<br>
+        5️⃣ Напиши мені в чат: «супабейс готовий» і пришли <b>service_role key</b> (він там же, в Settings → API) — я за секунду створю таблицю. Після цього кнопку service_role можна відкликати.
+      </div>
+      <p class="hint" style="margin:8px 0 0">Поля нижче зберігаються тільки у твоєму браузері (localStorage) і нікуди не надсилаються.</p>
+    </div>
+    <div class="card">
+      <h2>Підключення</h2>
+      <div class="row2">
+        <div><label>Project URL</label><input type="text" id="sup-url" placeholder="https://xxxx.supabase.co" style="font-size:13px"></div>
+        <div><label>anon public key</label><input type="text" id="sup-anon" placeholder="eyJhbGciOi..." style="font-size:11.5px"></div>
+      </div>
+      <div style="margin-top:10px; max-width:320px">
+        <label>Пароль адміна (придумай сам)</label>
+        <input type="password" id="sup-pass" placeholder="мін. 8 символів">
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px">
+        <button class="btn btn-soft" id="sup-test">✋ Перевірити з'єднання</button>
+        <button class="btn btn-gold" id="sup-publish">🚀 Опублікувати на сайт</button>
+      </div>
+      <div class="status" id="sup-status"></div>
+      <div class="status ok" id="sup-hint" style="display:none; font-size:12.5px; line-height:1.5">Після «🚀 Опублікувати» відкрий сайт — зміни вже там. Перевіряй скільки завгодно разів: кожна публікація миттєва.</div>
     </div>
   </div>
 </main>
@@ -516,6 +551,63 @@ document.getElementById('logo-clear').addEventListener('click', function(){
   cfg.site.logo = '';
   document.getElementById('logo-prev').classList.add('hidden');
   document.getElementById('logo-clear').classList.add('hidden');
+});
+
+/* ================= SUPABASE (хмара) ================= */
+var sup = { url:'', anon:'', pass:'' };
+try { var supSaved = JSON.parse(localStorage.getItem('tqr_supabase') || 'null'); if (supSaved) sup = supSaved; } catch(e) {}
+document.getElementById('sup-url').value = sup.url || '';
+document.getElementById('sup-anon').value = sup.anon || '';
+document.getElementById('sup-pass').value = sup.pass || '';
+function supSave(){
+  sup.url = document.getElementById('sup-url').value.trim().replace(/\/+$/,'');
+  sup.anon = document.getElementById('sup-anon').value.trim();
+  sup.pass = document.getElementById('sup-pass').value;
+  try { localStorage.setItem('tqr_supabase', JSON.stringify(sup)); } catch(e) {}
+}
+function supFlash(msg, isErr){
+  var st = document.getElementById('sup-status');
+  st.textContent = msg;
+  st.className = 'status ' + (isErr ? 'err' : 'ok');
+}
+function supHeaders(extra){
+  var h = { 'apikey': sup.anon, 'Authorization': 'Bearer ' + sup.anon, 'Content-Type': 'application/json' };
+  if (extra) for (var k in extra) h[k] = extra[k];
+  return h;
+}
+document.getElementById('sup-test').addEventListener('click', function(){
+  supSave();
+  if (!sup.url || !sup.anon) { supFlash('Спочатку встав Project URL і anon key', true); return; }
+  supFlash('Перевіряю…');
+  fetch(sup.url + '/rest/v1/store?select=id&limit=1', { headers: supHeaders() })
+    .then(function(r){
+      if (r.status === 404) supFlash("З'єднання є, але таблицю ще не створено — напиши Каті «супабейс готовий» і пришли service_role key", false);
+      else if (r.ok) supFlash("✅ З'єднання працює, таблиця на місці! Можна публікувати.", false);
+      else supFlash('Помилка ' + r.status + ' — перевір URL і ключі', true);
+    })
+    .catch(function(){ supFlash('Немає мережі або неправильний URL', true); });
+});
+document.getElementById('sup-publish').addEventListener('click', function(){
+  supSave();
+  if (!sup.url || !sup.anon) { supFlash('Встав Project URL і anon key спочатку', true); return; }
+  if (sup.pass.length < 8) { supFlash('Пароль адміна має бути не коротший за 8 символів', true); return; }
+  supFlash('Публікую…');
+  var body = { id: 1, data: { config: collect() } };
+  fetch(sup.url + '/rest/v1/store?id=eq.1', {
+    method: 'POST',
+    headers: supHeaders({ 'x-admin-key': sup.pass, 'Prefer': 'resolution=merge-duplicates' }),
+    body: JSON.stringify(body)
+  })
+    .then(function(r){
+      if (r.status === 404) supFlash('Таблицю ще не створено — пришли Каті service_role key, і все запрацює', true);
+      else if (r.ok || r.status === 201) {
+        supFlash('🚀 Опубліковано! Сайт уже оновлено.', false);
+        document.getElementById('sup-hint').style.display = 'block';
+      }
+      else if (r.status === 403 || r.status === 401) supFlash('Пароль адміна невірний (403). Перевір або напиши Каті', true);
+      else supFlash('Помилка ' + r.status + ' — спробуй ще раз', true);
+    })
+    .catch(function(){ supFlash('Немає мережі — спробуй ще раз', true); });
 });
 
 /* Навігація */

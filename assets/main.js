@@ -24,10 +24,24 @@
     russo: { display: "'Russo One'", displayCyr: "'Russo One'", body: "'Inter'", bodyCyr: "'Inter'", script: "'Great Vibes'", link: "family=Russo+One&family=Inter:wght@400;500;600;700&family=Great+Vibes" }
   };
 
-  /* ---- Завантаження config.json (фолбек на вбудований CFG) ---- */
-  fetch('config.json?v=' + Date.now()).then(function (r) { return r.ok ? r.json() : null; }).then(function (cfg) {
-    if (cfg && cfg.products) CFG = cfg;
-    applyConfig();
+  /* ---- Завантаження: спершу Supabase-хмара (якщо налаштована), потім config.json ---- */
+  function loadCloud() {
+    if (!CFG.cloud || !CFG.cloud.url) return Promise.resolve(null);
+    return fetch(CFG.cloud.url.replace(/\/+$/, '') + '/rest/v1/store?select=data&id=eq.1', {
+      headers: { apikey: CFG.cloud.anon, Authorization: 'Bearer ' + CFG.cloud.anon }
+    })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (rows) {
+        if (rows && rows[0] && rows[0].data && rows[0].data.config && rows[0].data.config.products) return rows[0].data.config;
+        return null;
+      })
+      .catch(function () { return null; });
+  }
+  loadCloud().then(function (cloudCfg) {
+    return cloudCfg || fetch('config.json?v=' + Date.now()).then(function (r) { return r.ok ? r.json() : null; });
+  }).then(function (cfg) {
+    if (cfg && cfg.products) { CFG = cfg; applyConfig(); }
+    else applyConfig();
   }).catch(function () { applyConfig(); });
 
   function lang() {

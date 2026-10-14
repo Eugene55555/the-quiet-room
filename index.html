@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Quiet Room — принти для тиші</title>
+<meta name="description" content="The Quiet Room — цифрові файли принтів для друку на замовлення. Один файл — будь-який носій: футболки, худі, кухлі, постери.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%238E2137'/%3E%3Cpath d='M30 62 a18 18 0 0 1 0-24' stroke='%23F6EFE0' stroke-width='6' fill='none' stroke-linecap='round'/%3E%3Cpath d='M55 38 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3 z' fill='%23C9A24A'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=1">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="logo" href="index.html">
+      <svg class="logo-mark" viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="3"/>
+        <path d="M30 62 a18 18 0 0 1 0-24" stroke="currentColor" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <path d="M55 38 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3 z" fill="currentColor"/>
+      </svg>
+      <span class="logo-text" data-i18n="brand">The Quiet Room</span>
+    </a>
+    <nav class="site-nav" aria-label="Основна навігація">
+      <a href="index.html" class="active" data-i18n="nav_home">Головна</a>
+      <a href="#" data-i18n="nav_collection">Колекція</a>
+      <a href="#" data-i18n="nav_about">Про нас</a>
+      <a href="#" data-i18n="nav_contact">Контакти</a>
+    </nav>
+    <div class="header-tools">
+      <div class="search-box">
+        <input id="search-input" type="search" placeholder="Пошук принта…" data-i18n-placeholder="search_ph">
+      </div>
+      <div class="lang-switch">
+        <button class="lang-btn active" data-lang="uk">UA</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- Заголовок колекції -->
+  <section class="collection-head">
+    <div class="container">
+      <h1><span class="script">The Quiet Room</span> — <span data-i18n="head_title">принти для тиші</span></h1>
+      <p class="head-sub" data-i18n="head_sub">Цифрові файли принтів для друку на замовлення. Купуєте один раз — друкуєте безліч разів.</p>
+    </div>
+  </section>
+
+  <!-- SEO-опис (як у Quick Digital Files) -->
+  <section class="collection-desc">
+    <div class="container">
+      <div class="desc-text" id="desc-text">
+        <p data-i18n="desc_p1">Друк на замовлення (print on demand) змінив правила гри: ніяких складів, ніяких мінімальних партій, ніякого ризику залишитися з коробкою футболок, які ніхто не купив. Ви завантажуєте файл — покупець замовляє річ — платформа друкує й відправляє. Єдине, що потрібно від вас, — дизайн, який зачіпає людей.</p>
+        <p data-i18n="desc_p2">Саме це і є ця колекція. Принти The Quiet Room створені під реальний POD-процес: прозорий фон, роздільність 4500×5400 px (300 dpi), формати PNG + SVG. Файл одразу готовий до завантаження у Printify, Printful, Redbubble чи будь-який інший сервіс — без підготовки з вашого боку.</p>
+        <p data-i18n="desc_p3">Кожен файл — миттєва цифрова завантаження. Жодних передплат, очікування і доставки: ви купуєте, завантажуєте і одразу заливаєте файл у вашу платформу.</p>
+      </div>
+      <button class="read-more" id="read-more" data-i18n="read_more">Читати далі ▼</button>
+    </div>
+  </section>
+
+  <!-- Сітка товарів -->
+  <section class="collection-grid">
+    <div class="container">
+      <div class="grid" id="catalog">
+        <!-- картки будуються з data.json -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Підвал -->
+  <section class="collection-note">
+    <div class="container">
+      <p data-i18n="note_text">💌 Переконайтесь, що ваша пошта правильна при оформленні замовлення — на неї прийде файл з принтом одразу після оплати.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <span class="script">The Quiet Room</span>
+      <p data-i18n="footer_tag">Метафора домашнього затишку, в якому висять ваші роботи.</p>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="footer_shop">Магазин</h4>
+      <a href="https://6820536600065.blacksea.in.ua/l/eaq" target="_blank" rel="noopener" data-i18n="footer_buy">Купити на BlackSea</a>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="footer_help">Підтримка</h4>
+      <a href="#" data-i18n="footer_faq">Питання-відповіді</a>
+    </div>
+    <p class="footer-note">© <span id="year">2026</span> The Quiet Room</p>
+  </div>
+</footer>
+
+<script>
+window.TQR_PRODUCTS = [
+  { id: 'crescent', name_uk: 'Півмісяць', name_en: 'Crescent', tag_uk: 'Футболка · Бавовна', tag_en: 'T-Shirt · Cotton',
+    img: 'assets/img/tee-cream.svg', price: '55', old: '75', badge_uk: 'ХІТ', badge_en: 'HIT' },
+  { id: 'arch', name_uk: 'Арка', name_en: 'Arch', tag_uk: 'Футболка · Бавовна', tag_en: 'T-Shirt · Cotton',
+    img: 'assets/img/tee-white.svg', price: '55', old: '75', badge_uk: 'НОВЕ', badge_en: 'NEW' },
+  { id: 'night', name_uk: 'Нічник', name_en: 'Nightlight', tag_uk: 'Худі · Фліс', tag_en: 'Hoodie · Fleece',
+    img: 'assets/img/hoodie-dark.svg', price: '55', old: '75', badge_uk: 'ХІТ', badge_en: 'HIT' },
+  { id: 'moon', name_uk: 'Місяць', name_en: 'Moon', tag_uk: 'Кухоль · Кераміка', tag_en: 'Mug · Ceramic',
+    img: 'assets/img/mug.svg', price: '55', old: '75', badge_uk: 'ДІМ', badge_en: 'HOME' }
+];
+window.TQR_BUY = 'https://6820536600065.blacksea.in.ua/l/eaq';
+</script>
+<script src="assets/main.js?v=1"></script>
+</body>
+</html>

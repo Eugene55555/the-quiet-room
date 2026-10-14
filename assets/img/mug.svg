@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="400" height="500">
+  <!-- Мокап 4: кружка «Луна» -->
+  <defs>
+    <style>
+      .mug { fill: #F5EEE1; stroke: rgba(34,30,25,.16); stroke-width: 3.5; stroke-linejoin: round; }
+      .mug-in { fill: #ECE2CC; }
+      .handle { fill: none; stroke: rgba(34,30,25,.5); stroke-width: 9; stroke-linecap: round; }
+      .print { fill: none; stroke: #C4572F; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+      .star { fill: #C4572F; }
+    </style>
+  </defs>
+
+  <!-- Ручка -->
+  <path class="handle" d="M 282 200 C 344 200 344 272 278 276"/>
+
+  <!-- Корпус -->
+  <path class="mug" d="M 118 150 L 132 305 Q 200 340 268 305 L 282 150 Q 200 172 118 150 Z"/>
+  <!-- Отверстие -->
+  <path class="mug-in" d="M 118 150 Q 200 172 282 150 Q 200 128 118 150 Z"/>
+
+  <!-- Принт: полумесяц + звезда -->
+  <g transform="translate(155 255) scale(0.45)">
+    <path class="print" d="M 100 84 A 32 32 0 1 0 100 148 A 24 24 0 1 1 100 84 Z"/>
+    <path class="star" d="M 130 88 L 133.5 96 L 142 99.5 L 133.5 103 L 130 111 L 126.5 103 L 118 99.5 L 126.5 96 Z"/>
+  </g>
+</svg>

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="400" height="500">
+  <!-- Мокап 3: тёмное худи «Ночник» с полным знаком -->
+  <defs>
+    <style>
+      .tee { fill: #221E19; stroke: rgba(244,239,230,.18); stroke-width: 3; stroke-linejoin: round; }
+      .print { fill: none; stroke: #E0805A; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+      .star { fill: #E0805A; }
+      .light { fill: #E0805A; }
+    </style>
+  </defs>
+
+  <!-- Капюшон -->
+  <path class="tee" d="M 148 96 Q 200 42 252 96 Q 200 76 148 96 Z"/>
+
+  <!-- Корпус худи -->
+  <path class="tee" d="M 152 86 L 118 108 L 74 166 L 66 190 L 112 184 L 122 152 L 128 440 Q 200 452 272 440 L 278 152 L 288 184 L 334 190 L 326 166 L 282 108 L 248 86 Q 200 120 152 86 Z"/>
+
+  <!-- Карман-кенгуру -->
+  <path class="tee" fill="none" d="M 130 336 L 192 312 L 208 312 L 270 336"/>
+
+  <!-- Принт: полный знак «тихая комната» -->
+  <g transform="translate(150 198.5) scale(0.5)">
+    <path class="print" d="M 40 195 A 60 60 0 0 1 160 195"/>
+    <path class="print" d="M 100 84 A 32 32 0 1 0 100 148 A 24 24 0 1 1 100 84 Z"/>
+    <path class="star" d="M 130 88 L 133.5 96 L 142 99.5 L 133.5 103 L 130 111 L 126.5 103 L 118 99.5 L 126.5 96 Z"/>
+    <circle class="light" cx="100" cy="195" r="5.5"/>
+  </g>
+</svg>

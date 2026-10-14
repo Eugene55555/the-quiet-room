@@ -303,7 +303,7 @@
       + '<h1>' + esc(p.name) + '</h1>'
       + '<div class="product-price">'
       + '<span class="price-sale">' + esc(p.price) + ' ₴</span>'
-      + (p.old ? '<span class="price-old">' + esc(p.old) + ' ₴</span><span class="card-formats">' + (Math.round((1 - p.price / p.old) * 100)) + '% знижка</span>' : '')
+      + (p.old ? '<span class="price-old">' + esc(p.old) + ' ₴</span><span class="discount-badge">' + (Math.round((1 - p.price / p.old) * 100)) + '% знижка</span>' : '')
       + '</div>'
       + '<p class="product-formats">Формати: ' + esc(p.formats) + ' · Роздільність 4500×5400 px · 300 dpi · Прозорий фон</p>'
       + '<div class="product-desc">'

@@ -259,7 +259,6 @@
     if (!main) return;
     var key = pageKey();
     var secs = (key === 'main') ? CFG.sections : CFG['sections_' + key];
-    window.__dbg2 = { key: key, secs: secs ? secs.length : -1, src: main.dataset.src };
     if (!secs || !secs.length) {
       if (key === 'main' && /sq_blocks/.test(location.search)) secs = TEST_SECTIONS;
       else return;
@@ -270,15 +269,12 @@
       if (s && s.variant) html += buildSection(s, L);
     });
     if (!html) return;
-    window.__dbg2.built = html.length;
     main.innerHTML = html;
     main.dataset.src = 'sanity';
     var extra = document.getElementById('static-extra');
     if (extra) extra.style.display = 'none';
     main.querySelectorAll('.reveal').forEach(function (el) { if (window.__io) window.__io.observe(el); else el.classList.add('in'); });
-    window.__dbg2.rendered = true;
     if (key === 'collection') renderCatChips();
-    window.__dbg2.chipsDone = true;
   }
   function applyConfig() {
     var root = document.documentElement.style;
@@ -329,6 +325,7 @@
 
   /* ---- Фільтр категорій (сторінка «Колекція») ---- */
   function renderCatChips() {
+    var esc = function (x) { return String(x == null ? '' : x).replace(/&/g, '&amp;').replace(/\"/g, '&quot;').replace(/</g, '&lt;'); };
     var wrap = document.getElementById('cat-chips');
     if (!wrap || pageKey() !== 'collection') return;
     var cards = document.querySelectorAll('#catalog .card');
@@ -361,9 +358,7 @@
   /* ---- Каталог з конфігу ---- */
   function renderCatalog() {
     var grid = document.getElementById('catalog');
-    window.__dbg = { grid: !!grid, prods: CFG.products ? CFG.products.length : -1, key: pageKey() };
-    try {
-      if (!grid || !CFG.products) { window.__dbg.ret = 'no-grid-or-prods'; return; }
+    if (!grid || !CFG.products) return;
     var L = lang();
     var out = '';
     CFG.products.forEach(function (p, i) {
@@ -399,8 +394,6 @@
     // пере-фільтри пошуку, якщо був запит
     var qp = new URLSearchParams(location.search).get('q');
     if (qp) applySearch(qp);
-    window.__dbg.done = true;
-    } catch (e) { window.__dbg.err = String(e && e.message || e); window.__dbg.stack = e && e.stack ? e.stack.slice(0, 400) : ''; }
   }
 
   function t(key) {

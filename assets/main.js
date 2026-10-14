@@ -1,6 +1,9 @@
 /* The Quiet Room — інтеракції v7: конфіг-адмінка (config.json), паралакс, reveal, tilt, пошук, мови */
 (function () {
   'use strict';
+  window.addEventListener('error', function (e) {
+    try { window.__errs = (window.__errs || []).concat([String(e.message) + ' @' + (e.filename || '').split('/').pop() + ':' + e.lineno]); } catch (x) {}
+  });
 
   /* ================= КОНФІГ З АДМІНКИ (config.json) =================
      Note: innerHTML нижче будує картки з config.json — це довірений файл

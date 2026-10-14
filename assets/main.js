@@ -29,17 +29,8 @@
   }
   window.addEventListener('scroll', onScroll, { passive: true });
 
-  /* ---------- Бургер (мобільне меню) ---------- */
+  /* ---------- Бургер: відкриває виїзну панель ---------- */
   var burger = document.getElementById('burger');
-  var nav = document.getElementById('site-nav');
-  if (burger && nav) {
-    burger.addEventListener('click', function () { nav.classList.toggle('open'); });
-    document.addEventListener('click', function (e) {
-      if (nav.classList.contains('open') && !nav.contains(e.target) && !burger.contains(e.target)) {
-        nav.classList.remove('open');
-      }
-    });
-  }
 
   /* ---------- Виїзна панель меню (як у Quick Digital Files) ---------- */
   var menuDrawer = document.getElementById('menu-drawer');
@@ -188,7 +179,16 @@
     if (state.page > totalPages) state.page = totalPages;
     var start = (state.page - 1) * PER_PAGE;
     var pageItems = list.slice(start, start + PER_PAGE);
-    if (count) count.textContent = list.length + (list.length === 1 ? ' товар' : ' товарів');
+    /* Счётчик: 1 товар / 2-4 товари / 5+ товарів (укр. числительные) */
+    if (count) {
+      var n = list.length;
+      var mod10 = n % 10, mod100 = n % 100;
+      var word = 'товарів';
+      if (mod100 >= 11 && mod100 <= 14) word = 'товарів';
+      else if (mod10 === 1) word = 'товар';
+      else if (mod10 >= 2 && mod10 <= 4) word = 'товари';
+      count.textContent = n + ' ' + word;
+    }
     grid.innerHTML = pageItems.length
       ? pageItems.map(cardHTML).join('')
       : '<p style="grid-column:1/-1;text-align:center;color:var(--muted);padding:40px 0">Нічого не знайдено за запитом</p>';

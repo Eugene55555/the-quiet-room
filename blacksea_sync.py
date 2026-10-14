@@ -33,11 +33,23 @@ LOCAL_HTML = os.path.join(os.path.dirname(os.path.abspath(__file__)), "profile.h
 AVATAR = "https://res-4.cloudinary.com/dubkmnuvi/image/upload/6eyaylwq4lztoyesau8bi8gvcdd1.png"
 UA = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"}
 CURRENCIES = {"uah": "₴", "usd": "$", "eur": "€"}
+# Домены соцсетей: ссылки на них НЕ считаются «сайтом» для логотипа
+SOCIAL_DOMAINS = ("instagram.com", "facebook.com", "fb.com", "twitter.com", "x.com",
+                  "tiktok.com", "youtube.com", "t.me", "telegram.me", "linkedin.com",
+                  "pinterest.com", "vk.com")
+# Запасной сайт, если в кабинете не указан ни один не-социальный URL
+DEFAULT_SITE_URL = "https://eugene55555.github.io/the-quiet-room/"
 
 
 # ---------------------------------------------------------------- scrape
 def _brace_json(s: str, start: int):
     """s[start] должен быть '{'. Возвращает (объект|None, индекс после '}')."""
+    obj, end = _brace_value(s, start)
+    return obj, end
+
+
+def _brace_json_array(s: str, start: int):
+    """s[start] должен быть '['. Возвращает (массив|None, индекс после ']')."""
     depth, i, in_str, esc = 0, start, False, False
     while i < len(s):
         c = s[i]
@@ -50,9 +62,43 @@ def _brace_json(s: str, start: int):
                 in_str = False
         elif c == '"':
             in_str = True
-        elif c == "{":
+        elif c == "[":
             depth += 1
-        elif c == "}":
+        elif c == "]":
+            depth -= 1
+            if depth == 0:
+                try:
+                    return json.loads(s[start:i + 1]), i + 1
+                except Exception:
+                    return None, i + 1
+        i += 1
+    return None, i
+
+
+def _brace_value(s: str, start: int):
+    """Универсально: '{' → объект, '[' → массив. Возвращает (значение|None, индекс после)."""
+    depth, i, in_str, esc = 0, start, False, False
+    open_c, close_c = s[start], None
+    if open_c == "{":
+        close_c = "}"
+    elif open_c == "[":
+        close_c = "]"
+    else:
+        return None, start
+    while i < len(s):
+        c = s[i]
+        if in_str:
+            if esc:
+                esc = False
+            elif c == "\\":
+                esc = True
+            elif c == '"':
+                in_str = False
+        elif c == '"':
+            in_str = True
+        elif c == open_c:
+            depth += 1
+        elif c == close_c:
             depth -= 1
             if depth == 0:
                 try:
@@ -98,6 +144,22 @@ def scrape_products():
     return products
 
 
+def scrape_site_url():
+    """Сайт для логотипа: creator_profile.social_links — первый URL, который НЕ соцсеть.
+    Меняется в кабинете BlackSea (профиль → соцссылки) — синк подхватит автоматически."""
+    r = requests.get(f"https://{SUBDOMAIN}/", headers=UA, timeout=30)
+    r.raise_for_status()
+    m = re.search(r'"social_links"\s*:\s*\[', r.text)
+    if m:
+        arr, _ = _brace_json_array(r.text, m.end() - 1)
+        for item in arr or []:
+            url = (item or {}).get("url") or ""
+            host = url.split("//")[-1].split("/")[0].lower().removeprefix("www.")
+            if url.startswith("http") and not any(host == d or host.endswith("." + d) for d in SOCIAL_DOMAINS):
+                return url
+    return DEFAULT_SITE_URL
+
+
 # ---------------------------------------------------------------- auth
 def _token_ok(token: str) -> bool:
     try:
@@ -138,7 +200,7 @@ def get_token():
 
 
 # ---------------------------------------------------------------- html
-def build_html(products):
+def build_html(products, site_url):
     catalog = json.dumps(
         [{"name": p["name"], "url": p["url"], "price": p["price"], "thumb": p["thumbnail"]}
          for p in products],
@@ -185,7 +247,9 @@ def build_html(products):
 <body>
   <div style="min-height:100vh; display:flex; flex-direction:column;">
     <header class="hero" role="banner">
-      <img class="avatar" src="''' + AVATAR + '''" alt="" loading="lazy">
+      <a href="''' + site_url + '''" target="_blank" rel="noopener noreferrer" aria-label="Сайт The Quiet Room" style="display:inline-block; border-radius:50%;">
+        <img class="avatar" src="''' + AVATAR + '''" alt="" loading="lazy">
+      </a>
       <h1 class="name" data-blacksea-field="name">njp</h1>
       <p class="bio" data-blacksea-field="bio">Цифрові товари — миттєва доставка після оплати.</p>
       <div class="divider" aria-hidden="true"></div>
@@ -312,7 +376,7 @@ def main():
     for p in products:
         print(f"   - {p['name']} | {p['price']} | {p['permalink']} | img: {'да' if p['thumbnail'] else 'нет'}")
 
-    html = build_html(products)
+    html = build_html(products, scrape_site_url())
     with open(LOCAL_HTML, "w", encoding="utf-8") as f:
         f.write(html)
 

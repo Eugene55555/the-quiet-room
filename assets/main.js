@@ -1,117 +1,236 @@
-/* The Quiet Room — головна: картки, мови, пошук, читати далі */
+/* The Quiet Room — шапка-скролл, пошук, фільтри, сортування, пагінація, сторінка товару, підписка */
 (function () {
   'use strict';
-  var L = (localStorage.getItem('tqr_lang') || 'uk');
-  if (['uk', 'en'].indexOf(L) === -1) L = 'uk';
 
-  var I18N = {
-    uk: {
-      brand: 'The Quiet Room', nav_home: 'Головна', nav_collection: 'Колекція', nav_about: 'Про нас', nav_contact: 'Контакти',
-      search_ph: 'Пошук принта…',
-      head_title: 'принти для тиші',
-      head_sub: 'Цифрові файли принтів для друку на замовлення. Купуєте один раз — друкуєте безліч разів.',
-      desc_p1: 'Друк на замовлення (print on demand) змінив правила гри: ніяких складів, ніяких мінімальних партій, ніякого ризику залишитися з коробкою футболок, які ніхто не купив. Ви завантажуєте файл — покупець замовляє річ — платформа друкує й відправляє. Єдине, що потрібно від вас, — дизайн, який зачіпає людей.',
-      desc_p2: 'Саме це і є ця колекція. Принти The Quiet Room створені під реальний POD-процес: прозорий фон, роздільність 4500×5400 px (300 dpi), формати PNG + SVG. Файл одразу готовий до завантаження у Printify, Printful, Redbubble чи будь-який інший сервіс — без підготовки з вашого боку.',
-      desc_p3: 'Кожен файл — миттєва цифрова завантаження. Жодних передплат, очікування і доставки: ви купуєте, завантажуєте і одразу заливаєте файл у вашу платформу.',
-      read_more: 'Читати далі ▼', read_less: 'Згорнути ▲',
-      buy_btn: 'Купити на BlackSea', not_found: 'Нічого не знайдено за запитом',
-      reg_price: 'Звичайна ціна', sale_price: 'Ціна зі знижкою',
-      note_text: '🙂 Переконайтесь, що ваша пошта правильна при оформленні замовлення на BlackSea — файл з принтом прийде на неї одразу після оплати.',
-      footer_tag: 'Метафора домашнього затишку, в якому висять ваші роботи.',
-      footer_shop: 'Магазин', footer_buy: 'Купити на BlackSea', footer_help: 'Підтримка', footer_faq: 'Питання-відповіді'
-    },
-    en: {
-      brand: 'The Quiet Room', nav_home: 'Home', nav_collection: 'Collection', nav_about: 'About', nav_contact: 'Contact',
-      search_ph: 'Search prints…',
-      head_title: 'prints for stillness',
-      head_sub: 'Digital print files for print on demand. Buy once — print forever.',
-      desc_p1: 'Print on demand has fundamentally changed what it means to run a product business. No inventory. No upfront manufacturing costs. No minimum order quantities. No risk of being stuck with a box of t-shirts nobody bought. You upload a file — a customer places an order — the platform prints and ships it. All it takes from you is design that connects with people.',
-      desc_p2: 'That is exactly what this collection delivers. The Quiet Room prints are built for the real POD workflow: transparent background, 4500×5400 px (300 dpi), PNG + SVG formats. The file is instantly ready to upload to Printify, Printful, Redbubble or any other service — no preparation on your end.',
-      desc_p3: 'Every file is an instant digital download. No subscriptions, no waiting, no shipping: you buy, you download, and you are uploading to your platform immediately.',
-      read_more: 'Read more ▼', read_less: 'Collapse ▲',
-      buy_btn: 'Buy on BlackSea', not_found: 'Nothing found for your search',
-      reg_price: 'Regular price', sale_price: 'Sale price',
-      note_text: '🙂 Make sure your email is valid when you check out on BlackSea — the print file will be delivered to it right after payment.',
-      footer_tag: 'A metaphor of home comfort, with your works hanging inside.',
-      footer_shop: 'Shop', footer_buy: 'Buy on BlackSea', footer_help: 'Support', footer_faq: 'FAQ'
-    }
-  };
+  var PRODUCTS = window.TQR_PRODUCTS || [];
+  var PER_PAGE = 8;
+  var state = { q: '', cat: '', price: '', sort: 'featured', page: 1 };
 
-  function t(key) { return (I18N[L] && I18N[L][key]) || key; }
-
-  function lang() {
-    document.documentElement.lang = L;
-    document.querySelectorAll('[data-i18n]').forEach(function (el) { el.textContent = t(el.getAttribute('data-i18n')); });
-    document.querySelectorAll('[data-i18n-placeholder]').forEach(function (el) { el.setAttribute('placeholder', t(el.getAttribute('data-i18n-placeholder'))); });
-    document.title = t('brand') + ' — ' + t('head_title');
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
   }
 
-  function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
+  /* ---------- Шапка: ховається вниз, з'являється вгору ---------- */
+  var header = document.getElementById('site-header');
+  var lastY = window.pageYOffset;
+  var ticking = false;
+  function onScroll() {
+    var y = window.pageYOffset;
+    if (!ticking) {
+      window.requestAnimationFrame(function () {
+        if (!header) return;
+        if (y > lastY && y > 120) header.classList.add('hidden');
+        else header.classList.remove('hidden');
+        lastY = y;
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
 
-  /* ---------- Картки товарів ---------- */
-  function renderCatalog(filter) {
-    var grid = document.getElementById('catalog');
+  /* ---------- Бургер (мобільне меню) ---------- */
+  var burger = document.getElementById('burger');
+  var nav = document.getElementById('site-nav');
+  if (burger && nav) {
+    burger.addEventListener('click', function () { nav.classList.toggle('open'); });
+    document.addEventListener('click', function (e) {
+      if (nav.classList.contains('open') && !nav.contains(e.target) && !burger.contains(e.target)) {
+        nav.classList.remove('open');
+      }
+    });
+  }
+
+  /* ---------- Пошук: лупа відкриває поле ---------- */
+  var st = document.getElementById('search-toggle');
+  var sp = document.getElementById('search-panel');
+  var si = document.getElementById('search-input');
+  if (st && sp) {
+    st.addEventListener('click', function (e) {
+      e.stopPropagation();
+      sp.classList.toggle('open');
+      if (sp.classList.contains('open') && si) si.focus();
+    });
+    document.addEventListener('click', function (e) {
+      if (sp.classList.contains('open') && !sp.contains(e.target) && !st.contains(e.target)) {
+        sp.classList.remove('open');
+      }
+    });
+  }
+  if (si) {
+    si.addEventListener('input', function () {
+      state.q = si.value.trim().toLowerCase();
+      state.page = 1;
+      renderGrid();
+    });
+  }
+
+  /* ---------- Фільтри та сортування ---------- */
+  function bindSelect(id, key) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('change', function () {
+      state[key] = el.value;
+      state.page = 1;
+      renderGrid();
+    });
+  }
+  bindSelect('f-cat', 'cat');
+  bindSelect('f-price', 'price');
+  bindSelect('f-sort', 'sort');
+
+  /* ---------- Фільтрація + сортування ---------- */
+  function applyFilters() {
+    var list = PRODUCTS.slice();
+    if (state.q) list = list.filter(function (p) {
+      return (p.name + ' ' + p.cat).toLowerCase().indexOf(state.q) !== -1;
+    });
+    if (state.cat) list = list.filter(function (p) { return p.cat === state.cat; });
+    if (state.price === 'sale') list = list.filter(function (p) { return p.old > 0; });
+    if (state.price === '55') list = list.filter(function (p) { return p.price <= 60; });
+    switch (state.sort) {
+      case 'az': list.sort(function (a, b) { return a.name.localeCompare(b.name, 'uk'); }); break;
+      case 'za': list.sort(function (a, b) { return b.name.localeCompare(a.name, 'uk'); }); break;
+      case 'lo': list.sort(function (a, b) { return a.price - b.price; }); break;
+      case 'hi': list.sort(function (a, b) { return b.price - a.price; }); break;
+      case 'new': list.sort(function (a, b) { return b.order - a.order; }); break;
+      default: list.sort(function (a, b) { return a.order - b.order; });
+    }
+    return list;
+  }
+
+  /* ---------- Картка (скелет як у Quick Digital Files) ---------- */
+  function cardHTML(p) {
+    return '<article class="card">'
+      + '<a class="card-media" href="product.html?id=' + esc(p.id) + '">'
+      + (p.badge ? '<span class="card-badge">' + esc(p.badge) + '</span>' : '')
+      + '<img loading="lazy" src="' + esc(p.img) + '" alt="' + esc(p.name) + ' — принт The Quiet Room" width="500" height="625">'
+      + '</a>'
+      + '<div class="card-body">'
+      + '<a class="card-title" href="product.html?id=' + esc(p.id) + '">' + esc(p.name) + '</a>'
+      + '<p class="card-formats">' + esc(p.formats) + ' · 300 dpi</p>'
+      + '<div class="card-price-row">'
+      + '<span class="price-sale">' + esc(p.price) + ' ₴</span>'
+      + (p.old ? '<span class="price-old">' + esc(p.old) + ' ₴</span>' : '')
+      + (p.old ? '<span class="card-formats">' + (Math.round((1 - p.price / p.old) * 100)) + '% знижка</span>' : '')
+      + '</div>'
+      + '<a class="card-btn" href="' + esc(window.TQR_BUY) + '">Купити на BlackSea</a>'
+      + '</div></article>';
+  }
+
+  /* ---------- Сітка + пагінація ---------- */
+  var grid = document.getElementById('catalog');
+  var pag = document.getElementById('pagination');
+  var count = document.getElementById('count');
+
+  function renderGrid() {
     if (!grid) return;
-    var q = (filter || '').trim().toLowerCase();
-    var out = '';
-    window.TQR_PRODUCTS.forEach(function (p, i) {
-      var hay = (p.name_uk + ' ' + p.name_en + ' ' + p.tag_uk + ' ' + p.tag_en).toLowerCase();
-      if (q && hay.indexOf(q) === -1) return;
-      var name = L === 'uk' ? p.name_uk : p.name_en;
-      var tag = L === 'uk' ? p.tag_uk : p.tag_en;
-      var badge = L === 'uk' ? p.badge_uk : p.badge_en;
-      out += '<article class="card" data-cat="' + esc(q) + '">'
-        + '<div class="card-media"><span class="card-badge">' + esc(badge) + '</span>'
-        + '<img loading="lazy" src="' + esc(p.img) + '" alt="' + esc(name) + ' — принт The Quiet Room" width="500" height="625"></div>'
-        + '<div class="card-body">'
-        + '<p class="card-tag">' + esc(tag) + '</p>'
-        + '<h2 class="card-title">' + esc(name) + '</h2>'
-        + '<p class="card-desc"></p>'
-        + '<div class="card-price-row"><span class="price-sale">' + esc(p.price) + ' ₴</span>'
-        + (p.old ? '<span class="price-old">' + esc(p.old) + ' ₴</span><span class="price-cur">' + (L === 'uk' ? 'акція' : 'sale') + '</span>' : '')
-        + '</div>'
-        + '<a class="card-btn" href="' + esc(window.TQR_BUY) + '" target="_blank" rel="noopener">' + esc(t('buy_btn')) + '</a>'
-        + '</div></article>';
+    var list = applyFilters();
+    var totalPages = Math.max(1, Math.ceil(list.length / PER_PAGE));
+    if (state.page > totalPages) state.page = totalPages;
+    var start = (state.page - 1) * PER_PAGE;
+    var pageItems = list.slice(start, start + PER_PAGE);
+    if (count) count.textContent = list.length + (list.length === 1 ? ' товар' : ' товарів');
+    grid.innerHTML = pageItems.length
+      ? pageItems.map(cardHTML).join('')
+      : '<p style="grid-column:1/-1;text-align:center;color:var(--muted);padding:40px 0">Нічого не знайдено за запитом</p>';
+    if (pag) {
+      var p = '';
+      if (state.page > 1) p += '<a href="#" data-p="' + (state.page - 1) + '">←</a>';
+      for (var i = 1; i <= totalPages; i++) {
+        p += i === state.page
+          ? '<span class="cur">' + i + '</span>'
+          : '<a href="#" data-p="' + i + '">' + i + '</a>';
+      }
+      if (state.page < totalPages) p += '<a href="#" data-p="' + (state.page + 1) + '">→</a>';
+      pag.innerHTML = p;
+    }
+  }
+  if (pag) {
+    pag.addEventListener('click', function (e) {
+      var a = e.target.closest('a[data-p]');
+      if (!a) return;
+      e.preventDefault();
+      state.page = parseInt(a.getAttribute('data-p'), 10);
+      renderGrid();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-    if (!out) out = '<p style="grid-column:1/-1;text-align:center;color:var(--muted);padding:40px 0">' + esc(t('not_found')) + '</p>';
-    grid.innerHTML = out;
   }
 
-  /* ---------- Мови ---------- */
-  function setLang(l) {
-    if (l === L) return;
-    L = l;
-    localStorage.setItem('tqr_lang', l);
-    document.querySelectorAll('.lang-btn').forEach(function (b) { b.classList.toggle('active', b.getAttribute('data-lang') === l); });
-    lang();
-    renderCatalog();
+  /* ---------- Читати далі ---------- */
+  var rm = document.getElementById('read-more');
+  var hd = document.getElementById('head-desc');
+  if (rm && hd) {
+    if (hd.scrollHeight <= hd.clientHeight + 4) rm.style.display = 'none';
+    rm.addEventListener('click', function () {
+      var open = hd.classList.toggle('open');
+      rm.textContent = open ? 'Згорнути ▲' : 'Читати далі ▼';
+    });
   }
 
-  /* ---------- Пошук ---------- */
-  var debounce = null;
+  /* ---------- Підписка ---------- */
+  var sf = document.getElementById('sub-form');
+  var sok = document.getElementById('sub-ok');
+  if (sf) {
+    sf.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var email = document.getElementById('sub-email');
+      if (email && email.value.indexOf('@') > 0) {
+        try { localStorage.setItem('tqr_sub', email.value.trim()); } catch (err) {}
+        if (sok) sok.hidden = false;
+        sf.reset();
+      }
+    });
+  }
+
+  /* ---------- Сторінка товару ---------- */
+  function renderProduct() {
+    var page = document.getElementById('product-page');
+    if (!page) return;
+    var params = new URLSearchParams(window.location.search);
+    var p = null;
+    var id = params.get('id');
+    for (var i = 0; i < PRODUCTS.length; i++) {
+      if (PRODUCTS[i].id === id) { p = PRODUCTS[i]; break; }
+    }
+    if (!p) {
+      page.innerHTML = '<p style="padding:60px 0;text-align:center;color:var(--muted)">Товар не знайдено. <a href="index.html" style="color:var(--wine);text-decoration:underline">На головну</a></p>';
+      return;
+    }
+    document.title = p.name + ' — The Quiet Room';
+    var related = PRODUCTS.filter(function (x) { return x.id !== p.id; }).slice(0, 4);
+    page.innerHTML =
+      '<div class="product-layout">'
+      + '<div class="product-media"><img src="' + esc(p.img) + '" alt="' + esc(p.name) + '" width="560" height="700"></div>'
+      + '<div class="product-info">'
+      + '<p class="product-cat">' + esc(p.cat) + '</p>'
+      + '<h1>' + esc(p.name) + '</h1>'
+      + '<div class="product-price">'
+      + '<span class="price-sale">' + esc(p.price) + ' ₴</span>'
+      + (p.old ? '<span class="price-old">' + esc(p.old) + ' ₴</span><span class="card-formats">' + (Math.round((1 - p.price / p.old) * 100)) + '% знижка</span>' : '')
+      + '</div>'
+      + '<p class="product-formats">Формати: ' + esc(p.formats) + ' · Роздільність 4500×5400 px · 300 dpi · Прозорий фон</p>'
+      + '<div class="product-desc">'
+      + '<p>Цифровий файл принта «' + esc(p.name) + '» у фірмовій стилістиці The Quiet Room. Підходить для друку на футболках, худі, кухлях, постерах і будь-яких інших носіях.</p>'
+      + '<p>Купуєте один раз — друкуєте безліч разів. Після оплати файл миттєво приходить на вашу пошту, а також зберігається у бібліотеці BlackSea.</p>'
+      + '</div>'
+      + '<ul class="product-feats">'
+      + '<li><i class="fa-solid fa-circle-check"></i>Миттєва доставка на email після оплати</li>'
+      + '<li><i class="fa-solid fa-circle-check"></i>Готовий до завантаження у Printify, Printful, Redbubble</li>'
+      + '<li><i class="fa-solid fa-circle-check"></i>Персональне використання та малий бізнес</li>'
+      + '</ul>'
+      + '<a class="product-buy" href="' + esc(window.TQR_BUY) + '">Купити на BlackSea — ' + esc(p.price) + ' ₴</a>'
+      + '<p class="product-safe"><i class="fa-solid fa-lock"></i> Безпечна оплата карткою · 3-D Secure</p>'
+      + '</div></div>'
+      + '<section class="product-related"><h2>Схожі принти</h2><div class="grid">'
+      + related.map(cardHTML).join('')
+      + '</div></section>';
+  }
+
+  /* ---------- Старт ---------- */
   document.addEventListener('DOMContentLoaded', function () {
-    lang();
-    renderCatalog();
-    document.querySelectorAll('.lang-btn').forEach(function (b) {
-      b.addEventListener('click', function () { setLang(b.getAttribute('data-lang')); });
-    });
-    var input = document.getElementById('search-input');
-    if (input) {
-      input.addEventListener('input', function () {
-        clearTimeout(debounce);
-        debounce = setTimeout(function () { renderCatalog(input.value); }, 180);
-      });
-    }
-    var rm = document.getElementById('read-more');
-    var dt = document.getElementById('desc-text');
-    if (rm && dt) {
-      if (dt.scrollHeight <= 152) { rm.style.display = 'none'; }
-      rm.addEventListener('click', function () {
-        var open = dt.classList.toggle('short');
-        rm.textContent = open ? t('read_more') : t('read_less');
-      });
-      dt.classList.add('short');
-    }
+    renderGrid();
+    renderProduct();
     var year = document.getElementById('year');
     if (year) year.textContent = new Date().getFullYear();
   });

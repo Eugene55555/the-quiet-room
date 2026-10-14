@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="400" height="500">
+<defs><style>
+.tee { fill: #F5EEE1; stroke: rgba(34,30,25,.14); stroke-width: 3; stroke-linejoin: round; }
+.tee-w { fill: #FBFBF8; stroke: rgba(34,30,25,.14); stroke-width: 3; stroke-linejoin: round; }
+.tee-d { fill: #221E19; stroke: rgba(244,239,230,.18); stroke-width: 3; stroke-linejoin: round; }
+.print { fill: none; stroke: #8E2137; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+.print-d { fill: none; stroke: #E4C9A8; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+.print-g { fill: none; stroke: #C9A24A; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+.star { fill: #8E2137; }
+.star-d { fill: #E4C9A8; }
+.star-g { fill: #C9A24A; }
+.mug { fill: #F5EEE1; stroke: rgba(34,30,25,.16); stroke-width: 3.5; stroke-linejoin: round; }
+.mug-in { fill: #ECE2CC; }
+.handle { fill: none; stroke: rgba(34,30,25,.5); stroke-width: 9; stroke-linecap: round; }
+.frame { fill: #FBFBF8; stroke: rgba(34,30,25,.2); stroke-width: 3; }
+</style></defs>
+<path class="tee" d="M 152 86 L 118 108 L 74 166 L 66 190 L 112 184 L 122 152 L 128 440 Q 200 452 272 440 L 278 152 L 288 184 L 334 190 L 326 166 L 282 108 L 248 86 Q 200 120 152 86 Z"/>
+<g transform="translate(145 214) scale(0.55)"><path class="print" d="M 100 84 A 32 32 0 1 0 100 148 A 24 24 0 1 1 100 84 Z"/><path class="star" d="M 130 99 L 135 112.0 L 140 99 L 135 86.0 Z" transform="translate(-2.5 -2.5)"/></g></svg>

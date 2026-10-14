@@ -198,7 +198,7 @@ def build_html(products):
       </section>
     </main>
     <footer class="footer" role="contentinfo">
-      <p>© 2024 <span data-blacksea-field="name">njp</span> · <a href="https://blacksea.in.ua" target="_blank" rel="noopener noreferrer">Створено на BlackSea</a></p>
+      <p>© ''' + str(datetime.now().year) + ''' <span data-blacksea-field="name">njp</span> · <a href="https://blacksea.in.ua" target="_blank" rel="noopener noreferrer">Створено на BlackSea</a></p>
     </footer>
   </div>
 

@@ -14,16 +14,8 @@ export const product = {
     { name: 'img_url', title: 'Або шлях до макета (assets/img/...svg)', type: 'string' },
     { name: 'blacksea_link', title: 'Посилання покупки (BlackSea)', type: 'url', validation: r => r.uri({ scheme: ['https'] }) },
     {
-      name: 'category', title: 'Категорія', type: 'string',
-      options: {
-        list: [
-          { title: '👕 Одяг', value: 'clothes' },
-          { title: '🏠 Дім', value: 'home' },
-          { title: '✨ Інше', value: 'other' }
-        ],
-        layout: 'radio'
-      },
-      initialValue: 'clothes'
+      name: 'category', title: 'Категорія', type: 'reference', to: [{ type: 'category' }],
+      description: 'Оберіть готову категорію або створіть нову прямо тут (кнопка «+ Створити нову категорію»). Категорії потім з\'являться фільтром на сторінці «Колекція» (видаляються в розділі «Категорії» студії чи тут же, якщо вона порожня).'
     },
     { name: 'order', title: 'Порядок (1 — перший)', type: 'number', initialValue: 10 },
     { name: 'visible', title: 'Показувати на витрині', type: 'boolean', initialValue: true }

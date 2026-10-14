@@ -27,7 +27,9 @@ export const sectionBlock = {
           { title: '📝 Текст (з форматуванням)', value: 'text' },
           { title: '❓ Питання-відповіді', value: 'faq' },
           { title: '📖 Про бренд', value: 'about' },
-          { title: '🎯 Кнопка-заклик (CTA)', value: 'cta' }
+          { title: '🎯 Кнопка-заклик (CTA)', value: 'cta' },
+          { title: '📌 Заголовок сторінки (шапка)', value: 'pagehead' },
+          { title: '✉️ Форма зворотного зв\'язку', value: 'contactform' }
         ]
       },
       validation: r => r.required()

@@ -31,8 +31,8 @@
     if (!pid) return Promise.resolve(null);
     var base = 'https://' + pid + '.apicdn.sanity.io/v2023-01-01/data/query/production?query=';
     var enc = function (q) { return encodeURIComponent(q); };
-    var prodQ = '*[_type=="product" && visible != false]|order(order asc){_id,name_uk,name_en,tag_uk,tag_en,desc_uk,desc_en,price,img_url,"img":image.asset->url,category,blacksea_link,order}';
-    var setQ = '*[_type=="siteSettings"][0]{brand,banner_uk,banner_en,discount_note,color_wine,color_wine_deep,color_cream,color_gold,font_pair,social_instagram,social_tiktok,social_facebook,social_telegram,wear[]{title_uk,title_en,desc_uk,desc_en},faqs[]{q_uk,q_en,a_uk,a_en},sections[]{variant,bg,title_uk,title_en,sub_uk,sub_en,body_uk,body_en,items[]{t_uk,t_en,d_uk,d_en},image,btn_label_uk,btn_label_en,btn_link}}';
+    var prodQ = '*[_type=="product" && visible != false]|order(order asc){_id,name_uk,name_en,tag_uk,tag_en,desc_uk,desc_en,price,img_url,"img":image.asset->url,"cat_uk":category->name_uk,"cat_en":category->name_en,"cat_id":category->_id,blacksea_link,order}';
+    var setQ = '*[_type=="siteSettings"][0]{brand,banner_uk,banner_en,discount_note,color_wine,color_wine_deep,color_cream,color_gold,font_pair,social_instagram,social_tiktok,social_facebook,social_telegram,wear[]{title_uk,title_en,desc_uk,desc_en},faqs[]{q_uk,q_en,a_uk,a_en},sections[]{variant,bg,title_uk,title_en,sub_uk,sub_en,body_uk,body_en,items[]{t_uk,t_en,d_uk,d_en},image,btn_label_uk,btn_label_en,btn_link},sections_collection[]{variant,bg,title_uk,title_en,sub_uk,sub_en,body_uk,body_en,items[]{t_uk,t_en,d_uk,d_en},image,btn_label_uk,btn_label_en,btn_link},sections_about[]{variant,bg,title_uk,title_en,sub_uk,sub_en,body_uk,body_en,items[]{t_uk,t_en,d_uk,d_en},image,btn_label_uk,btn_label_en,btn_link},sections_contacts[]{variant,bg,title_uk,title_en,sub_uk,sub_en,body_uk,body_en,items[]{t_uk,t_en,d_uk,d_en},image,btn_label_uk,btn_label_en,btn_link}}';
     return Promise.all([
       fetch(base + enc(prodQ)).then(function (r) { return r.ok ? r.json() : null; }),
       fetch(base + enc(setQ)).then(function (r) { return r.ok ? r.json() : null; })
@@ -45,6 +45,7 @@
           return {
             id: p._id || 'p' + i,
             cat: p.category || 'clothes',
+            cat_uk: p.cat_uk || '', cat_en: p.cat_en || '',
             img: p.img_url || p.img || 'assets/img/tee-cream.svg',
             price: String(p.price || 55),
             link: p.blacksea_link || 'https://6820536600065.blacksea.in.ua/l/eaq',
@@ -63,6 +64,9 @@
         cfg.wear = set.wear || null;
         cfg.faqs = set.faqs || null;
         cfg.sections = set.sections || null;
+        cfg.sections_collection = set.sections_collection || null;
+        cfg.sections_about = set.sections_about || null;
+        cfg.sections_contacts = set.sections_contacts || null;
       }
       return cfg;
     }).catch(function () { return null; });
@@ -161,9 +165,34 @@
       return html + '</div></div></section>';
     }
     if (v === 'catalog') {
+      if (pageKey() === 'collection') {
+        return '<section class="section" id="collection"><div class="container">'
+          + (title ? '<h2 class="section-title reveal">' + title + '</h2>' : '')
+          + (sub ? '<p class="section-lead reveal">' + sub + '</p>' : '')
+          + '<div class="cat-chips reveal" id="cat-chips"></div>'
+          + '<div class="grid" id="catalog"></div></div></section>';
+      }
       return '<section class="section" id="collection"><div class="container"><div class="sec-head"><h2 class="section-title">' + (title || esc(t('best_title'))) + '</h2><a class="sec-link" href="collection.html">' + esc(t('cat_all')) + ' →</a></div>'
         + (sub ? '<p class="section-lead">' + sub + '</p>' : '<p class="section-lead">' + esc(t('best_sub')) + '</p>')
         + '<div class="grid" id="catalog"></div></div></section>';
+    }
+    if (v === 'pagehead') {
+      return '<div class="page-head"><div class="container"><h1>' + (title || esc(t('brand'))) + '</h1>'
+        + (sub ? '<p class="sub">' + sub + '</p>' : '') + '</div></div>';
+    }
+    if (v === 'contactform') {
+      return '<section class="section"><div class="container"><div class="contact-grid"><div class="reveal">'
+        + '<form class="contact-form" id="contact-form" novalidate>'
+        + '<label>' + esc(t('f_name')) + '</label><input name="name" required>'
+        + '<label>' + esc(t('f_email')) + '</label><input name="email" type="email" required>'
+        + '<label>' + esc(t('f_msg')) + '</label><textarea name="message" rows="5" required></textarea>'
+        + '<button class="btn btn-wine" type="submit">' + esc(t('f_send')) + '</button>'
+        + '<p class="form-note">' + esc(t('f_note')) + '</p>'
+        + '<p class="form-status" id="form-status">' + esc(t('f_ok')) + '</p></form></div>'
+        + '<div><h2 class="section-title reveal" style="margin-bottom:22px;font-size:clamp(30px,4vw,44px)">' + esc(t('faq_title')) + '</h2>'
+        + '<div class="mini-faq"></div>'
+        + (s.btn_label_uk || s.btn_label_en ? '<a class="btn btn-gold btn-shine reveal" data-delay="3" style="margin-top:26px" href="' + (s.btn_link || 'https://6820536600065.blacksea.in.ua/l/eaq') + '" target="_blank" rel="noopener">' + esc(L === 'uk' ? s.btn_label_uk : s.btn_label_en) + '</a>' : '')
+        + '</div></div></div></section>';
     }
     if (v === 'wear') {
       return '<section class="section" id="wear" style="padding-top:10px"><div class="container">'
@@ -215,16 +244,25 @@
     }
     return '';
   }
+  function pageKey() {
+    var p = (location.pathname || '/').split('/').pop();
+    if (p === 'collection.html') return 'collection';
+    if (p === 'about.html') return 'about';
+    if (p === 'contact.html') return 'contacts';
+    return 'main';
+  }
   function renderSections() {
     var main = document.getElementById('page-root');
     if (!main) return;
-    if (!CFG.sections || !CFG.sections.length) {
-      if (/sq_blocks/.test(location.search)) CFG.sections = TEST_SECTIONS;
+    var key = pageKey();
+    var secs = (key === 'main') ? CFG.sections : CFG['sections_' + key];
+    if (!secs || !secs.length) {
+      if (key === 'main' && /sq_blocks/.test(location.search)) secs = TEST_SECTIONS;
       else return;
     }
     var L = lang();
     var html = '';
-    CFG.sections.forEach(function (s) {
+    secs.forEach(function (s) {
       if (s && s.variant) html += buildSection(s, L);
     });
     if (!html) return;
@@ -233,6 +271,7 @@
     var extra = document.getElementById('static-extra');
     if (extra) extra.style.display = 'none';
     main.querySelectorAll('.reveal').forEach(function (el) { if (window.__io) window.__io.observe(el); else el.classList.add('in'); });
+    if (key === 'collection') renderCatChips();
   }
   function applyConfig() {
     var root = document.documentElement.style;
@@ -255,6 +294,7 @@
     }
     applyBrand();
     renderCatalog();
+    renderCatChips();
     renderSocial();
     renderWear();
     renderFaq();
@@ -280,6 +320,37 @@
     }
   }
 
+  /* ---- Фільтр категорій (сторінка «Колекція») ---- */
+  function renderCatChips() {
+    var wrap = document.getElementById('cat-chips');
+    if (!wrap || pageKey() !== 'collection') return;
+    var cards = document.querySelectorAll('#catalog .card');
+    var seen = {};
+    CFG.products.forEach(function (p) {
+      if (!p.hide && p.cat_uk) seen[p.cat_uk] = p.cat_en || p.cat_uk;
+    });
+    var names = Object.keys(seen);
+    if (names.length <= 1) { wrap.style.display = 'none'; return; }
+    var L = lang();
+    var html = '<button type="button" class="chip active" data-cat="">' + esc(L === 'uk' ? 'Всі' : 'All') + '</button>';
+    names.forEach(function (uk) {
+      html += '<button type="button" class="chip" data-cat="' + esc(uk) + '">' + esc(L === 'uk' ? uk : (seen[uk] || uk)) + '</button>';
+    });
+    wrap.innerHTML = html;
+    wrap.onclick = function (e) {
+      var btn = e.target.closest('.chip');
+      if (!btn) return;
+      wrap.querySelectorAll('.chip').forEach(function (c) { c.classList.remove('active'); });
+      btn.classList.add('active');
+      var cat = btn.getAttribute('data-cat');
+      cards.forEach(function (card) {
+        var ok = !cat || (card.getAttribute('data-cat') === cat);
+        card.style.display = ok ? '' : 'none';
+        if (ok) card.classList.add('in');
+      });
+    };
+  }
+
   /* ---- Каталог з конфігу ---- */
   function renderCatalog() {
     var grid = document.getElementById('catalog');
@@ -295,7 +366,7 @@
       var tag = L === 'uk' ? p.tag_uk : p.tag_en;
       var desc = L === 'uk' ? p.desc_uk : p.desc_en;
       var esc = function (s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;'); };
-      out += '<a class="card reveal" data-delay="' + (i % 4) + '" href="' + esc(p.link) + '" target="_blank" rel="noopener" data-name="' + esc(p.name_uk + ' ' + p.name_en) + '" data-desc="' + esc(p.desc_uk + ' ' + p.desc_en) + '" data-cat="' + esc(p.cat || '') + '">'
+      out += '<a class="card reveal" data-delay="' + (i % 4) + '" href="' + esc(p.link) + '" target="_blank" rel="noopener" data-name="' + esc(p.name_uk + ' ' + p.name_en) + '" data-desc="' + esc(p.desc_uk + ' ' + p.desc_en) + '" data-cat="' + esc(p.cat_uk || '') + '">'
         + '<div class="card-media' + dark + '">'
         + '<span class="card-num">' + n + '</span>'
         + '<img loading="lazy" src="' + esc(p.img) + '" alt="' + esc(name + ' — принт The Quiet Room') + '" width="400" height="500">'

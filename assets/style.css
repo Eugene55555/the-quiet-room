@@ -824,3 +824,8 @@ a { color: inherit; text-decoration: none; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .reveal { opacity: 1; transform: none; }
 }
+/* Фільтр категорій (Колекція) */
+.cat-chips{display:flex;flex-wrap:wrap;gap:10px;margin:4px 0 28px}
+.cat-chips .chip{border:1px solid rgba(142,33,55,.35);background:transparent;color:var(--wine);border-radius:40px;padding:9px 18px;font:600 13px/1 var(--font-body);letter-spacing:.4px;cursor:pointer;transition:all .25s ease}
+.cat-chips .chip:hover{border-color:var(--wine);background:rgba(142,33,55,.06)}
+.cat-chips .chip.active{background:var(--wine);border-color:var(--wine);color:#fff}

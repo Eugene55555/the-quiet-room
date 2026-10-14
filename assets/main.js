@@ -160,18 +160,17 @@
 
   /* ---------- Картка (скелет як у Quick Digital Files) ---------- */
   function cardHTML(p) {
+    var fmts = p.formats.replace(/ \+ /g, ' ');
     return '<article class="card">'
       + '<a class="card-media" href="product.html?id=' + esc(p.id) + '">'
-      + (p.badge ? '<span class="card-badge">' + esc(p.badge) + '</span>' : '')
+      + '<span class="card-badge">' + esc(p.cat) + '</span>'
       + '<img loading="lazy" src="' + esc(p.img) + '" alt="' + esc(p.name) + ' — принт The Quiet Room" width="500" height="625">'
       + '</a>'
       + '<div class="card-body">'
-      + '<a class="card-title" href="product.html?id=' + esc(p.id) + '">' + esc(p.name) + '</a>'
-      + '<p class="card-formats">' + esc(p.formats) + ' · 300 dpi</p>'
+      + '<a class="card-title" href="product.html?id=' + esc(p.id) + '">' + esc(p.name) + ': ' + esc(fmts) + '</a>'
       + '<div class="card-price-row">'
-      + '<span class="price-sale">' + esc(p.price) + ' ₴</span>'
       + (p.old ? '<span class="price-old">' + esc(p.old) + ' ₴</span>' : '')
-      + (p.old ? '<span class="card-formats">' + (Math.round((1 - p.price / p.old) * 100)) + '% знижка</span>' : '')
+      + '<span class="price-sale">' + esc(p.price) + ' ₴</span>'
       + '</div>'
       + '<a class="card-btn" href="' + esc(window.TQR_BUY) + '" target="_blank" rel="noopener">Купити на BlackSea</a>'
       + '</div></article>';

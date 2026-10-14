@@ -88,13 +88,18 @@
 
   /* ---------- Фільтри та сортування ---------- */
   function syncSelects() {
-    var pairs = { cat: ['f-cat', 'm-cat'], price: ['f-price', 'm-price'], sort: ['f-sort', 'm-sort'] };
+    var pairs = { cat: ['f-cat'], price: ['f-price'], sort: ['f-sort', 'm-sort'] };
     Object.keys(pairs).forEach(function (key) {
       pairs[key].forEach(function (id) {
         var el = document.getElementById(id);
         if (el && el.value !== state[key]) el.value = state[key];
       });
     });
+    /* радио в панели — синхронно со состоянием */
+    var rc = document.querySelector('input[name="p-cat"][value="' + state.cat + '"]');
+    if (rc) rc.checked = true;
+    var rp = document.querySelector('input[name="p-price"][value="' + state.price + '"]');
+    if (rp) rp.checked = true;
   }
   function bindSelect(id, key) {
     var el = document.getElementById(id);
@@ -108,11 +113,34 @@
     });
   }
   bindSelect('f-cat', 'cat');
-  bindSelect('m-cat', 'cat');
   bindSelect('f-price', 'price');
-  bindSelect('m-price', 'price');
   bindSelect('f-sort', 'sort');
   bindSelect('m-sort', 'sort');
+
+  /* Радио-кнопки панели: применяется сразу (как у них фильтр живой), кнопка Застосувати закрывает */
+  ['p-cat', 'p-price'].forEach(function (name) {
+    document.querySelectorAll('input[name="' + name + '"]').forEach(function (r) {
+      r.addEventListener('change', function () {
+        state[name === 'p-cat' ? 'cat' : 'price'] = r.value;
+        state.page = 1;
+        renderGrid();
+        syncSelects();
+        updateResetVisibility();
+      });
+    });
+  });
+
+  /* Аккордеоны */
+  document.querySelectorAll('.acc-toggle').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var group = document.getElementById(btn.getAttribute('data-acc')).parentElement;
+      group.classList.toggle('open');
+    });
+  });
+
+  /* Застосувати = просто закрыть панель (фильтры уже применены) */
+  var applyBtn = document.getElementById('m-apply');
+  if (applyBtn) applyBtn.addEventListener('click', function () { setFilterPanel(false); });
 
   /* ---------- Скинути всі фільтри ---------- */
   function resetFilters() {
@@ -127,15 +155,16 @@
     updateResetVisibility();
   }
   var fReset = document.getElementById('f-reset');
-  var mReset = document.getElementById('m-reset');
+  var mRemove = document.getElementById('m-remove');
   if (fReset) fReset.addEventListener('click', resetFilters);
-  if (mReset) mReset.addEventListener('click', resetFilters);
+  if (mRemove) mRemove.addEventListener('click', function (e) { e.preventDefault(); resetFilters(); });
 
   /* Кнопка «Скинути» видима лише коли є що скидати */
   function updateResetVisibility() {
     var dirty = state.q || state.cat || state.price || (state.sort && state.sort !== 'featured');
     if (fReset) fReset.style.display = dirty ? '' : 'none';
-    if (mReset) mReset.classList.toggle('vis', !!dirty);
+    var fc = document.getElementById('f-live-count');
+    if (fc) fc.textContent = applyFilters().length;
   }
 
   /* ---------- Фільтрація + сортування ---------- */

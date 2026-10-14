@@ -200,30 +200,50 @@ select, input, button { font-family: var(--font); }
   transition: .2s;
 }
 .drawer-socials a:hover { border-color: var(--wine); color: var(--wine); }
+/* ---------- Панель фільтрів (акордеони як у QDF) ---------- */
 .drawer-filter .drawer-body {
-  padding: 8px 20px 28px;
+  padding: 4px 20px 12px;
   overflow-y: auto;
-  display: flex; flex-direction: column; gap: 22px;
+  flex: 1;
 }
-.drawer-group h3 {
-  font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px;
-  margin-bottom: 10px; color: var(--ink);
+.acc-group { border-bottom: 1px solid var(--line); }
+.acc-toggle {
+  width: 100%; display: flex; justify-content: space-between; align-items: center;
+  background: none; border: 0; cursor: pointer;
+  font-family: var(--font); font-size: 16px; color: var(--ink);
+  padding: 16px 2px;
 }
-.drawer-group select {
-  width: 100%;
-  border: 1px solid rgba(255, 255, 255, .4); border-radius: 8px;
-  font-size: 15px; padding: 12px 14px; background: var(--wine); color: #FDF3E3; outline: none;
+.acc-toggle i { font-style: normal; font-size: 20px; color: var(--wine); transition: transform .25s; }
+.acc-group.open .acc-toggle i { transform: rotate(45deg); }
+.acc-panel { display: none; padding: 0 2px 14px; }
+.acc-group.open .acc-panel { display: block; }
+.acc-panel label {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 0; font-size: 15px; color: var(--ink); cursor: pointer;
 }
-.drawer-group select:focus { border-color: #FDEFDC; }
-.drawer-group select option { background: #fff; color: var(--ink); }
-.drawer-reset {
-  display: none; width: 100%; margin-top: 6px;
-  background: var(--wine); border: 0; border-radius: 8px; cursor: pointer;
-  color: #FFFFFF; font-size: 15px; font-weight: 700; padding: 13px 14px;
-  transition: .2s;
+.acc-panel input { accent-color: var(--wine); width: 17px; height: 17px; }
+.sort-line { display: flex; flex-direction: column; gap: 8px; padding: 14px 2px; font-size: 15px; color: var(--ink); }
+.sort-line select {
+  border: 1px solid var(--line); border-radius: 8px; background: #fff;
+  font-size: 15px; color: var(--ink); padding: 12px 14px; outline: none;
 }
-.drawer-reset:hover { background: var(--wine-deep); }
-.drawer-reset.vis { display: block; }
+.sort-line select:focus { border-color: var(--wine); }
+.drawer-foot {
+  padding: 14px 20px 22px;
+  border-top: 1px solid var(--line);
+  display: flex; flex-direction: column; gap: 12px;
+}
+.remove-all {
+  text-align: center; font-size: 14.5px; color: var(--ink);
+  text-decoration: underline; padding: 2px;
+}
+.remove-all:hover { color: var(--wine); }
+.apply-btn {
+  background: var(--ink); color: #fff; border: 0; border-radius: 8px; cursor: pointer;
+  font-family: var(--font); font-size: 15.5px; font-weight: 700; padding: 15px;
+  transition: background .2s;
+}
+.apply-btn:hover { background: var(--wine); }
 .filter-open {
   display: none;
   align-items: center; gap: 8px;

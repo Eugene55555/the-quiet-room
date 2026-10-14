@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Arvo:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-<link rel="stylesheet" href="assets/style.css?v=9">
+<link rel="stylesheet" href="assets/style.css?v=10">
 </head>
 <body>
 
@@ -111,40 +111,44 @@
   <div class="drawer-overlay" id="filter-overlay"></div>
   <aside class="drawer drawer-filter" id="filter-drawer" aria-label="Фільтри">
     <div class="drawer-head">
-      <span>Фільтр і сортування</span>
+      <span>Фільтр і сортування · <em id="f-live-count"></em></span>
       <button class="drawer-close" id="filter-close" aria-label="Закрити фільтри"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div class="drawer-body">
-      <div class="drawer-group">
-        <h3>Категорія</h3>
-        <select id="m-cat">
-          <option value="">Всі категорії</option>
-          <option value="Футболка">Футболки</option>
-          <option value="Худі">Худі</option>
-          <option value="Кухоль">Кухлі</option>
-          <option value="Постер">Постери</option>
-        </select>
+      <div class="acc-group">
+        <button class="acc-toggle" type="button" data-acc="acc-cat">Категорія <i>+</i></button>
+        <div class="acc-panel" id="acc-cat">
+          <label><input type="radio" name="p-cat" value="" checked><span>Всі категорії</span></label>
+          <label><input type="radio" name="p-cat" value="Футболка"><span>Футболки</span></label>
+          <label><input type="radio" name="p-cat" value="Худі"><span>Худі</span></label>
+          <label><input type="radio" name="p-cat" value="Кухоль"><span>Кухлі</span></label>
+          <label><input type="radio" name="p-cat" value="Постер"><span>Постери</span></label>
+        </div>
       </div>
-      <div class="drawer-group">
-        <h3>Ціна</h3>
-        <select id="m-price">
-          <option value="">Будь-яка ціна</option>
-          <option value="sale">Зі знижкою</option>
-          <option value="55">До 60 ₴</option>
-        </select>
+      <div class="acc-group">
+        <button class="acc-toggle" type="button" data-acc="acc-price">Ціна <i>+</i></button>
+        <div class="acc-panel" id="acc-price">
+          <label><input type="radio" name="p-price" value="" checked><span>Будь-яка ціна</span></label>
+          <label><input type="radio" name="p-price" value="sale"><span>Зі знижкою</span></label>
+          <label><input type="radio" name="p-price" value="55"><span>До 60 ₴</span></label>
+        </div>
       </div>
-      <div class="drawer-group">
-        <h3>Сортувати</h3>
-        <select id="m-sort">
-          <option value="featured">За замовчуванням</option>
-          <option value="az">Назва, А–Я</option>
-          <option value="za">Назва, Я–А</option>
-          <option value="lo">Ціна: від дешевих</option>
-          <option value="hi">Ціна: від дорогих</option>
-          <option value="new">Новинки</option>
-        </select>
+      <div class="acc-group acc-sort">
+        <label class="sort-line">Сортувати:
+          <select id="m-sort">
+            <option value="featured">За замовчуванням</option>
+            <option value="az">Назва, А–Я</option>
+            <option value="za">Назва, Я–А</option>
+            <option value="lo">Ціна: від дешевих</option>
+            <option value="hi">Ціна: від дорогих</option>
+            <option value="new">Новинки</option>
+          </select>
+        </label>
       </div>
-      <button class="drawer-reset" id="m-reset" type="button">Скинути все</button>
+    </div>
+    <div class="drawer-foot">
+      <a href="#" class="remove-all" id="m-remove">Прибрати все</a>
+      <button class="apply-btn" id="m-apply" type="button">Застосувати</button>
     </div>
   </aside>
 

@@ -82,6 +82,7 @@
       state.q = si.value.trim().toLowerCase();
       state.page = 1;
       renderGrid();
+      updateResetVisibility();
     });
   }
 
@@ -103,6 +104,7 @@
       state.page = 1;
       renderGrid();
       syncSelects();
+      updateResetVisibility();
     });
   }
   bindSelect('f-cat', 'cat');
@@ -122,11 +124,19 @@
     if (si) si.value = '';
     syncSelects();
     renderGrid();
+    updateResetVisibility();
   }
   var fReset = document.getElementById('f-reset');
   var mReset = document.getElementById('m-reset');
   if (fReset) fReset.addEventListener('click', resetFilters);
   if (mReset) mReset.addEventListener('click', resetFilters);
+
+  /* Кнопка «Скинути» видима лише коли є що скидати */
+  function updateResetVisibility() {
+    var dirty = state.q || state.cat || state.price || (state.sort && state.sort !== 'featured');
+    if (fReset) fReset.style.display = dirty ? '' : 'none';
+    if (mReset) mReset.classList.toggle('vis', !!dirty);
+  }
 
   /* ---------- Фільтрація + сортування ---------- */
   function applyFilters() {
@@ -289,6 +299,7 @@
   document.addEventListener('DOMContentLoaded', function () {
     renderGrid();
     syncSelects();
+    updateResetVisibility();
     renderProduct();
     var year = document.getElementById('year');
     if (year) year.textContent = new Date().getFullYear();

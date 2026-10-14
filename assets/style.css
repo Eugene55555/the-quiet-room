@@ -217,12 +217,13 @@ select, input, button { font-family: var(--font); }
 .drawer-group select:focus { border-color: #FDEFDC; }
 .drawer-group select option { background: #fff; color: var(--ink); }
 .drawer-reset {
-  display: block; width: 100%; margin-top: 6px;
-  background: none; border: 1px solid rgba(255, 255, 255, .4); border-radius: 8px; cursor: pointer;
-  color: #FDF3E3; font-size: 15px; padding: 12px 14px;
+  display: none; width: 100%; margin-top: 6px;
+  background: var(--wine); border: 0; border-radius: 8px; cursor: pointer;
+  color: #FFFFFF; font-size: 15px; font-weight: 700; padding: 13px 14px;
   transition: .2s;
 }
-.drawer-reset:hover { border-color: #FDEFDC; background: rgba(255, 255, 255, .12); }
+.drawer-reset:hover { background: var(--wine-deep); }
+.drawer-reset.vis { display: block; }
 .filter-open {
   display: none;
   align-items: center; gap: 8px;

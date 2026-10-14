@@ -116,13 +116,10 @@ select, input, button { font-family: var(--font); }
 .head-sub { margin: 10px auto 0; max-width: 660px; color: #F2D9C4; font-size: 15px; font-weight: 500; }
 .head-desc {
   max-width: 760px; margin: 22px auto 0;
-  text-align: left; color: #111111;
+  text-align: left; color: #F7E7D6;
   font-size: 15px; font-weight: 500;
   line-height: 1.8;
   max-height: 96px; overflow: hidden; position: relative;
-  background: #FDF3E3;
-  border-radius: 12px;
-  padding: 20px 24px;
 }
 .head-desc.open { max-height: none; }
 .head-desc p { margin-bottom: 14px; }

@@ -121,6 +121,22 @@
   bindSelect('f-sort', 'sort');
   bindSelect('m-sort', 'sort');
 
+  /* ---------- Скинути всі фільтри ---------- */
+  function resetFilters() {
+    state.q = '';
+    state.cat = '';
+    state.price = '';
+    state.sort = 'featured';
+    state.page = 1;
+    if (si) si.value = '';
+    syncSelects();
+    renderGrid();
+  }
+  var fReset = document.getElementById('f-reset');
+  var mReset = document.getElementById('m-reset');
+  if (fReset) fReset.addEventListener('click', resetFilters);
+  if (mReset) mReset.addEventListener('click', resetFilters);
+
   /* ---------- Фільтрація + сортування ---------- */
   function applyFilters() {
     var list = PRODUCTS.slice();

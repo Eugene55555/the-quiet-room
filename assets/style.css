@@ -18,7 +18,8 @@ body {
   font-size: 16px;
   line-height: 1.6;
   color: var(--ink);
-  background: #fff;
+  background: linear-gradient(180deg, #7E1B30 0%, #8E2137 26%, #7A1A2E 100%);
+  background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
 }
 img { max-width: 100%; display: block; }
@@ -28,8 +29,8 @@ select, input, button { font-family: var(--font); }
 
 /* ============ Смуга-повідомлення ============ */
 .announce {
-  background: var(--wine);
-  color: #FDF6EA;
+  background: var(--wine-deep);
+  color: #FDEFDC;
   text-align: center;
   font-size: 13px;
   padding: 8px 16px;
@@ -41,10 +42,10 @@ select, input, button { font-family: var(--font); }
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(255, 255, 255, .94);
+  background: rgba(126, 27, 48, .94);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid rgba(255, 255, 255, .14);
   transition: transform .3s ease;
 }
 .site-header.hidden { transform: translateY(-100%); }
@@ -53,27 +54,27 @@ select, input, button { font-family: var(--font); }
 .burger {
   display: none;
   background: none; border: 0; cursor: pointer;
-  font-size: 20px; color: var(--ink); padding: 6px;
+  font-size: 20px; color: #FDEFDC; padding: 6px;
 }
-.logo { display: flex; align-items: center; gap: 10px; color: var(--wine); }
+.logo { display: flex; align-items: center; gap: 10px; color: #FDEFDC; }
 .logo-mark { width: 32px; height: 32px; flex: none; }
-.logo-text { font-size: 22px; color: var(--ink); letter-spacing: .3px; }
+.logo-text { font-size: 22px; color: #FDF3E3; letter-spacing: .3px; }
 
 .site-nav { display: flex; gap: 26px; margin: 0 auto; }
 .site-nav a {
-  font-size: 16px; color: var(--ink);
+  font-size: 16px; color: #FDF3E3;
   padding: 6px 2px;
   border-bottom: 2px solid transparent;
   transition: color .2s, border-color .2s;
 }
-.site-nav a:hover, .site-nav a.active { color: var(--wine); border-color: var(--wine); }
+.site-nav a:hover, .site-nav a.active { color: #FFD9B8; border-color: #FFD9B8; }
 
 .search-wrap { display: flex; align-items: center; }
 .search-toggle {
   background: none; border: 0; cursor: pointer;
-  font-size: 18px; color: var(--ink); padding: 8px;
+  font-size: 18px; color: #FDEFDC; padding: 8px;
 }
-.search-toggle:hover { color: var(--wine); }
+.search-toggle:hover { color: #FFD9B8; }
 .search-panel {
   position: absolute; right: 20px; top: calc(100% + 6px);
   width: min(360px, calc(100vw - 40px));
@@ -108,13 +109,13 @@ select, input, button { font-family: var(--font); }
   font-size: clamp(28px, 4vw, 40px);
   font-weight: 400;
   letter-spacing: .3px;
-  color: var(--ink);
+  color: #FDF3E3;
   text-transform: none;
 }
-.head-sub { margin: 10px auto 0; max-width: 660px; color: var(--muted); font-size: 16.5px; }
+.head-sub { margin: 10px auto 0; max-width: 660px; color: #F2D9C4; font-size: 16.5px; }
 .head-desc {
   max-width: 760px; margin: 22px auto 0;
-  text-align: left; color: #4F4F4D;
+  text-align: left; color: #F7E7D6;
   font-size: 15px;
   max-height: 92px; overflow: hidden; position: relative;
 }
@@ -122,26 +123,26 @@ select, input, button { font-family: var(--font); }
 .head-desc p { margin-bottom: 14px; }
 .read-more {
   margin-top: 8px; background: none; border: 0; cursor: pointer;
-  color: var(--ink); text-decoration: underline;
+  color: #FFD9B8; text-decoration: underline;
   font-size: 15px; padding: 4px;
 }
-.read-more:hover { color: var(--wine); }
+.read-more:hover { color: #FFFFFF; }
 
 /* ============ Фільтри ============ */
 .filter-bar {
   display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 14px;
   padding: 26px 0 18px;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid rgba(255, 255, 255, .18);
 }
 .filters { display: flex; gap: 18px; flex-wrap: wrap; }
 .sort-row { display: flex; align-items: center; gap: 14px; }
-.filter-label { font-size: 14.5px; color: var(--ink); display: inline-flex; align-items: center; gap: 8px; }
+.filter-label { font-size: 14.5px; color: #F7E7D6; display: inline-flex; align-items: center; gap: 8px; }
 .filter-label select {
-  border: 1px solid var(--line); background: #fff; border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, .35); background: #fff; border-radius: 6px;
   font-size: 14.5px; color: var(--ink); padding: 8px 10px; cursor: pointer; outline: none;
 }
-.filter-label select:focus { border-color: var(--wine); }
-.count { font-size: 14.5px; color: var(--muted); white-space: nowrap; }
+.filter-label select:focus { border-color: #FDEFDC; }
+.count { font-size: 14.5px; color: #F2D9C4; white-space: nowrap; }
 
 /* ============ Виїзні панелі (drawer) ============ */
 .drawer-overlay {
@@ -210,10 +211,10 @@ select, input, button { font-family: var(--font); }
 .filter-open {
   display: none;
   align-items: center; gap: 8px;
-  background: none; border: 1px solid var(--line); border-radius: 8px;
-  font-size: 14.5px; color: var(--ink); padding: 10px 14px; cursor: pointer;
+  background: rgba(255, 255, 255, .12); border: 1px solid rgba(255, 255, 255, .4); border-radius: 8px;
+  font-size: 14.5px; color: #FDF3E3; padding: 10px 14px; cursor: pointer;
 }
-.filter-open:hover { border-color: var(--wine); color: var(--wine); }
+.filter-open:hover { border-color: #FDEFDC; background: rgba(255, 255, 255, .2); }
 
 /* ============ Сітка товарів ============ */
 .collection-grid { padding: 24px 0 44px; }
@@ -226,11 +227,14 @@ select, input, button { font-family: var(--font); }
   display: flex; flex-direction: column;
   background: #fff;
   height: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(40, 5, 12, .28);
 }
 .card-media {
   position: relative;
   background: #F7F6F3;
-  border-radius: 10px;
+  border-radius: 0;
   overflow: hidden;
   aspect-ratio: 4 / 5;
 }
@@ -245,7 +249,7 @@ select, input, button { font-family: var(--font); }
   font-size: 11px; letter-spacing: 1.1px; text-transform: uppercase;
   padding: 5px 11px; border-radius: 30px;
 }
-.card-body { padding: 13px 4px 0; display: flex; flex-direction: column; gap: 4px; }
+.card-body { padding: 14px 14px 16px; display: flex; flex-direction: column; gap: 5px; }
 .card-title {
   font-size: 16.5px; font-weight: 400; line-height: 1.35;
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
@@ -254,8 +258,8 @@ select, input, button { font-family: var(--font); }
 .card-title:hover { text-decoration: underline; }
 .card-formats { font-size: 12.5px; color: var(--muted); }
 .card-formats { min-height: 1.4em; }
-.card-price-row { display: flex; align-items: baseline; gap: 9px; margin-top: 2px; }
-.price-sale { font-size: 16px; color: var(--wine); }
+.card-price-row { display: flex; align-items: baseline; gap: 9px; margin-top: 2px; min-height: 26px; }
+.price-sale { font-size: 16.5px; color: var(--wine); }
 .price-old { font-size: 14px; color: #A8A6A2; text-decoration: line-through; }
 .card-btn {
   display: block; text-align: center; margin-top: auto; padding-top: 14px;
@@ -264,7 +268,7 @@ select, input, button { font-family: var(--font); }
   padding-bottom: 12px; border-radius: 8px;
   transition: background .2s, opacity .2s;
 }
-.card-btn:hover { background: var(--wine); }
+.card-btn:hover { background: var(--wine-soft); }
 
 /* ============ Пагінація ============ */
 .pagination {
@@ -274,48 +278,48 @@ select, input, button { font-family: var(--font); }
 .pagination a, .pagination span {
   min-width: 42px; height: 42px;
   display: inline-flex; align-items: center; justify-content: center;
-  border: 1px solid var(--line); border-radius: 8px;
-  font-size: 15px; color: var(--ink);
+  border: 1px solid rgba(255, 255, 255, .4); border-radius: 8px;
+  font-size: 15px; color: #FDF3E3; background: rgba(255, 255, 255, .1);
   transition: .2s;
 }
-.pagination a:hover { border-color: var(--wine); color: var(--wine); }
-.pagination .cur { background: var(--wine); border-color: var(--wine); color: #fff; }
+.pagination a:hover { border-color: #FDEFDC; background: rgba(255, 255, 255, .22); }
+.pagination .cur { background: #FDEFDC; border-color: #FDEFDC; color: var(--wine); font-weight: 700; }
 .pagination .dim { opacity: .4; pointer-events: none; }
 
 /* ============ Підписка ============ */
 .subscribe {
-  background: var(--cream);
+  background: rgba(64, 13, 24, .35);
   text-align: center;
   padding: 44px 20px 36px;
 }
-.subscribe h2 { font-size: 23px; font-weight: 400; }
-.subscribe p { color: var(--muted); font-size: 14.5px; margin: 8px 0 18px; }
+.subscribe h2 { font-size: 23px; font-weight: 400; color: #FDF3E3; }
+.subscribe p { color: #F2D9C4; font-size: 14.5px; margin: 8px 0 18px; }
 .sub-form {
   display: flex; justify-content: center; gap: 10px;
   max-width: 440px; margin: 0 auto; flex-wrap: wrap;
 }
 .sub-form input {
   flex: 1 1 240px;
-  border: 1px solid var(--line); border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, .35); border-radius: 8px;
   padding: 12px 16px; font-size: 15px; outline: none; background: #fff;
 }
-.sub-form input:focus { border-color: var(--wine); }
+.sub-form input:focus { border-color: #FDEFDC; }
 .sub-form button {
-  background: var(--wine); color: #fff; border: 0; border-radius: 8px;
-  padding: 12px 26px; font-size: 15px; cursor: pointer;
+  background: #FDEFDC; color: var(--wine); border: 0; border-radius: 8px;
+  padding: 12px 26px; font-size: 15px; font-weight: 700; cursor: pointer;
   transition: background .2s;
 }
-.sub-form button:hover { background: var(--wine-deep); }
-.sub-ok { margin-top: 4px !important; color: var(--wine) !important; font-size: 15px !important; }
+.sub-form button:hover { background: #FFFFFF; }
+.sub-ok { margin-top: 4px !important; color: #FFD9B8 !important; font-size: 15px !important; }
 .socials { display: flex; justify-content: center; gap: 16px; margin-top: 22px; }
 .socials a {
   width: 42px; height: 42px;
   display: inline-flex; align-items: center; justify-content: center;
-  border: 1px solid #DCD8CE; border-radius: 50%;
-  color: var(--ink); font-size: 17px;
+  border: 1px solid rgba(255, 255, 255, .4); border-radius: 50%;
+  color: #FDF3E3; font-size: 17px;
   transition: .2s;
 }
-.socials a:hover { border-color: var(--wine); color: var(--wine); }
+.socials a:hover { border-color: #FDEFDC; color: #FDEFDC; background: rgba(255, 255, 255, .12); }
 
 /* ============ Оплата ============ */
 .payments {
@@ -323,9 +327,9 @@ select, input, button { font-family: var(--font); }
   padding: 26px 20px;
   flex-wrap: wrap;
 }
-.payments i { font-size: 34px; color: #2E2E2C; }
-.pay-label { font-size: 14px; color: var(--muted); letter-spacing: .4px; }
-.pay-note { font-size: 13.5px; color: var(--muted); width: 100%; text-align: center; }
+.payments i { font-size: 34px; color: #FDEFDC; }
+.pay-label { font-size: 14px; color: #F2D9C4; letter-spacing: .4px; }
+.pay-note { font-size: 13.5px; color: #F2D9C4; width: 100%; text-align: center; }
 
 /* ============ Футер ============ */
 .site-footer {
@@ -344,29 +348,29 @@ select, input, button { font-family: var(--font); }
 /* ============ Сторінка товару ============ */
 .product-page { padding: 36px 0 50px; }
 .product-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 44px; align-items: start; }
-.product-media { position: relative; background: #F7F6F3; border-radius: 12px; overflow: hidden; }
+.product-media { position: relative; background: #F7F6F3; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(40, 5, 12, .3); }
 .product-media img { width: 100%; }
-.product-info h1 { font-size: 27px; font-weight: 400; line-height: 1.3; }
-.product-cat { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 6px; }
+.product-info h1 { font-size: 27px; font-weight: 400; line-height: 1.3; color: #FDF3E3; }
+.product-cat { font-size: 13px; color: #F2D9C4; text-transform: uppercase; letter-spacing: 1px; margin-top: 6px; }
 .product-price { display: flex; align-items: baseline; gap: 12px; margin: 18px 0 6px; }
-.product-price .price-sale { font-size: 26px; color: var(--wine); }
-.product-price .price-old { font-size: 18px; }
-.product-formats { font-size: 14px; color: var(--muted); margin-bottom: 18px; }
-.product-desc { font-size: 15px; color: #4F4F4D; margin-bottom: 22px; }
+.product-price .price-sale { font-size: 26px; color: #FFD9B8; }
+.product-price .price-old { font-size: 18px; color: #D8B3A0; }
+.product-formats { font-size: 14px; color: #F2D9C4; margin-bottom: 18px; }
+.product-desc { font-size: 15px; color: #F7E7D6; margin-bottom: 22px; }
 .product-desc p { margin-bottom: 12px; }
 .product-feats { list-style: none; margin-bottom: 24px; display: grid; gap: 8px; }
-.product-feats li { font-size: 14.5px; color: var(--ink); }
-.product-feats i { color: var(--wine); margin-right: 9px; font-size: 13px; }
+.product-feats li { font-size: 14.5px; color: #FDF3E3; }
+.product-feats i { color: #FFD9B8; margin-right: 9px; font-size: 13px; }
 .product-buy {
   display: inline-block;
-  background: var(--wine); color: #fff;
-  font-size: 15.5px; padding: 14px 34px; border-radius: 8px;
+  background: #FDEFDC; color: var(--wine);
+  font-size: 15.5px; font-weight: 700; padding: 14px 34px; border-radius: 8px;
   transition: background .2s;
 }
-.product-buy:hover { background: var(--wine-deep); }
-.product-safe { font-size: 13px; color: var(--muted); margin-top: 12px; }
+.product-buy:hover { background: #FFFFFF; }
+.product-safe { font-size: 13px; color: #F2D9C4; margin-top: 12px; }
 .product-related { margin-top: 56px; }
-.product-related h2 { font-size: 22px; font-weight: 400; margin-bottom: 20px; }
+.product-related h2 { font-size: 22px; font-weight: 400; margin-bottom: 20px; color: #FDF3E3; }
 
 /* ============ Адаптив ============ */
 @media (max-width: 900px) {

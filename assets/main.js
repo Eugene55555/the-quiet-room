@@ -156,7 +156,7 @@
       + (p.old ? '<span class="price-old">' + esc(p.old) + ' ₴</span>' : '')
       + (p.old ? '<span class="card-formats">' + (Math.round((1 - p.price / p.old) * 100)) + '% знижка</span>' : '')
       + '</div>'
-      + '<a class="card-btn" href="' + esc(window.TQR_BUY) + '">Купити на BlackSea</a>'
+      + '<a class="card-btn" href="' + esc(window.TQR_BUY) + '" target="_blank" rel="noopener">Купити на BlackSea</a>'
       + '</div></article>';
   }
 
@@ -261,7 +261,7 @@
       + '<li><i class="fa-solid fa-circle-check"></i>Готовий до завантаження у Printify, Printful, Redbubble</li>'
       + '<li><i class="fa-solid fa-circle-check"></i>Персональне використання та малий бізнес</li>'
       + '</ul>'
-      + '<a class="product-buy" href="' + esc(window.TQR_BUY) + '">Купити на BlackSea — ' + esc(p.price) + ' ₴</a>'
+      + '<a class="product-buy" href="' + esc(window.TQR_BUY) + '" target="_blank" rel="noopener">Купити на BlackSea — ' + esc(p.price) + ' ₴</a>'
       + '<p class="product-safe"><i class="fa-solid fa-lock"></i> Безпечна оплата карткою · 3-D Secure</p>'
       + '</div></div>'
       + '<section class="product-related"><h2>Схожі принти</h2><div class="grid">'

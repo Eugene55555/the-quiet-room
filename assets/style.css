@@ -107,27 +107,31 @@ select, input, button { font-family: var(--font); }
 /* ============ Заголовок колекції ============ */
 .collection-head { padding: 46px 0 6px; text-align: center; }
 .collection-head h1 {
-  font-size: clamp(28px, 4vw, 40px);
-  font-weight: 400;
-  letter-spacing: .3px;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: .6px;
   color: #FDF3E3;
   text-transform: none;
 }
-.head-sub { margin: 10px auto 0; max-width: 660px; color: #F2D9C4; font-size: 16.5px; }
+.head-sub { margin: 10px auto 0; max-width: 660px; color: #F2D9C4; font-size: 15px; font-weight: 500; }
 .head-desc {
   max-width: 760px; margin: 22px auto 0;
-  text-align: left; color: #F7E7D6;
-  font-size: 15px;
-  max-height: 92px; overflow: hidden; position: relative;
+  text-align: left; color: #111111;
+  font-size: 15px; font-weight: 500;
+  line-height: 1.8;
+  max-height: 96px; overflow: hidden; position: relative;
+  background: #FDF3E3;
+  border-radius: 12px;
+  padding: 20px 24px;
 }
 .head-desc.open { max-height: none; }
 .head-desc p { margin-bottom: 14px; }
 .read-more {
-  margin-top: 8px; background: none; border: 0; cursor: pointer;
-  color: #FFD9B8; text-decoration: underline;
-  font-size: 15px; padding: 4px;
+  margin-top: 10px; background: none; border: 0; cursor: pointer;
+  color: #FDF3E3; text-decoration: underline;
+  font-size: 15px; font-weight: 700; padding: 4px;
 }
-.read-more:hover { color: #FFFFFF; }
+.read-more:hover { color: #FFD9B8; }
 
 /* ============ Фільтри ============ */
 .filter-bar {

@@ -357,7 +357,9 @@
   /* ---- Каталог з конфігу ---- */
   function renderCatalog() {
     var grid = document.getElementById('catalog');
-    if (!grid || !CFG.products) return;
+    window.__dbg = { grid: !!grid, prods: CFG.products ? CFG.products.length : -1, key: pageKey() };
+    try {
+      if (!grid || !CFG.products) { window.__dbg.ret = 'no-grid-or-prods'; return; }
     var L = lang();
     var out = '';
     CFG.products.forEach(function (p, i) {
@@ -393,6 +395,8 @@
     // пере-фільтри пошуку, якщо був запит
     var qp = new URLSearchParams(location.search).get('q');
     if (qp) applySearch(qp);
+    window.__dbg.done = true;
+    } catch (e) { window.__dbg.err = String(e && e.message || e); window.__dbg.stack = e && e.stack ? e.stack.slice(0, 400) : ''; }
   }
 
   function t(key) {

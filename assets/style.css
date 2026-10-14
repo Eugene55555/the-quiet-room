@@ -143,6 +143,78 @@ select, input, button { font-family: var(--font); }
 .filter-label select:focus { border-color: var(--wine); }
 .count { font-size: 14.5px; color: var(--muted); white-space: nowrap; }
 
+/* ============ Виїзні панелі (drawer) ============ */
+.drawer-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(0, 0, 0, .45);
+  opacity: 0; visibility: hidden; transition: opacity .28s, visibility .28s;
+}
+.drawer-overlay.show { opacity: 1; visibility: visible; }
+.drawer {
+  position: fixed; top: 0; left: 0; bottom: 0; z-index: 210;
+  width: min(360px, 88vw);
+  background: #fff;
+  transform: translateX(-102%);
+  transition: transform .3s ease;
+  display: flex; flex-direction: column;
+  box-shadow: 8px 0 40px rgba(0, 0, 0, .18);
+}
+.drawer.show { transform: translateX(0); }
+.drawer-head {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line);
+  font-size: 17px;
+}
+.drawer-close {
+  background: none; border: 0; cursor: pointer;
+  font-size: 20px; color: var(--ink); padding: 4px 8px;
+}
+.drawer-close:hover { color: var(--wine); }
+.drawer-nav { padding: 8px 20px; display: flex; flex-direction: column; }
+.drawer-nav a {
+  padding: 14px 0;
+  font-size: 17px;
+  border-bottom: 1px solid var(--line);
+}
+.drawer-nav a:hover { color: var(--wine); }
+.drawer-socials {
+  margin-top: auto;
+  display: flex; gap: 16px;
+  padding: 22px 20px;
+  border-top: 1px solid var(--line);
+}
+.drawer-socials a {
+  width: 40px; height: 40px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid #DCD8CE; border-radius: 50%;
+  font-size: 16px; color: var(--ink);
+  transition: .2s;
+}
+.drawer-socials a:hover { border-color: var(--wine); color: var(--wine); }
+.drawer-filter .drawer-body {
+  padding: 8px 20px 28px;
+  overflow-y: auto;
+  display: flex; flex-direction: column; gap: 22px;
+}
+.drawer-group h3 {
+  font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px;
+  margin-bottom: 10px; color: var(--ink);
+}
+.drawer-group select {
+  width: 100%;
+  border: 1px solid var(--line); border-radius: 8px;
+  font-size: 15px; padding: 12px 14px; background: #fff; outline: none;
+}
+.drawer-group select:focus { border-color: var(--wine); }
+.filter-open {
+  display: none;
+  align-items: center; gap: 8px;
+  background: none; border: 1px solid var(--line); border-radius: 8px;
+  font-size: 14.5px; color: var(--ink); padding: 10px 14px; cursor: pointer;
+}
+.filter-open:hover { border-color: var(--wine); color: var(--wine); }
+
 /* ============ Сітка товарів ============ */
 .collection-grid { padding: 24px 0 44px; }
 .grid {
@@ -153,6 +225,7 @@ select, input, button { font-family: var(--font); }
 .card {
   display: flex; flex-direction: column;
   background: #fff;
+  height: 100%;
 }
 .card-media {
   position: relative;
@@ -176,17 +249,19 @@ select, input, button { font-family: var(--font); }
 .card-title {
   font-size: 16.5px; font-weight: 400; line-height: 1.35;
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  min-height: calc(2 * 1.35em);
 }
 .card-title:hover { text-decoration: underline; }
 .card-formats { font-size: 12.5px; color: var(--muted); }
+.card-formats { min-height: 1.4em; }
 .card-price-row { display: flex; align-items: baseline; gap: 9px; margin-top: 2px; }
 .price-sale { font-size: 16px; color: var(--wine); }
 .price-old { font-size: 14px; color: #A8A6A2; text-decoration: line-through; }
 .card-btn {
-  display: block; text-align: center; margin-top: 11px;
-  background: var(--ink); color: #fff;
+  display: block; text-align: center; margin-top: auto; padding-top: 14px;
+  background: var(--wine); color: #fff;
   font-size: 14px; font-weight: 400;
-  padding: 12px 16px; border-radius: 8px;
+  padding-bottom: 12px; border-radius: 8px;
   transition: background .2s, opacity .2s;
 }
 .card-btn:hover { background: var(--wine); }
@@ -226,11 +301,11 @@ select, input, button { font-family: var(--font); }
 }
 .sub-form input:focus { border-color: var(--wine); }
 .sub-form button {
-  background: var(--ink); color: #fff; border: 0; border-radius: 8px;
+  background: var(--wine); color: #fff; border: 0; border-radius: 8px;
   padding: 12px 26px; font-size: 15px; cursor: pointer;
   transition: background .2s;
 }
-.sub-form button:hover { background: var(--wine); }
+.sub-form button:hover { background: var(--wine-deep); }
 .sub-ok { margin-top: 4px !important; color: var(--wine) !important; font-size: 15px !important; }
 .socials { display: flex; justify-content: center; gap: 16px; margin-top: 22px; }
 .socials a {
@@ -254,7 +329,7 @@ select, input, button { font-family: var(--font); }
 
 /* ============ Футер ============ */
 .site-footer {
-  background: linear-gradient(180deg, #191112 0%, #2A0F18 100%);
+  background: linear-gradient(180deg, #2A0F18 0%, #8E2137 120%);
   color: #C9C2BD;
 }
 .footer-inner {
@@ -284,11 +359,11 @@ select, input, button { font-family: var(--font); }
 .product-feats i { color: var(--wine); margin-right: 9px; font-size: 13px; }
 .product-buy {
   display: inline-block;
-  background: var(--ink); color: #fff;
+  background: var(--wine); color: #fff;
   font-size: 15.5px; padding: 14px 34px; border-radius: 8px;
   transition: background .2s;
 }
-.product-buy:hover { background: var(--wine); }
+.product-buy:hover { background: var(--wine-deep); }
 .product-safe { font-size: 13px; color: var(--muted); margin-top: 12px; }
 .product-related { margin-top: 56px; }
 .product-related h2 { font-size: 22px; font-weight: 400; margin-bottom: 20px; }
@@ -299,9 +374,10 @@ select, input, button { font-family: var(--font); }
   .product-layout { grid-template-columns: 1fr; gap: 26px; }
 }
 @media (max-width: 640px) {
+  .container { padding: 0 16px; }
   .burger { display: inline-flex; }
   .site-nav { display: none; }
-  .header-inner { gap: 10px; }
+  .header-inner { gap: 10px; padding: 12px 16px; }
   .logo-text { font-size: 19px; }
   .logo { margin: 0 auto; order: 2; }
   .burger { order: 1; margin-right: auto; }
@@ -309,7 +385,23 @@ select, input, button { font-family: var(--font); }
   .grid { grid-template-columns: repeat(2, 1fr); gap: 18px 12px; }
   .card-title { font-size: 15px; }
   .card-btn { font-size: 13px; padding: 11px 12px; }
-  .filter-bar { flex-direction: column; align-items: stretch; }
-  .sort-row { justify-content: space-between; }
-  .head-desc { max-height: 112px; }
+  .filter-bar { justify-content: space-between; align-items: center; }
+  .filters { display: none; }
+  .filter-open { display: inline-flex; }
+  .count { margin-left: auto; }
+  .collection-head { padding: 32px 0 4px; }
+  .head-desc { margin-top: 16px; max-height: 118px; }
+  .head-desc p { margin-bottom: 12px; }
+  .subscribe { padding: 36px 16px 30px; }
+  .sub-form { width: 100%; }
+  .sub-form input { flex: 1 1 100%; }
+  .payments { padding: 22px 16px; gap: 14px; }
+  .footer-inner { padding: 20px 16px; flex-direction: column; align-items: flex-start; gap: 10px; }
+  .product-page { padding: 24px 0 36px; }
+  .product-layout { gap: 20px; }
+  .product-info h1 { font-size: 23px; }
+  .product-buy { display: block; text-align: center; }
+  .pagination { gap: 6px; }
+  .pagination a, .pagination span { min-width: 38px; height: 38px; }
+  .announce { font-size: 12px; padding: 7px 12px; }
 }

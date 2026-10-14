@@ -41,6 +41,35 @@
     });
   }
 
+  /* ---------- Виїзна панель меню (як у Quick Digital Files) ---------- */
+  var menuDrawer = document.getElementById('menu-drawer');
+  var menuOverlay = document.getElementById('menu-overlay');
+  var menuClose = document.getElementById('menu-close');
+  function setMenu(open) {
+    if (!menuDrawer) return;
+    menuDrawer.classList.toggle('show', open);
+    if (menuOverlay) menuOverlay.classList.toggle('show', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+  if (burger) burger.addEventListener('click', function () { setMenu(true); });
+  if (menuClose) menuClose.addEventListener('click', function () { setMenu(false); });
+  if (menuOverlay) menuOverlay.addEventListener('click', function () { setMenu(false); });
+
+  /* ---------- Виїзна панель фільтрів (моб, як у Quick Digital Files) ---------- */
+  var filterDrawer = document.getElementById('filter-drawer');
+  var filterOverlay = document.getElementById('filter-overlay');
+  var filterClose = document.getElementById('filter-close');
+  var filterOpenBtn = document.getElementById('filter-open');
+  function setFilterPanel(open) {
+    if (!filterDrawer) return;
+    filterDrawer.classList.toggle('show', open);
+    /* панель не згортається сама — лише по кнопці закриття (як у них) */
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+  if (filterOpenBtn) filterOpenBtn.addEventListener('click', function () { setFilterPanel(true); });
+  if (filterClose) filterClose.addEventListener('click', function () { setFilterPanel(false); });
+  if (filterOverlay) filterOverlay.addEventListener('click', function () { setFilterPanel(false); });
+
   /* ---------- Пошук: лупа відкриває поле ---------- */
   var st = document.getElementById('search-toggle');
   var sp = document.getElementById('search-panel');
@@ -66,6 +95,15 @@
   }
 
   /* ---------- Фільтри та сортування ---------- */
+  function syncSelects() {
+    var pairs = { cat: ['f-cat', 'm-cat'], price: ['f-price', 'm-price'], sort: ['f-sort', 'm-sort'] };
+    Object.keys(pairs).forEach(function (key) {
+      pairs[key].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el && el.value !== state[key]) el.value = state[key];
+      });
+    });
+  }
   function bindSelect(id, key) {
     var el = document.getElementById(id);
     if (!el) return;
@@ -73,11 +111,15 @@
       state[key] = el.value;
       state.page = 1;
       renderGrid();
+      syncSelects();
     });
   }
   bindSelect('f-cat', 'cat');
+  bindSelect('m-cat', 'cat');
   bindSelect('f-price', 'price');
+  bindSelect('m-price', 'price');
   bindSelect('f-sort', 'sort');
+  bindSelect('m-sort', 'sort');
 
   /* ---------- Фільтрація + сортування ---------- */
   function applyFilters() {
@@ -230,6 +272,7 @@
   /* ---------- Старт ---------- */
   document.addEventListener('DOMContentLoaded', function () {
     renderGrid();
+    syncSelects();
     renderProduct();
     var year = document.getElementById('year');
     if (year) year.textContent = new Date().getFullYear();

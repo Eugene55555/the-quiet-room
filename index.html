@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Arvo:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-<link rel="stylesheet" href="assets/style.css?v=2">
+<link rel="stylesheet" href="assets/style.css?v=3">
 </head>
 <body>
 
@@ -40,6 +40,23 @@
   </div>
 </header>
 
+<!-- Меню: виїзна панель зліва (як у Quick Digital Files) -->
+<div class="drawer-overlay" id="menu-overlay"></div>
+<aside class="drawer" id="menu-drawer" aria-label="Меню">
+  <div class="drawer-head">
+    <span>Меню</span>
+    <button class="drawer-close" id="menu-close" aria-label="Закрити меню"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <nav class="drawer-nav">
+    <a href="index.html">Головна</a>
+  </nav>
+  <div class="drawer-socials">
+    <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+    <a href="#" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+  </div>
+</aside>
+
 <main class="container">
 
   <!-- Заголовок колекції -->
@@ -56,6 +73,7 @@
 
   <!-- Фільтри та сортування -->
   <section class="filter-bar">
+    <button class="filter-open" id="filter-open"><i class="fa-solid fa-sliders"></i> Фільтр і сортування</button>
     <div class="filters">
       <label class="filter-label">
         Фільтр:
@@ -74,8 +92,6 @@
           <option value="55">До 60 ₴</option>
         </select>
       </label>
-    </div>
-    <div class="sort-row">
       <label class="filter-label">Сортувати:
         <select id="f-sort">
           <option value="featured">За замовчуванням</option>
@@ -86,9 +102,49 @@
           <option value="new">Новинки</option>
         </select>
       </label>
-      <span class="count" id="count"></span>
     </div>
+    <span class="count" id="count"></span>
   </section>
+
+  <!-- Фільтри: виїзна панель зліва (моб, як у Quick Digital Files) -->
+  <div class="drawer-overlay" id="filter-overlay"></div>
+  <aside class="drawer drawer-filter" id="filter-drawer" aria-label="Фільтри">
+    <div class="drawer-head">
+      <span>Фільтр і сортування</span>
+      <button class="drawer-close" id="filter-close" aria-label="Закрити фільтри"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="drawer-body">
+      <div class="drawer-group">
+        <h3>Категорія</h3>
+        <select id="m-cat">
+          <option value="">Всі категорії</option>
+          <option value="Футболка">Футболки</option>
+          <option value="Худі">Худі</option>
+          <option value="Кухоль">Кухлі</option>
+          <option value="Постер">Постери</option>
+        </select>
+      </div>
+      <div class="drawer-group">
+        <h3>Ціна</h3>
+        <select id="m-price">
+          <option value="">Будь-яка ціна</option>
+          <option value="sale">Зі знижкою</option>
+          <option value="55">До 60 ₴</option>
+        </select>
+      </div>
+      <div class="drawer-group">
+        <h3>Сортувати</h3>
+        <select id="m-sort">
+          <option value="featured">За замовчуванням</option>
+          <option value="az">Назва, А–Я</option>
+          <option value="za">Назва, Я–А</option>
+          <option value="lo">Ціна: від дешевих</option>
+          <option value="hi">Ціна: від дорогих</option>
+          <option value="new">Новинки</option>
+        </select>
+      </div>
+    </div>
+  </aside>
 
   <!-- Сітка товарів -->
   <section class="collection-grid">
@@ -136,6 +192,6 @@
 
 <script src="assets/data.js"></script>
 <script src="https://blacksea.in.ua/js/blacksea.js"></script>
-<script src="assets/main.js?v=2"></script>
+<script src="assets/main.js?v=3"></script>
 </body>
 </html>

@@ -260,13 +260,23 @@ def build_html(products):
 
 
 # ---------------------------------------------------------------- publish
+def _norm(h: str) -> str:
+    """Нормализация для сравнения: BlackSea хранит HTML по-своему
+    (вырезает <!DOCTYPE>/<html>/<head>/<body>, экранирует & в атрибутах,
+    триммет пустые строки) — сравниваем «сущность», а не байты."""
+    h = re.sub(r"(?is)<!DOCTYPE[^>]*>", "", h)
+    h = re.sub(r"(?is)</?(html|head|body)\b[^>]*>", "", h)
+    h = h.replace(chr(38) + "amp;", chr(38))  # BlackSea экранирует & в атрибутах — раскрываем обратно
+    return "\n".join(line.strip() for line in h.splitlines() if line.strip())
+
+
 def publish(token, html):
     headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
 
-    # Идемпотентность: не публиковать, если опубликованный HTML уже совпадает
+    # Идемпотентность: не публиковать, если нормализованный HTML совпадает
     try:
         cur = requests.get(f"{BASE}/v2/user/custom_html", headers=headers, timeout=20)
-        if cur.ok and cur.json().get("custom_html") == html:
+        if cur.ok and _norm(cur.json().get("custom_html", "")) == _norm(html):
             print("  без изменений — публикация пропущена")
             return 0
     except Exception:

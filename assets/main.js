@@ -187,6 +187,15 @@
     return list;
   }
 
+  /* ---------- Ссылка чек-аута с referrer: Continue shopping вернёт на исходную страницу ---------- */
+  function buyURL() {
+    var base = window.TQR_BUY || 'https://6820536600065.blacksea.in.ua/checkout?product=eaq&quantity=1';
+    try {
+      var back = window.location.href.split('#')[0];
+      return base + '&referrer=' + encodeURIComponent(back);
+    } catch (e) { return base; }
+  }
+
   /* ---------- Картка (скелет як у Quick Digital Files) ---------- */
   function cardHTML(p) {
     var fmts = p.formats.replace(/ \+ /g, ' ');
@@ -201,7 +210,7 @@
       + (p.old ? '<span class="price-old">' + esc(p.old) + ' ₴</span>' : '')
       + '<span class="price-sale">' + esc(p.price) + ' ₴</span>'
       + '</div>'
-      + '<a class="card-btn" href="' + esc(window.TQR_BUY) + '">Купити на BlackSea</a>'
+      + '<a class="card-btn" href="' + esc(buyURL()) + '">Купити на BlackSea</a>'
       + '</div></article>';
   }
 
@@ -315,7 +324,7 @@
       + '<li><i class="fa-solid fa-circle-check"></i>Готовий до завантаження у Printify, Printful, Redbubble</li>'
       + '<li><i class="fa-solid fa-circle-check"></i>Персональне використання та малий бізнес</li>'
       + '</ul>'
-      + '<a class="product-buy" href="' + esc(window.TQR_BUY) + '">Купити на BlackSea — ' + esc(p.price) + ' ₴</a>'
+      + '<a class="product-buy" href="' + esc(buyURL()) + '">Купити на BlackSea — ' + esc(p.price) + ' ₴</a>'
       + '<p class="product-safe"><i class="fa-solid fa-lock"></i> Безпечна оплата карткою · 3-D Secure</p>'
       + '</div></div>'
       + '<section class="product-related"><h2>Схожі принти</h2><div class="grid">'

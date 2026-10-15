@@ -17,6 +17,6 @@ window.TQR_PRODUCTS = [
   { id: 'key',       name: 'Ключ від дому',   cat: 'Худі',     img: 'assets/img/mock-key.svg',       formats: 'PNG + SVG + PDF', price: 55, old: 0,  badge: '',    order: 15 },
   { id: 'book',      name: 'Книга',           cat: 'Кухоль',   img: 'assets/img/mock-book.svg',      formats: 'PNG + SVG + PDF', price: 55, old: 0,  badge: 'НОВЕ', order: 16 }
 ];
-window.TQR_BUY = 'https://6820536600065.blacksea.in.ua/checkout?product=eaq&quantity=1&referrer=https%3A%2F%2Feugene55555.github.io%2F';
-window.TQR_BUY_WANTED = 'https://6820536600065.blacksea.in.ua/checkout?product=eaq&quantity=1&referrer=https%3A%2F%2Feugene55555.github.io%2F';
+window.TQR_BUY = 'https://6820536600065.blacksea.in.ua/checkout?product=eaq&quantity=1&referrer=https%3A%2F%2Feugene55555.github.io%2Fthe-quiet-room%2F';
+window.TQR_BUY_WANTED = 'https://6820536600065.blacksea.in.ua/checkout?product=eaq&quantity=1&referrer=https%3A%2F%2Feugene55555.github.io%2Fthe-quiet-room%2F';
 window.TQR_SITE = 'https://eugene55555.github.io/the-quiet-room/';

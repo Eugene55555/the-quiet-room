@@ -108,6 +108,7 @@
   }
 
   var CHECKOUT_URL = 'https://5307397047125.blacksea.in.ua/checkout';
+  var pendingProductCardScroll = window.location.hash.indexOf('#product-card-') === 0;
 
   function currentURLWithoutHash() {
     return window.location.href.split('#')[0];
@@ -380,8 +381,9 @@
   }
 
   function scrollToProductCard() {
+    if (!pendingProductCardScroll) return;
+    pendingProductCardScroll = false;
     var hash = window.location.hash;
-    if (hash.indexOf('#product-card-') !== 0) return;
     var id = hash.slice('#product-card-'.length);
     try { id = decodeURIComponent(id); } catch (err) {}
     window.requestAnimationFrame(function () {

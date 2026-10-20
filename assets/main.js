@@ -108,10 +108,16 @@
   }
 
   var CHECKOUT_URL = 'https://5307397047125.blacksea.in.ua/checkout';
-  var PRODUCT_PAGE_URL = 'https://eugene55555.github.io/the-quiet-room/product.html';
 
-  function buyURL(p) {
-    var referrer = PRODUCT_PAGE_URL + '?id=' + encodeURIComponent(p.id);
+  function currentURLWithoutHash() {
+    return window.location.href.split('#')[0];
+  }
+
+  function cardReferrer(id) {
+    return currentURLWithoutHash() + '#product-card-' + encodeURIComponent(id);
+  }
+
+  function buyURL(p, referrer) {
     return CHECKOUT_URL + '?product=' + encodeURIComponent(p.slug)
       + '&quantity=1&referrer=' + encodeURIComponent(referrer);
   }
@@ -344,7 +350,7 @@
   }
 
   /* ---------- Product card ---------- */
-  function cardHTML(p) {
+  function cardHTML(p, referrer) {
     var images = productImages(p);
     var slides = images.map(function (src, i) {
       return '<img class="card-slide' + (i === 0 ? ' is-active' : '') + '"'
@@ -357,7 +363,7 @@
           return '<span class="card-dot' + (i === 0 ? ' is-active' : '') + '"></span>';
         }).join('') + '</span>'
       : '';
-    return '<article class="card">'
+    return '<article class="card" id="product-card-' + esc(p.id) + '">'
       + '<a class="card-media" href="product.html?id=' + esc(p.id) + '"'
       + ' data-gallery-index="0" data-gallery-count="' + images.length + '">'
       + '<span class="card-badge">' + esc(p.cat) + '</span>'
@@ -369,8 +375,21 @@
       + '<div class="card-price-row">'
       + '<span class="price-sale">' + money(p.price) + '</span>'
       + '</div>'
-      + '<a class="card-btn" href="' + esc(buyURL(p)) + '">Buy now</a>'
+      + '<a class="card-btn" href="' + esc(buyURL(p, referrer)) + '">Buy now</a>'
       + '</div></article>';
+  }
+
+  function scrollToProductCard() {
+    var hash = window.location.hash;
+    if (hash.indexOf('#product-card-') !== 0) return;
+    var id = hash.slice('#product-card-'.length);
+    try { id = decodeURIComponent(id); } catch (err) {}
+    window.requestAnimationFrame(function () {
+      var el = document.getElementById('product-card-' + id);
+      if (el && el.scrollIntoView) {
+        el.scrollIntoView({ block: 'center', behavior: 'auto' });
+      }
+    });
   }
 
   /* ---------- Grid and pagination ---------- */
@@ -388,7 +407,7 @@
     }
 
     grid.innerHTML = pageItems.length
-      ? pageItems.map(cardHTML).join('')
+      ? pageItems.map(function (p) { return cardHTML(p, cardReferrer(p.id)); }).join('')
       : '<p class="empty-state">No prints match your search. Try a different search or reset the filters.</p>';
 
     bindCardGalleries(grid);
@@ -408,6 +427,8 @@
       }
       pag.innerHTML = p;
     }
+
+    scrollToProductCard();
   }
   if (pag) {
     pag.addEventListener('click', function (e) {
@@ -510,12 +531,12 @@
       + '<li><i class="fa-solid fa-circle-check"></i>For personal use and small businesses</li>'
       + '<li><i class="fa-solid fa-circle-check"></i>Digital download — no physical item is shipped</li>'
       + '</ul>'
-      + '<a class="product-buy" href="' + esc(buyURL(p)) + '">Buy now — ' + money(p.price) + '</a>'
+      + '<a class="product-buy" href="' + esc(buyURL(p, currentURLWithoutHash())) + '">Buy now — ' + money(p.price) + '</a>'
       + '<p class="product-safe"><i class="fa-solid fa-lock"></i> Secure card payment · 3-D Secure</p>'
       + '<p class="product-checkout-note">Checkout is hosted by BlackSea. Each print has its own checkout link.</p>'
       + '</div></div>'
       + '<section class="product-related"><h2>You may also like</h2><div class="grid">'
-      + related.map(cardHTML).join('')
+      + related.map(function (x) { return cardHTML(x, cardReferrer(x.id)); }).join('')
       + '</div></section>';
 
     var mainImage = document.getElementById('product-main-image');
@@ -544,6 +565,8 @@
       bindSwipe(media, function (dir) { showImage(current + dir); });
     }
     bindCardGalleries(page);
+
+    scrollToProductCard();
   }
 
   /* ---------- Start ---------- */

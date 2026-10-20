@@ -1,94 +1,93 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Товар — The Quiet Room</title>
-<meta name="description" content="The Quiet Room — цифровий файл принта для друку на замовлення.">
+<title>Print — The Quiet Room</title>
+<meta name="description" content="The Quiet Room — a digital print file for print-on-demand, delivered instantly by email.">
+<meta property="og:type" content="product">
+<meta property="og:site_name" content="The Quiet Room">
+<meta property="og:title" content="Print — The Quiet Room">
+<meta property="og:description" content="A digital print file for print-on-demand, delivered instantly by email.">
+<meta property="og:url" content="https://eugene55555.github.io/the-quiet-room/product.html">
+<meta property="og:image" content="https://eugene55555.github.io/the-quiet-room/assets/img/logo-qr.png">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Print — The Quiet Room">
+<meta name="twitter:description" content="A digital print file for print-on-demand, delivered instantly by email.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%238E2137'/%3E%3Cpath d='M30 62 a18 18 0 0 1 0-24' stroke='%23F6EFE0' stroke-width='6' fill='none' stroke-linecap='round'/%3E%3Cpath d='M55 38 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3 z' fill='%23C9A24A'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Arvo:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-<link rel="stylesheet" href="assets/style.css?v=15">
+<link rel="stylesheet" href="assets/style.css?v=16">
 </head>
 <body>
 
-<div class="announce">Миттєва цифрова доставка — файл приходить на вашу пошту після оплати 🚀</div>
+<div class="announce">Instant digital delivery — your files arrive by email after checkout</div>
 
 <header class="site-header" id="site-header">
   <div class="container header-inner">
-    <button class="burger" id="burger" aria-label="Меню"><i class="fa-solid fa-bars"></i></button>
+    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu-drawer"><i class="fa-solid fa-bars"></i></button>
     <a class="logo" href="index.html">
-      <img class="logo-mark" src="assets/img/logo-qr.png" alt="QR — The Quiet Room" width="46" height="46">
+      <img class="logo-mark" src="assets/img/logo-qr.png" alt="The Quiet Room logo" width="46" height="46">
       <span class="logo-text">The Quiet Room</span>
     </a>
-    <nav class="site-nav" id="site-nav" aria-label="Основна навігація">
-      <a href="index.html">Головна</a>
+    <nav class="site-nav" id="site-nav" aria-label="Main navigation">
+      <a href="index.html">Home</a>
     </nav>
     <div class="search-wrap" id="search-wrap">
-      <button class="search-toggle" id="search-toggle" aria-label="Пошук"><i class="fa-solid fa-magnifying-glass"></i></button>
+      <button class="search-toggle" id="search-toggle" aria-label="Search prints" aria-expanded="false" aria-controls="search-panel"><i class="fa-solid fa-magnifying-glass"></i></button>
       <div class="search-panel" id="search-panel">
-        <input id="search-input" type="search" placeholder="Пошук принта…" autocomplete="off">
+        <input id="search-input" type="search" placeholder="Search prints…" aria-label="Search prints" autocomplete="off">
       </div>
     </div>
   </div>
 </header>
 
-<!-- Меню: виїзна панель зліва -->
+<!-- Menu: slide-out panel from the left -->
 <div class="drawer-overlay" id="menu-overlay"></div>
-<aside class="drawer" id="menu-drawer" aria-label="Меню">
+<aside class="drawer" id="menu-drawer" aria-label="Menu">
   <div class="drawer-head">
-    <span>Меню</span>
-    <button class="drawer-close" id="menu-close" aria-label="Закрити меню"><i class="fa-solid fa-xmark"></i></button>
+    <span>Menu</span>
+    <button class="drawer-close" id="menu-close" aria-label="Close menu"><i class="fa-solid fa-xmark"></i></button>
   </div>
   <nav class="drawer-nav">
-    <a href="index.html">Головна</a>
+    <a href="index.html">Home</a>
   </nav>
-  <div class="drawer-socials">
-    <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-    <a href="#" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
-  </div>
 </aside>
 
 <main class="container product-page" id="product-page"></main>
 
-<!-- Підписка -->
+<!-- Newsletter -->
 <section class="subscribe">
-  <h2>Підпишіться на нові принти</h2>
-  <p>Нові дизайни, знижки та безкоштовні файли — раз на місяць, без спаму.</p>
+  <h2>Get new prints in your inbox</h2>
+  <p>New designs, discounts and free files once a month. No spam.</p>
+  <p class="sub-note">Newsletter signup isn’t connected yet. Submitting the form won’t send your email anywhere.</p>
   <form class="sub-form" id="sub-form">
-    <input type="email" id="sub-email" placeholder="Email" required>
-    <button type="submit">Підписатися</button>
+    <input type="email" id="sub-email" placeholder="Email address" aria-label="Email address" required>
+    <button type="submit">Subscribe</button>
   </form>
-  <p class="sub-ok" id="sub-ok" hidden>Дякуємо! Ви в списку ✨</p>
-  <div class="socials">
-    <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-    <a href="#" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
-  </div>
+  <p class="sub-ok" id="sub-ok" role="status" aria-live="polite" hidden></p>
 </section>
 
 <section class="payments">
-  <span class="pay-label">Оплата</span>
-  <i class="fa-brands fa-cc-visa"></i>
-  <i class="fa-brands fa-cc-mastercard"></i>
-  <span class="pay-note">Картками українських та міжнародних банків · захист 3-D Secure</span>
+  <span class="pay-label">Payment</span>
+  <i class="fa-brands fa-cc-visa" aria-label="Visa"></i>
+  <i class="fa-brands fa-cc-mastercard" aria-label="Mastercard"></i>
+  <span class="pay-note">Visa and Mastercard from Ukrainian and international banks · 3-D Secure protection</span>
 </section>
 
 <footer class="site-footer">
   <div class="container footer-inner">
     <span class="footer-copy">© <span id="year">2026</span> The Quiet Room</span>
-    <nav class="footer-links">
-      <a href="#">Повернення</a>
-      <a href="#">Конфіденційність</a>
-      <a href="#">Контакти</a>
+    <nav class="footer-links" aria-label="Footer">
+      <span>Returns, privacy and contact pages are coming soon.</span>
     </nav>
   </div>
 </footer>
 
 <script src="assets/data.js"></script>
-<script src="assets/main.js?v=15"></script>
+<script src="assets/main.js?v=16"></script>
 </body>
 </html>

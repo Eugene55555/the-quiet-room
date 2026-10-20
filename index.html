@@ -1,198 +1,197 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Принти для тиші — The Quiet Room</title>
-<meta name="description" content="The Quiet Room — цифрові файли принтів для друку на замовлення. 16 дизайнів: PNG + SVG + PDF, 4500×5400 px, 300 dpi. Миттєва доставка на пошту.">
+<title>Prints for Quiet Spaces — The Quiet Room</title>
+<meta name="description" content="The Quiet Room — digital print files for print-on-demand. 16 designs in PNG, SVG and PDF, 4500×5400 px at 300 dpi, delivered instantly by email.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="The Quiet Room">
+<meta property="og:title" content="Prints for Quiet Spaces — The Quiet Room">
+<meta property="og:description" content="Digital print files for print-on-demand. 16 designs in PNG, SVG and PDF, delivered instantly by email.">
+<meta property="og:url" content="https://eugene55555.github.io/the-quiet-room/">
+<meta property="og:image" content="https://eugene55555.github.io/the-quiet-room/assets/img/logo-qr.png">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Prints for Quiet Spaces — The Quiet Room">
+<meta name="twitter:description" content="Digital print files for print-on-demand. 16 designs, delivered instantly by email.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%238E2137'/%3E%3Cpath d='M30 62 a18 18 0 0 1 0-24' stroke='%23F6EFE0' stroke-width='6' fill='none' stroke-linecap='round'/%3E%3Cpath d='M55 38 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3 z' fill='%23C9A24A'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Arvo:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-<link rel="stylesheet" href="assets/style.css?v=15">
+<link rel="stylesheet" href="assets/style.css?v=16">
 </head>
 <body>
 
-<!-- Повідомлення-смуга -->
-<div class="announce">Миттєва цифрова доставка — файл приходить на вашу пошту після оплати 🚀</div>
+<!-- Announcement bar -->
+<div class="announce">Instant digital delivery — your files arrive by email after checkout</div>
 
 <header class="site-header" id="site-header">
   <div class="container header-inner">
-    <button class="burger" id="burger" aria-label="Меню"><i class="fa-solid fa-bars"></i></button>
+    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu-drawer"><i class="fa-solid fa-bars"></i></button>
     <a class="logo" href="index.html">
-      <img class="logo-mark" src="assets/img/logo-qr.png" alt="QR — The Quiet Room" width="46" height="46">
+      <img class="logo-mark" src="assets/img/logo-qr.png" alt="The Quiet Room logo" width="46" height="46">
       <span class="logo-text">The Quiet Room</span>
     </a>
-    <nav class="site-nav" id="site-nav" aria-label="Основна навігація">
-      <a href="index.html" class="active">Головна</a>
+    <nav class="site-nav" id="site-nav" aria-label="Main navigation">
+      <a href="index.html" class="active">Home</a>
     </nav>
     <div class="search-wrap" id="search-wrap">
-      <button class="search-toggle" id="search-toggle" aria-label="Пошук"><i class="fa-solid fa-magnifying-glass"></i></button>
+      <button class="search-toggle" id="search-toggle" aria-label="Search prints" aria-expanded="false" aria-controls="search-panel"><i class="fa-solid fa-magnifying-glass"></i></button>
       <div class="search-panel" id="search-panel">
-        <input id="search-input" type="search" placeholder="Пошук принта…" autocomplete="off">
+        <input id="search-input" type="search" placeholder="Search prints…" aria-label="Search prints" autocomplete="off">
       </div>
     </div>
   </div>
 </header>
 
-<!-- Меню: виїзна панель зліва (як у Quick Digital Files) -->
+<!-- Menu: slide-out panel from the left -->
 <div class="drawer-overlay" id="menu-overlay"></div>
-<aside class="drawer" id="menu-drawer" aria-label="Меню">
+<aside class="drawer" id="menu-drawer" aria-label="Menu">
   <div class="drawer-head">
-    <span>Меню</span>
-    <button class="drawer-close" id="menu-close" aria-label="Закрити меню"><i class="fa-solid fa-xmark"></i></button>
+    <span>Menu</span>
+    <button class="drawer-close" id="menu-close" aria-label="Close menu"><i class="fa-solid fa-xmark"></i></button>
   </div>
   <nav class="drawer-nav">
-    <a href="index.html">Головна</a>
+    <a href="index.html">Home</a>
   </nav>
-  <div class="drawer-socials">
-    <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-    <a href="#" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
-  </div>
 </aside>
 
 <main class="container">
 
-  <!-- Заголовок колекції -->
+  <!-- Collection header -->
   <section class="collection-head">
-    <h1>Принти для тиші</h1>
-    <p class="head-sub">Цифрові файли для друку на замовлення. Купуєте один раз — друкуєте безліч разів.</p>
+    <h1>Prints for Quiet Spaces</h1>
+    <p class="head-sub">Digital print files made for print-on-demand. Buy once, print as often as you like.</p>
     <div class="head-desc" id="head-desc">
-      <p>Print on demand змінив правила гри: ніяких складів, ніяких мінімальних партій, ніякого ризику залишитися з коробкою футболок, які ніхто не купив. Ви завантажуєте файл — покупець замовляє річ — платформа друкує й відправляє. Усе, що потрібно від вас, — дизайн, який зачіпає людей.</p>
-      <p>Саме це і є ця колекція. Принти The Quiet Room створені під реальний POD-процес: прозорий фон, роздільність 4500×5400 px (300 dpi), формати PNG, SVG та PDF. Файл одразу готовий до завантаження у Printify, Printful, Redbubble чи будь-який інший сервіс — без жодної підготовки з вашого боку.</p>
-      <p>Жодних передплат, очікування і доставки: ви купуєте, завантажуєте і одразу заливаєте файл у вашу платформу.</p>
+      <p>Print-on-demand changed the rules: no warehouses, no minimum orders, and no risk of being left with a box of T-shirts nobody wants. You upload a file, a customer orders a product, and the platform prints and ships it. All you need is a design that connects with people.</p>
+      <p>That is exactly what this collection is for. Every Quiet Room print is built for a real POD workflow: transparent background, 4500×5400 px at 300 dpi, and PNG, SVG and PDF formats. Each file is ready to upload straight to Printify, Printful, Redbubble or any other service — no extra preparation required.</p>
+      <p>No subscriptions, no waiting and no shipping: buy it, download it and upload it to your platform right away.</p>
     </div>
-    <button class="read-more" id="read-more">Читати далі ▼</button>
+    <button class="read-more" id="read-more" aria-expanded="false" aria-controls="head-desc">Read more ▼</button>
   </section>
 
-  <!-- Фільтри та сортування -->
+  <!-- Filters and sorting -->
   <section class="filter-bar">
-    <button class="filter-open" id="filter-open"><i class="fa-solid fa-sliders"></i> Фільтр і сортування</button>
+    <button class="filter-open" id="filter-open" aria-expanded="false" aria-controls="filter-drawer"><i class="fa-solid fa-sliders"></i> Filters &amp; sorting</button>
     <div class="filters">
       <label class="filter-label">
-        Фільтр:
+        Filter:
         <select id="f-cat">
-          <option value="">Всі категорії</option>
-          <option value="Футболка">Футболки</option>
-          <option value="Худі">Худі</option>
-          <option value="Кухоль">Кухлі</option>
-          <option value="Постер">Постери</option>
+          <option value="">All categories</option>
+          <option value="T-shirt">T-shirts</option>
+          <option value="Hoodie">Hoodies</option>
+          <option value="Mug">Mugs</option>
+          <option value="Poster">Posters</option>
         </select>
       </label>
       <label class="filter-label">
-        <select id="f-price">
-          <option value="">Будь-яка ціна</option>
-          <option value="sale">Зі знижкою</option>
-          <option value="55">До 60 ₴</option>
+        <select id="f-price" aria-label="Price">
+          <option value="">Any price</option>
+          <option value="sale">On sale</option>
+          <option value="55">Under 60 ₴</option>
         </select>
       </label>
-      <label class="filter-label">Сортувати:
+      <label class="filter-label">Sort by:
         <select id="f-sort">
-          <option value="featured">За замовчуванням</option>
-          <option value="az">Назва, А–Я</option>
-          <option value="za">Назва, Я–А</option>
-          <option value="lo">Ціна: від дешевих</option>
-          <option value="hi">Ціна: від дорогих</option>
-          <option value="new">Новинки</option>
+          <option value="featured">Featured</option>
+          <option value="az">Name: A–Z</option>
+          <option value="za">Name: Z–A</option>
+          <option value="lo">Price: Low to High</option>
+          <option value="hi">Price: High to Low</option>
+          <option value="new">Newest</option>
         </select>
       </label>
-      <button class="filter-reset" id="f-reset" type="button">Скинути</button>
+      <button class="filter-reset" id="f-reset" type="button">Reset</button>
     </div>
     <span class="count" id="count"></span>
   </section>
 
-  <!-- Фільтри: виїзна панель зліва (моб, як у Quick Digital Files) -->
+  <!-- Filters: slide-out panel from the left (mobile) -->
   <div class="drawer-overlay" id="filter-overlay"></div>
-  <aside class="drawer drawer-filter" id="filter-drawer" aria-label="Фільтри">
+  <aside class="drawer drawer-filter" id="filter-drawer" aria-label="Filters">
     <div class="drawer-head">
-      <span>Фільтр і сортування · <em id="f-live-count"></em></span>
-      <button class="drawer-close" id="filter-close" aria-label="Закрити фільтри"><i class="fa-solid fa-xmark"></i></button>
+      <span>Filters &amp; sorting · <em id="f-live-count"></em></span>
+      <button class="drawer-close" id="filter-close" aria-label="Close filters"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div class="drawer-body">
       <div class="acc-group">
-        <button class="acc-toggle" type="button" data-acc="acc-cat">Категорія <i>+</i></button>
+        <button class="acc-toggle" type="button" data-acc="acc-cat" aria-expanded="false" aria-controls="acc-cat">Category <i>+</i></button>
         <div class="acc-panel" id="acc-cat">
-          <label><input type="radio" name="p-cat" value="" checked><span>Всі категорії</span></label>
-          <label><input type="radio" name="p-cat" value="Футболка"><span>Футболки</span></label>
-          <label><input type="radio" name="p-cat" value="Худі"><span>Худі</span></label>
-          <label><input type="radio" name="p-cat" value="Кухоль"><span>Кухлі</span></label>
-          <label><input type="radio" name="p-cat" value="Постер"><span>Постери</span></label>
+          <label><input type="radio" name="p-cat" value="" checked><span>All categories</span></label>
+          <label><input type="radio" name="p-cat" value="T-shirt"><span>T-shirts</span></label>
+          <label><input type="radio" name="p-cat" value="Hoodie"><span>Hoodies</span></label>
+          <label><input type="radio" name="p-cat" value="Mug"><span>Mugs</span></label>
+          <label><input type="radio" name="p-cat" value="Poster"><span>Posters</span></label>
         </div>
       </div>
       <div class="acc-group">
-        <button class="acc-toggle" type="button" data-acc="acc-price">Ціна <i>+</i></button>
+        <button class="acc-toggle" type="button" data-acc="acc-price" aria-expanded="false" aria-controls="acc-price">Price <i>+</i></button>
         <div class="acc-panel" id="acc-price">
-          <label><input type="radio" name="p-price" value="" checked><span>Будь-яка ціна</span></label>
-          <label><input type="radio" name="p-price" value="sale"><span>Зі знижкою</span></label>
-          <label><input type="radio" name="p-price" value="55"><span>До 60 ₴</span></label>
+          <label><input type="radio" name="p-price" value="" checked><span>Any price</span></label>
+          <label><input type="radio" name="p-price" value="sale"><span>On sale</span></label>
+          <label><input type="radio" name="p-price" value="55"><span>Under 60 ₴</span></label>
         </div>
       </div>
       <div class="acc-group acc-sort">
-        <label class="sort-line">Сортувати:
-          <select id="m-sort">
-            <option value="featured">За замовчуванням</option>
-            <option value="az">Назва, А–Я</option>
-            <option value="za">Назва, Я–А</option>
-            <option value="lo">Ціна: від дешевих</option>
-            <option value="hi">Ціна: від дорогих</option>
-            <option value="new">Новинки</option>
+        <label class="sort-line">Sort by:
+          <select id="m-sort" aria-label="Sort by">
+            <option value="featured">Featured</option>
+            <option value="az">Name: A–Z</option>
+            <option value="za">Name: Z–A</option>
+            <option value="lo">Price: Low to High</option>
+            <option value="hi">Price: High to Low</option>
+            <option value="new">Newest</option>
           </select>
         </label>
       </div>
     </div>
     <div class="drawer-foot">
-      <a href="#" class="remove-all" id="m-remove">Прибрати все</a>
-      <button class="apply-btn" id="m-apply" type="button">Застосувати</button>
+      <button type="button" class="remove-all" id="m-remove">Clear all</button>
+      <button class="apply-btn" id="m-apply" type="button">Apply</button>
     </div>
   </aside>
 
-  <!-- Сітка товарів -->
+  <!-- Product grid -->
   <section class="collection-grid">
     <div class="grid" id="catalog"></div>
-    <nav class="pagination" id="pagination" aria-label="Пагінація"></nav>
+    <nav class="pagination" id="pagination" aria-label="Pagination"></nav>
   </section>
 
 </main>
 
-<!-- Підписка -->
+<!-- Newsletter -->
 <section class="subscribe">
-  <h2>Підпишіться на нові принти</h2>
-  <p>Нові дизайни, знижки та безкоштовні файли — раз на місяць, без спаму.</p>
+  <h2>Get new prints in your inbox</h2>
+  <p>New designs, discounts and free files once a month. No spam.</p>
+  <p class="sub-note">Newsletter signup isn’t connected yet. Submitting the form won’t send your email anywhere.</p>
   <form class="sub-form" id="sub-form">
-    <input type="email" id="sub-email" placeholder="Email" required>
-    <button type="submit">Підписатися</button>
+    <input type="email" id="sub-email" placeholder="Email address" aria-label="Email address" required>
+    <button type="submit">Subscribe</button>
   </form>
-  <p class="sub-ok" id="sub-ok" hidden>Дякуємо! Ви в списку ✨</p>
-  <div class="socials">
-    <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-    <a href="#" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
-  </div>
+  <p class="sub-ok" id="sub-ok" role="status" aria-live="polite" hidden></p>
 </section>
 
-<!-- Способи оплати -->
+<!-- Payment methods -->
 <section class="payments">
-  <span class="pay-label">Оплата</span>
-  <i class="fa-brands fa-cc-visa"></i>
-  <i class="fa-brands fa-cc-mastercard"></i>
-  <span class="pay-note">Картками українських та міжнародних банків · захист 3-D Secure</span>
+  <span class="pay-label">Payment</span>
+  <i class="fa-brands fa-cc-visa" aria-label="Visa"></i>
+  <i class="fa-brands fa-cc-mastercard" aria-label="Mastercard"></i>
+  <span class="pay-note">Visa and Mastercard from Ukrainian and international banks · 3-D Secure protection</span>
 </section>
 
-<!-- Футер -->
+<!-- Footer -->
 <footer class="site-footer">
   <div class="container footer-inner">
     <span class="footer-copy">© <span id="year">2026</span> The Quiet Room</span>
-    <nav class="footer-links">
-      <a href="#">Повернення</a>
-      <a href="#">Конфіденційність</a>
-      <a href="#">Контакти</a>
+    <nav class="footer-links" aria-label="Footer">
+      <span>Returns, privacy and contact pages are coming soon.</span>
     </nav>
   </div>
 </footer>
 
 <script src="assets/data.js"></script>
-<script src="assets/main.js?v=15"></script>
+<script src="assets/main.js?v=16"></script>
 </body>
 </html>

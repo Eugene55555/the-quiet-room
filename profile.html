@@ -1,6 +1,18 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>njp — The Quiet Room</title>
+  <meta name="description" content="Digital products from njp, delivered instantly after purchase.">
+  <meta property="og:type" content="profile">
+  <meta property="og:site_name" content="The Quiet Room">
+  <meta property="og:title" content="njp — The Quiet Room">
+  <meta property="og:description" content="Digital products from njp, delivered instantly after purchase.">
+  <meta property="og:url" content="https://eugene55555.github.io/the-quiet-room/profile.html">
+  <meta property="og:image" content="https://eugene55555.github.io/the-quiet-room/assets/img/logo-qr.png">
+  <meta property="og:locale" content="en_US">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%238E2137'/%3E%3Cpath d='M30 62 a18 18 0 0 1 0-24' stroke='%23F6EFE0' stroke-width='6' fill='none' stroke-linecap='round'/%3E%3Cpath d='M55 38 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3 z' fill='%23C9A24A'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Arvo:ital,wght@0,400;0,700;1,400&family=Manrope:wght@400;500;600;700&display=swap">
   <style>
     :root { --wine:#8E2137; --wine-deep:#400D18; --cream:#F6EFE0; --ink:#1A1A1A; --ink-soft:#4A4A4A; --bg:#FFFFFF; --bg-alt:#FAF8F5; --border:#E8E0D8; --shadow:rgba(142,33,55,.12); --shadow-strong:rgba(40,5,12,.28); --radius:12px; --tr:.25s ease; --f-head:'Arvo',Georgia,serif; --f-body:'Manrope',-apple-system,BlinkMacSystemFont,sans-serif; }
@@ -39,27 +51,29 @@
 <body>
   <div style="min-height:100vh; display:flex; flex-direction:column;">
     <header class="hero" role="banner">
-      <img class="avatar" src="https://res-4.cloudinary.com/dubkmnuvi/image/upload/6eyaylwq4lztoyesau8bi8gvcdd1.png" alt="" loading="lazy">
+      <img class="avatar" src="https://res-4.cloudinary.com/dubkmnuvi/image/upload/6eyaylwq4lztoyesau8bi8gvcdd1.png" alt="njp profile avatar" loading="lazy">
       <h1 class="name" data-blacksea-field="name">njp</h1>
-      <p class="bio" data-blacksea-field="bio">Цифрові товари — миттєва доставка після оплати.</p>
+      <p class="bio" data-blacksea-field="bio">Digital products — instant delivery after purchase.</p>
       <div class="divider" aria-hidden="true"></div>
     </header>
     <main role="main">
       <section class="section" aria-labelledby="cat-title">
-        <h2 class="section-title" id="cat-title">Мої товари</h2>
+        <h2 class="section-title" id="cat-title">My products</h2>
         <div class="grid" id="grid" role="list"></div>
-        <p class="empty" id="empty" hidden>Поки що товарів немає — поверніться скоро!</p>
+        <p class="empty" id="empty" hidden>No products yet — check back soon!</p>
       </section>
     </main>
     <footer class="footer" role="contentinfo">
-      <p>© 2024 <span data-blacksea-field="name">njp</span> · <a href="https://blacksea.in.ua" target="_blank" rel="noopener noreferrer">Створено на BlackSea</a></p>
+      <p>© <span id="year">2026</span> <span data-blacksea-field="name">njp</span> · <a href="https://blacksea.in.ua" target="_blank" rel="noopener noreferrer">Made on BlackSea</a></p>
     </footer>
   </div>
 
   <script id="blacksea-data" type="application/json">{"products":[],"posts":[],"pages":[]}</script>
-  <script id="catalog-data" type="application/json">[{"name": "Товар1", "url": "https://njp.blacksea.in.ua/l/ats", "price": "13,000 ₴", "thumb": "https://res-2.cloudinary.com/dubkmnuvi/image/upload/c_limit,w_1600,q_auto,f_auto/dcnh02n7jk54jynguv0ogdsgyxxa.jpg"}]</script>
+  <script id="catalog-data" type="application/json">[{"name": "Product 1", "url": "https://njp.blacksea.in.ua/l/ats", "price": "13,000 ₴", "thumb": "https://res-2.cloudinary.com/dubkmnuvi/image/upload/c_limit,w_1600,q_auto,f_auto/dcnh02n7jk54jynguv0ogdsgyxxa.jpg"}]</script>
   <script>
   (function(){
+    var year = document.getElementById('year');
+    if (year) year.textContent = new Date().getFullYear();
     try {
       var list = JSON.parse(document.getElementById('catalog-data').textContent);
       var grid = document.getElementById('grid');
@@ -68,24 +82,26 @@
       empty.hidden = true;
       for (var i = 0; i < list.length; i++) {
         var p = list[i];
-        var a = document.createElement('a');
-        a.href = p.url || '#';
-        a.target = '_blank';
-        a.rel = 'noopener noreferrer';
-        a.className = 'card';
-        a.setAttribute('role','listitem');
+        var card = document.createElement(p.url ? 'a' : 'div');
+        if (p.url) {
+          card.href = p.url;
+          card.target = '_blank';
+          card.rel = 'noopener noreferrer';
+        }
+        card.className = 'card';
+        card.setAttribute('role','listitem');
         var media = document.createElement('div');
         if (p.thumb) {
           media.className = 'card-media';
           var img = document.createElement('img');
           img.src = p.thumb;
-          img.alt = '';
+          img.alt = p.name || 'Product preview';
           img.loading = 'lazy';
           media.appendChild(img);
         } else {
           media.className = 'card-media ph';
         }
-        a.appendChild(media);
+        card.appendChild(media);
         var body = document.createElement('div');
         body.className = 'card-body';
         var name = document.createElement('h3');
@@ -98,14 +114,14 @@
         body.appendChild(price);
         var arrow = document.createElement('span');
         arrow.className = 'card-arrow';
-        arrow.textContent = 'Переглянути';
+        arrow.textContent = p.url ? 'View product' : 'Details coming soon';
         body.appendChild(arrow);
-        a.appendChild(body);
-        grid.appendChild(a);
+        card.appendChild(body);
+        grid.appendChild(card);
       }
     } catch (e) {
       var em = document.getElementById('empty');
-      if (em) { em.hidden = false; em.textContent = 'Товари завантажаться за мить — оновіть сторінку.'; }
+      if (em) { em.hidden = false; em.textContent = 'Products will load in a moment — please refresh the page.'; }
     }
   })();
   </script>

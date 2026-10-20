@@ -1,4 +1,4 @@
-/* The Quiet Room — стиль колекції Quick Digital Files (шрифт Arvo, тонкий), акцент #8E2137 */
+/* The Quiet Room — collection styling (Arvo typeface, light weight), accent #8E2137 */
 :root {
   --wine: #8E2137;
   --wine-deep: #400D18;
@@ -27,7 +27,7 @@ a { color: inherit; text-decoration: none; }
 select, input, button { font-family: var(--font); }
 .container { max-width: 1180px; margin: 0 auto; padding: 0 20px; }
 
-/* ============ Смуга-повідомлення ============ */
+/* ============ Announcement bar ============ */
 .announce {
   background: var(--wine-deep);
   color: #FDEFDC;
@@ -37,7 +37,7 @@ select, input, button { font-family: var(--font); }
   letter-spacing: .2px;
 }
 
-/* ============ Шапка (фіксована, ховається вниз) ============ */
+/* ============ Header (sticky, hides on scroll down) ============ */
 .site-header {
   position: sticky;
   top: 0;
@@ -97,7 +97,7 @@ select, input, button { font-family: var(--font); }
 .search-panel input::placeholder { color: rgba(253, 243, 227, .75); }
 .search-panel input:focus { border-color: #FDEFDC; }
 
-/* Мобільне меню */
+/* Mobile menu */
 #site-nav.open {
   display: flex;
   position: absolute; left: 20px; top: calc(100% + 6px);
@@ -109,7 +109,7 @@ select, input, button { font-family: var(--font); }
 }
 #site-nav.open a { padding: 8px 4px; }
 
-/* ============ Заголовок колекції ============ */
+/* ============ Collection header ============ */
 .collection-head { padding: 46px 0 6px; text-align: center; }
 .collection-head h1 {
   font-size: 24px;
@@ -135,7 +135,7 @@ select, input, button { font-family: var(--font); }
 }
 .read-more:hover { color: #FFD9B8; }
 
-/* ============ Фільтри ============ */
+/* ============ Filters ============ */
 .filter-bar {
   display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 14px;
   padding: 26px 0 18px;
@@ -157,7 +157,7 @@ select, input, button { font-family: var(--font); }
 .filter-reset:hover { color: #FFFFFF; }
 .count { font-size: 14.5px; color: #F2D9C4; white-space: nowrap; }
 
-/* ============ Виїзні панелі (drawer) ============ */
+/* ============ Slide-out panels (drawers) ============ */
 .drawer-overlay {
   position: fixed; inset: 0; z-index: 200;
   background: rgba(0, 0, 0, .45);
@@ -206,7 +206,7 @@ select, input, button { font-family: var(--font); }
   transition: .2s;
 }
 .drawer-socials a:hover { border-color: var(--wine); color: var(--wine); }
-/* ---------- Панель фільтрів (акордеони як у QDF) ---------- */
+/* ---------- Filter panel (accordion sections) ---------- */
 .drawer-filter .drawer-body {
   padding: 4px 20px 12px;
   overflow-y: auto;
@@ -242,6 +242,7 @@ select, input, button { font-family: var(--font); }
 .remove-all {
   text-align: center; font-size: 14.5px; color: var(--ink);
   text-decoration: underline; padding: 2px;
+  background: none; border: 0; cursor: pointer; font-family: var(--font);
 }
 .remove-all:hover { color: var(--wine); }
 .apply-btn {
@@ -258,7 +259,7 @@ select, input, button { font-family: var(--font); }
 }
 .filter-open:hover { border-color: #FDEFDC; background: rgba(255, 255, 255, .2); }
 
-/* ============ Сітка товарів ============ */
+/* ============ Product grid ============ */
 .collection-grid { padding: 24px 0 44px; }
 .grid {
   display: grid;
@@ -300,6 +301,12 @@ select, input, button { font-family: var(--font); }
 }
 .card-title:hover { text-decoration: underline; }
 .card-price-row { display: flex; align-items: center; gap: 8px; margin-top: 1px; min-height: 26px; flex-wrap: wrap; }
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #F7E7D6;
+  padding: 40px 0;
+}
 .price-sale {
   font-size: 14.5px; font-weight: 700; color: var(--wine);
   background: #FDEFDC;
@@ -316,23 +323,25 @@ select, input, button { font-family: var(--font); }
 }
 .card-btn:hover { background: var(--wine-soft); }
 
-/* ============ Пагінація ============ */
+/* ============ Pagination ============ */
 .pagination {
   display: flex; justify-content: center; align-items: center; gap: 8px;
   padding: 14px 0 6px;
 }
-.pagination a, .pagination span {
+.pagination a, .pagination button, .pagination span {
   min-width: 42px; height: 42px;
   display: inline-flex; align-items: center; justify-content: center;
   border: 1px solid rgba(255, 255, 255, .4); border-radius: 8px;
   font-size: 15px; color: #FDF3E3; background: rgba(255, 255, 255, .1);
   transition: .2s;
+  font-family: var(--font);
 }
-.pagination a:hover { border-color: #FDEFDC; background: rgba(255, 255, 255, .22); }
+.pagination button { cursor: pointer; }
+.pagination a:hover, .pagination button:hover { border-color: #FDEFDC; background: rgba(255, 255, 255, .22); }
 .pagination .cur { background: #FDEFDC; border-color: #FDEFDC; color: var(--wine); font-weight: 700; }
 .pagination .dim { opacity: .4; pointer-events: none; }
 
-/* ============ Підписка ============ */
+/* ============ Newsletter ============ */
 .subscribe {
   background: rgba(64, 13, 24, .35);
   text-align: center;
@@ -356,7 +365,8 @@ select, input, button { font-family: var(--font); }
   transition: background .2s;
 }
 .sub-form button:hover { background: #FFFFFF; }
-.sub-ok { margin-top: 4px !important; color: #FFD9B8 !important; font-size: 15px !important; }
+.sub-note { color: #F2D9C4; font-size: 13px; margin: -6px 0 16px; }
+.sub-ok { margin-top: 8px !important; color: #FFD9B8 !important; font-size: 14px !important; max-width: 520px; margin-left: auto !important; margin-right: auto !important; }
 .socials { display: flex; justify-content: center; gap: 16px; margin-top: 22px; }
 .socials a {
   width: 42px; height: 42px;
@@ -367,7 +377,7 @@ select, input, button { font-family: var(--font); }
 }
 .socials a:hover { border-color: #FDEFDC; color: #FDEFDC; background: rgba(255, 255, 255, .12); }
 
-/* ============ Оплата ============ */
+/* ============ Payment ============ */
 .payments {
   display: flex; justify-content: center; align-items: center; gap: 18px;
   padding: 26px 20px;
@@ -377,7 +387,7 @@ select, input, button { font-family: var(--font); }
 .pay-label { font-size: 14px; color: #F2D9C4; letter-spacing: .4px; }
 .pay-note { font-size: 13.5px; color: #F2D9C4; width: 100%; text-align: center; }
 
-/* ============ Футер ============ */
+/* ============ Footer ============ */
 .site-footer {
   background: linear-gradient(180deg, #2A0F18 0%, #8E2137 120%);
   color: #C9C2BD;
@@ -388,10 +398,9 @@ select, input, button { font-family: var(--font); }
 }
 .footer-copy { font-size: 13.5px; }
 .footer-links { display: flex; gap: 20px; }
-.footer-links a { font-size: 13.5px; color: #C9C2BD; transition: color .2s; }
-.footer-links a:hover { color: #fff; }
+.footer-links span { font-size: 13.5px; color: #C9C2BD; }
 
-/* ============ Сторінка товару ============ */
+/* ============ Product page ============ */
 .product-page { padding-top: 36px; padding-bottom: 50px; }
 .product-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 44px; align-items: start; }
 .product-media { position: relative; background: #F7F6F3; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(40, 5, 12, .3); }
@@ -425,10 +434,13 @@ select, input, button { font-family: var(--font); }
 }
 .product-buy:hover { background: #FFFFFF; }
 .product-safe { font-size: 13px; color: #F2D9C4; margin-top: 12px; }
+.product-checkout-note { font-size: 12.5px; line-height: 1.6; color: #D8B3A0; margin-top: 10px; max-width: 520px; }
+.product-missing { padding: 60px 0; text-align: center; color: #F7E7D6; }
+.product-missing a { color: #FFD9B8; text-decoration: underline; }
 .product-related { margin-top: 56px; }
 .product-related h2 { font-size: 22px; font-weight: 400; margin-bottom: 20px; color: #FDF3E3; }
 
-/* ============ Адаптив ============ */
+/* ============ Responsive ============ */
 @media (max-width: 900px) {
   .grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
   .product-layout { grid-template-columns: 1fr; gap: 26px; }

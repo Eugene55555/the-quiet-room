@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-BlackSea Profile Sync (динамический, без ручной работы)
-=======================================================
-Скрейпит публичную страницу профиля njp.blacksea.in.ua (react-JSON с товарами),
-генерирует HTML витрины The Quiet Room со ВСЕМИ товарами и обложками
-и публикует его в custom_html профиля. Новые товары подхватываются сами.
+BlackSea Profile Sync (automatic, no manual work)
+==================================================
+Scrapes the public profile page njp.blacksea.in.ua (React JSON with products),
+generates The Quiet Room showcase HTML with ALL products and covers,
+and publishes it to the profile custom_html. New products are picked up automatically.
 
-Аутентификация (по порядку):
-  1. User-токен из файла ~/.hermes/secrets/blacksea_user_token
-     (создаётся в кабинете BlackSea, долгоживущий; обновить файл, когда истечёт)
-  2. OAuth client_credentials (client_id/secret ниже) — сейчас BlackSea НЕ пускает
-     CC-токены на user-эндпоинты (404), проверяется на каждый запуск автоматически.
+Authentication (in order):
+  1. User token from ~/.hermes/secrets/blacksea_user_token
+     (created in the BlackSea dashboard, long-lived; refresh the file when it expires)
+  2. OAuth client_credentials (client_id/secret below) — BlackSea currently rejects
+     CC tokens on user endpoints (404); checked automatically on every run.
 
-Запуск вручную:   python3 blacksea_sync.py
-Hermes-крон:      каждые 2 ч (cronjob_manage), вывод в лог, алерт только при ошибке
+Manual run:   python3 blacksea_sync.py
+Hermes cron:  every 2 hours (cronjob_manage), output to a log, alert only on error
 """
 import json
 import os
@@ -33,23 +33,48 @@ LOCAL_HTML = os.path.join(os.path.dirname(os.path.abspath(__file__)), "profile.h
 AVATAR = "https://res-4.cloudinary.com/dubkmnuvi/image/upload/6eyaylwq4lztoyesau8bi8gvcdd1.png"
 UA = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"}
 CURRENCIES = {"uah": "₴", "usd": "$", "eur": "€"}
-# Домены соцсетей: ссылки на них НЕ считаются «сайтом» для логотипа
+# Product names that come from the external BlackSea store are mapped to English.
+NAME_MAP = {
+    "Півмісяць": "Crescent",
+    "Арка": "Arch",
+    "Нічник": "Nightlight",
+    "Місяць": "Moon",
+    "Зоряна ніч": "Starry Night",
+    "Сова": "Owl",
+    "Кіт на підвіконні": "Cat on the Windowsill",
+    "Свічка": "Candle",
+    "Вікно": "Window",
+    "Чайник": "Teapot",
+    "Хвилі": "Waves",
+    "Гори": "Mountains",
+    "Дерево": "Tree",
+    "Птах": "Bird",
+    "Ключ від дому": "House Key",
+    "Книга": "Book",
+    "Прінти": "Prints",
+}
+# Social domains: links to them are NOT treated as the "site" for the logo
 SOCIAL_DOMAINS = ("instagram.com", "facebook.com", "fb.com", "twitter.com", "x.com",
                   "tiktok.com", "youtube.com", "t.me", "telegram.me", "linkedin.com",
                   "pinterest.com", "vk.com")
-# Запасной сайт, если в кабинете не указан ни один не-социальный URL
+# Fallback site when no non-social URL is configured in the dashboard
 DEFAULT_SITE_URL = "https://eugene55555.github.io/the-quiet-room/"
+
+
+def english_name(name: str) -> str:
+    """Return the English display name for known store products."""
+    return NAME_MAP.get((name or "").strip(), (name or "").strip())
 
 
 # ---------------------------------------------------------------- scrape
 def _brace_json(s: str, start: int):
-    """s[start] должен быть '{'. Возвращает (объект|None, индекс после '}')."""
+    """s[start] must be '{'. Returns (object|None, index after '}')."""
     obj, end = _brace_value(s, start)
     return obj, end
 
 
 def _brace_json_array(s: str, start: int):
-    """s[start] должен быть '['. Возвращает (массив|None, индекс после ']')."""
+    """s[start] must be '['. Returns (array|None, index after ']')."""
     depth, i, in_str, esc = 0, start, False, False
     while i < len(s):
         c = s[i]
@@ -76,7 +101,7 @@ def _brace_json_array(s: str, start: int):
 
 
 def _brace_value(s: str, start: int):
-    """Универсально: '{' → объект, '[' → массив. Возвращает (значение|None, индекс после)."""
+    """Generic: '{' → object, '[' → array. Returns (value|None, index after)."""
     depth, i, in_str, esc = 0, start, False, False
     open_c, close_c = s[start], None
     if open_c == "{":
@@ -110,8 +135,8 @@ def _brace_value(s: str, start: int):
 
 
 def scrape_products():
-    """Публичная страница профиля → товары (имя, url, цена, обложка). JSON-парсинг,
-    никаких unicode_escape — кириллица не ломается."""
+    """Public profile page → products (name, url, price, cover). JSON parsing,
+    no unicode_escape — non-Latin names stay intact."""
     r = requests.get(f"https://{SUBDOMAIN}/", headers=UA, timeout=30)
     r.raise_for_status()
     html = r.text
@@ -136,7 +161,7 @@ def scrape_products():
                 price = f"{cents / 100:,.2f} {cur}"
             products.append({
                 "permalink": permalink,
-                "name": p.get("name") or "",
+                "name": english_name(p.get("name") or ""),
                 "url": f"https://{SUBDOMAIN}/l/{permalink}",
                 "thumbnail": p.get("thumbnail_url") or "",
                 "price": price,
@@ -145,8 +170,8 @@ def scrape_products():
 
 
 def scrape_site_url():
-    """Сайт для логотипа: creator_profile.social_links — первый URL, который НЕ соцсеть.
-    Меняется в кабинете BlackSea (профиль → соцссылки) — синк подхватит автоматически."""
+    """Logo site: creator_profile.social_links — the first URL that is NOT a social network.
+    Change it in the BlackSea dashboard (profile → social links) and the sync picks it up."""
     r = requests.get(f"https://{SUBDOMAIN}/", headers=UA, timeout=30)
     r.raise_for_status()
     m = re.search(r'"social_links"\s*:\s*\[', r.text)
@@ -172,14 +197,14 @@ def _token_ok(token: str) -> bool:
 
 
 def get_token():
-    """Цепочка: user-токен из файла → client_credentials. Возвращает (токен|None, источник)."""
+    """Chain: user token from file → client_credentials. Returns (token|None, source)."""
     try:
         with open(TOKEN_FILE, encoding="utf-8") as f:
             tok = f.read().strip()
         if tok and _token_ok(tok):
-            return tok, "user-token (файл)"
+            return tok, "user-token (file)"
         if tok:
-            print("  user-токен из файла недействителен (истёк?)")
+            print("  user token from file is invalid (expired?)")
     except FileNotFoundError:
         pass
 
@@ -195,8 +220,8 @@ def get_token():
             if cc and _token_ok(cc):
                 return cc, "client_credentials"
     except Exception as e:
-        print("  oauth/token ошибка:", e)
-    return None, "нет валидного токена"
+        print("  oauth/token error:", e)
+    return None, "no valid token"
 
 
 # ---------------------------------------------------------------- html
@@ -207,8 +232,20 @@ def build_html(products, site_url):
         ensure_ascii=False).replace("</", "<\\/")
 
     return '''<!DOCTYPE html>
-<html lang="uk">
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>njp — The Quiet Room</title>
+  <meta name="description" content="Digital products from njp, delivered instantly after purchase.">
+  <meta property="og:type" content="profile">
+  <meta property="og:site_name" content="The Quiet Room">
+  <meta property="og:title" content="njp — The Quiet Room">
+  <meta property="og:description" content="Digital products from njp, delivered instantly after purchase.">
+  <meta property="og:url" content="''' + DEFAULT_SITE_URL + '''profile.html">
+  <meta property="og:image" content="''' + DEFAULT_SITE_URL + '''assets/img/logo-qr.png">
+  <meta property="og:locale" content="en_US">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%238E2137'/%3E%3Cpath d='M30 62 a18 18 0 0 1 0-24' stroke='%23F6EFE0' stroke-width='6' fill='none' stroke-linecap='round'/%3E%3Cpath d='M55 38 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3 z' fill='%23C9A24A'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Arvo:ital,wght@0,400;0,700;1,400&family=Manrope:wght@400;500;600;700&display=swap">
   <style>
     :root { --wine:#8E2137; --wine-deep:#400D18; --cream:#F6EFE0; --ink:#1A1A1A; --ink-soft:#4A4A4A; --bg:#FFFFFF; --bg-alt:#FAF8F5; --border:#E8E0D8; --shadow:rgba(142,33,55,.12); --shadow-strong:rgba(40,5,12,.28); --radius:12px; --tr:.25s ease; --f-head:'Arvo',Georgia,serif; --f-body:'Manrope',-apple-system,BlinkMacSystemFont,sans-serif; }
@@ -247,22 +284,22 @@ def build_html(products, site_url):
 <body>
   <div style="min-height:100vh; display:flex; flex-direction:column;">
     <header class="hero" role="banner">
-      <a href="''' + site_url + '''" target="_blank" rel="noopener noreferrer" aria-label="Сайт The Quiet Room" style="display:inline-block; border-radius:50%;">
-        <img class="avatar" src="''' + AVATAR + '''" alt="" loading="lazy">
+      <a href="''' + site_url + '''" target="_blank" rel="noopener noreferrer" aria-label="The Quiet Room site" style="display:inline-block; border-radius:50%;">
+        <img class="avatar" src="''' + AVATAR + '''" alt="njp profile avatar" loading="lazy">
       </a>
       <h1 class="name" data-blacksea-field="name">njp</h1>
-      <p class="bio" data-blacksea-field="bio">Цифрові товари — миттєва доставка після оплати.</p>
+      <p class="bio" data-blacksea-field="bio">Digital products — instant delivery after purchase.</p>
       <div class="divider" aria-hidden="true"></div>
     </header>
     <main role="main">
       <section class="section" aria-labelledby="cat-title">
-        <h2 class="section-title" id="cat-title">Мої товари</h2>
+        <h2 class="section-title" id="cat-title">My products</h2>
         <div class="grid" id="grid" role="list"></div>
-        <p class="empty" id="empty" hidden>Поки що товарів немає — поверніться скоро!</p>
+        <p class="empty" id="empty" hidden>No products yet — check back soon!</p>
       </section>
     </main>
     <footer class="footer" role="contentinfo">
-      <p>© ''' + str(datetime.now().year) + ''' <span data-blacksea-field="name">njp</span> · <a href="https://blacksea.in.ua" target="_blank" rel="noopener noreferrer">Створено на BlackSea</a></p>
+      <p>© <span id="year">''' + str(datetime.now().year) + '''</span> <span data-blacksea-field="name">njp</span> · <a href="https://blacksea.in.ua" target="_blank" rel="noopener noreferrer">Made on BlackSea</a></p>
     </footer>
   </div>
 
@@ -270,6 +307,8 @@ def build_html(products, site_url):
   <script id="catalog-data" type="application/json">''' + catalog + '''</script>
   <script>
   (function(){
+    var year = document.getElementById('year');
+    if (year) year.textContent = new Date().getFullYear();
     try {
       var list = JSON.parse(document.getElementById('catalog-data').textContent);
       var grid = document.getElementById('grid');
@@ -278,10 +317,12 @@ def build_html(products, site_url):
       empty.hidden = true;
       for (var i = 0; i < list.length; i++) {
         var p = list[i];
-        var a = document.createElement('a');
-        a.href = p.url || '#';
-        a.target = '_blank';
-        a.rel = 'noopener noreferrer';
+        var a = document.createElement(p.url ? 'a' : 'div');
+        if (p.url) {
+          a.href = p.url;
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+        }
         a.className = 'card';
         a.setAttribute('role','listitem');
         var media = document.createElement('div');
@@ -289,7 +330,7 @@ def build_html(products, site_url):
           media.className = 'card-media';
           var img = document.createElement('img');
           img.src = p.thumb;
-          img.alt = '';
+          img.alt = p.name || 'Product preview';
           img.loading = 'lazy';
           media.appendChild(img);
         } else {
@@ -308,14 +349,14 @@ def build_html(products, site_url):
         body.appendChild(price);
         var arrow = document.createElement('span');
         arrow.className = 'card-arrow';
-        arrow.textContent = 'Переглянути';
+        arrow.textContent = p.url ? 'View product' : 'Details coming soon';
         body.appendChild(arrow);
         a.appendChild(body);
         grid.appendChild(a);
       }
     } catch (e) {
       var em = document.getElementById('empty');
-      if (em) { em.hidden = false; em.textContent = 'Товари завантажаться за мить — оновіть сторінку.'; }
+      if (em) { em.hidden = false; em.textContent = 'Products will load in a moment — please refresh the page.'; }
     }
   })();
   </script>
@@ -325,23 +366,23 @@ def build_html(products, site_url):
 
 # ---------------------------------------------------------------- publish
 def _norm(h: str) -> str:
-    """Нормализация для сравнения: BlackSea хранит HTML по-своему
-    (вырезает <!DOCTYPE>/<html>/<head>/<body>, экранирует & в атрибутах,
-    триммет пустые строки) — сравниваем «сущность», а не байты."""
+    """Normalize for comparison: BlackSea stores HTML in its own way
+    (strips <!DOCTYPE>/<html>/<head>/<body>, escapes & in attributes,
+    trims blank lines) — so we compare the "entity", not the bytes."""
     h = re.sub(r"(?is)<!DOCTYPE[^>]*>", "", h)
     h = re.sub(r"(?is)</?(html|head|body)\b[^>]*>", "", h)
-    h = h.replace(chr(38) + "amp;", chr(38))  # BlackSea экранирует & в атрибутах — раскрываем обратно
+    h = h.replace(chr(38) + "amp;", chr(38))  # BlackSea escapes & in attributes — undo that
     return "\n".join(line.strip() for line in h.splitlines() if line.strip())
 
 
 def publish(token, html):
     headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
 
-    # Идемпотентность: не публиковать, если нормализованный HTML совпадает
+    # Idempotency: skip publishing when the normalized HTML already matches
     try:
         cur = requests.get(f"{BASE}/v2/user/custom_html", headers=headers, timeout=20)
         if cur.ok and _norm(cur.json().get("custom_html", "")) == _norm(html):
-            print("  без изменений — публикация пропущена")
+            print("  no changes — publish skipped")
             return 0
     except Exception:
         pass
@@ -352,10 +393,10 @@ def publish(token, html):
         rep = r.json().get("sanitization_report", {})
         removed = rep.get("total_removed", "?")
     except Exception:
-        removed = f"(не-JSON ответ: {r.status_code})"
-    print(f"  превью: {r.status_code}, удалено санитайзером: {removed}")
+        removed = f"(non-JSON response: {r.status_code})"
+    print(f"  preview: {r.status_code}, removed by sanitizer: {removed}")
     if r.status_code != 200:
-        print("  ✗ превью не принято:", r.text[:200])
+        print("  ✗ preview rejected:", r.text[:200])
         return 1
 
     r2 = requests.put(f"{BASE}/v2/user/custom_html", headers=headers,
@@ -364,7 +405,7 @@ def publish(token, html):
         ok = r2.json().get("success")
     except Exception:
         ok = False
-    print(f"  публикация: {r2.status_code}, success: {ok}")
+    print(f"  publish: {r2.status_code}, success: {ok}")
     return 0 if ok else 1
 
 
@@ -372,9 +413,9 @@ def main():
     print(f"[{datetime.now():%Y-%m-%d %H:%M:%S}] Sync start")
 
     products = scrape_products()
-    print(f"  товаров найдено: {len(products)}")
+    print(f"  products found: {len(products)}")
     for p in products:
-        print(f"   - {p['name']} | {p['price']} | {p['permalink']} | img: {'да' if p['thumbnail'] else 'нет'}")
+        print(f"   - {p['name']} | {p['price']} | {p['permalink']} | img: {'yes' if p['thumbnail'] else 'no'}")
 
     html = build_html(products, scrape_site_url())
     with open(LOCAL_HTML, "w", encoding="utf-8") as f:
@@ -382,10 +423,10 @@ def main():
 
     token, src = get_token()
     if not token:
-        print(f"  ✗ {src}: пользовательский токен нужен для публикации.")
-        print(f"    Сгенерируй новый в кабинете BlackSea и положи в {TOKEN_FILE}")
+        print(f"  ✗ {src}: a user token is required for publishing.")
+        print(f"    Generate a new one in the BlackSea dashboard and save it to {TOKEN_FILE}")
         return 1
-    print(f"  токен: {src}")
+    print(f"  token: {src}")
 
     return publish(token, html)
 

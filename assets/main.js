@@ -111,11 +111,18 @@
   var pendingProductCardScroll = window.location.hash.indexOf('#product-card-') === 0;
 
   function currentURLWithoutHash() {
-    return window.location.href.split('#')[0];
+    var url = new URL(window.location.href);
+    var productId = /\/product\.html$/.test(url.pathname) ? url.searchParams.get('id') : null;
+    url.search = '';
+    url.hash = '';
+    if (productId) url.searchParams.set('id', productId);
+    return url.href;
   }
 
   function cardReferrer(id) {
-    return currentURLWithoutHash() + '#product-card-' + encodeURIComponent(id);
+    var url = new URL(currentURLWithoutHash());
+    url.hash = 'product-card-' + encodeURIComponent(id);
+    return url.href;
   }
 
   function buyURL(p, referrer) {
@@ -380,18 +387,34 @@
       + '</div></article>';
   }
 
+  function productCardIdFromHash() {
+    var hash = window.location.hash;
+    if (hash.indexOf('#product-card-') !== 0) return '';
+    var id = hash.slice('#product-card-'.length);
+    try { id = decodeURIComponent(id); } catch (err) {}
+    return id;
+  }
+
   function scrollToProductCard() {
     if (!pendingProductCardScroll) return;
     pendingProductCardScroll = false;
-    var hash = window.location.hash;
-    var id = hash.slice('#product-card-'.length);
-    try { id = decodeURIComponent(id); } catch (err) {}
+    var id = productCardIdFromHash();
+    if (!id) return;
     window.requestAnimationFrame(function () {
       var el = document.getElementById('product-card-' + id);
       if (el && el.scrollIntoView) {
         el.scrollIntoView({ block: 'center', behavior: 'auto' });
       }
     });
+  }
+
+  function selectCatalogPageForHash() {
+    if (!grid) return;
+    var id = productCardIdFromHash();
+    if (!id) return;
+    var list = applyFilters();
+    var index = list.findIndex(function (p) { return p.id === id; });
+    if (index >= 0) state.page = Math.floor(index / PER_PAGE) + 1;
   }
 
   /* ---------- Grid and pagination ---------- */
@@ -582,6 +605,7 @@
         if (st) st.setAttribute('aria-expanded', 'true');
       }
     }
+    selectCatalogPageForHash();
     renderGrid();
     syncSelects();
     updateResetVisibility();

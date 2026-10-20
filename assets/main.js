@@ -18,6 +18,15 @@
     return (p.images && p.images.length) ? p.images : [p.img];
   }
 
+  var CHECKOUT_URL = 'https://5307397047125.blacksea.in.ua/checkout';
+  var PRODUCT_PAGE_URL = 'https://eugene55555.github.io/the-quiet-room/product.html';
+
+  function buyURL(p) {
+    var referrer = PRODUCT_PAGE_URL + '?id=' + encodeURIComponent(p.id);
+    return CHECKOUT_URL + '?product=' + encodeURIComponent(p.slug)
+      + '&quantity=1&referrer=' + encodeURIComponent(referrer);
+  }
+
   var header = document.getElementById('site-header');
   var grid = document.getElementById('catalog');
   var pag = document.getElementById('pagination');
@@ -257,7 +266,7 @@
       + '<div class="card-price-row">'
       + '<span class="price-sale">' + money(p.price) + '</span>'
       + '</div>'
-      + '<a class="card-btn" href="' + esc(p.buy) + '">Buy now</a>'
+      + '<a class="card-btn" href="' + esc(buyURL(p)) + '">Buy now</a>'
       + '</div></article>';
   }
 
@@ -396,7 +405,7 @@
       + '<li><i class="fa-solid fa-circle-check"></i>For personal use and small businesses</li>'
       + '<li><i class="fa-solid fa-circle-check"></i>Digital download — no physical item is shipped</li>'
       + '</ul>'
-      + '<a class="product-buy" href="' + esc(p.buy) + '">Buy now — ' + money(p.price) + '</a>'
+      + '<a class="product-buy" href="' + esc(buyURL(p)) + '">Buy now — ' + money(p.price) + '</a>'
       + '<p class="product-safe"><i class="fa-solid fa-lock"></i> Secure card payment · 3-D Secure</p>'
       + '<p class="product-checkout-note">Checkout is hosted by BlackSea. Each print has its own checkout link.</p>'
       + '</div></div>'

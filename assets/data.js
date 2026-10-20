@@ -10,7 +10,7 @@ window.TQR_PRODUCTS = [
       'assets/img/baby-tiger-4.jpg'
     ],
     formats: 'PNG + PDF', price: 2.60,
-    buy: 'https://5307397047125.blacksea.in.ua/checkout?product=lek&quantity=1&referrer=https%3A%2F%2Feugene55555.github.io%2Fthe-quiet-room%2F',
+    slug: 'lek',
     order: 1
   },
   {
@@ -22,7 +22,7 @@ window.TQR_PRODUCTS = [
       'assets/img/golden-butterfly-cat-3.jpg'
     ],
     formats: 'PNG + PDF', price: 1.30,
-    buy: 'https://5307397047125.blacksea.in.ua/checkout?product=ksi&quantity=1&referrer=https%3A%2F%2Feugene55555.github.io%2Fthe-quiet-room%2F',
+    slug: 'ksi',
     order: 2
   },
   {
@@ -34,7 +34,7 @@ window.TQR_PRODUCTS = [
       'assets/img/enchanted-rainbow-cat-3.jpg'
     ],
     formats: 'PNG + PDF', price: 1.95,
-    buy: 'https://5307397047125.blacksea.in.ua/checkout?product=oko&quantity=1&referrer=https%3A%2F%2Feugene55555.github.io%2Fthe-quiet-room%2F',
+    slug: 'oko',
     order: 3
   },
   {
@@ -46,7 +46,7 @@ window.TQR_PRODUCTS = [
       'assets/img/cat-tree-dreams-3.jpg'
     ],
     formats: 'PNG + PDF', price: 2.60,
-    buy: 'https://5307397047125.blacksea.in.ua/checkout?product=xmv&quantity=1&referrer=https%3A%2F%2Feugene55555.github.io%2Fthe-quiet-room%2F',
+    slug: 'xmv',
     order: 4
   }
 ];

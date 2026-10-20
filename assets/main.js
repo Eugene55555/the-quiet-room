@@ -18,6 +18,95 @@
     return (p.images && p.images.length) ? p.images : [p.img];
   }
 
+  /* ---------- Swipe galleries ---------- */
+  var SWIPE_MIN = 32;
+  var SWIPE_RATIO = 1.2;
+
+  function wrapIndex(index, length) {
+    if (!length) return 0;
+    return ((index % length) + length) % length;
+  }
+
+  function swipeDirection(dx, dy) {
+    if (Math.abs(dx) < SWIPE_MIN) return 0;
+    if (Math.abs(dx) <= Math.abs(dy) * SWIPE_RATIO) return 0;
+    return dx < 0 ? 1 : -1;
+  }
+
+  function bindSwipe(el, onSwipe) {
+    if (!el) return;
+    var start = null;
+    var suppressClickUntil = 0;
+
+    el.addEventListener('pointerdown', function (e) {
+      if (e.isPrimary === false || (e.pointerType === 'mouse' && e.button !== 0)) return;
+      suppressClickUntil = 0;
+      start = { id: e.pointerId, x: e.clientX, y: e.clientY, horizontal: false };
+      if (el.setPointerCapture) {
+        try { el.setPointerCapture(e.pointerId); } catch (err) {}
+      }
+    }, { passive: true });
+
+    el.addEventListener('pointermove', function (e) {
+      if (!start || e.pointerId !== start.id) return;
+      var dx = e.clientX - start.x;
+      var dy = e.clientY - start.y;
+      if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+      if (Math.abs(dx) > Math.abs(dy) * SWIPE_RATIO) {
+        start.horizontal = true;
+      } else if (Math.abs(dy) > Math.abs(dx) * SWIPE_RATIO) {
+        start = null;
+      }
+    }, { passive: true });
+
+    el.addEventListener('pointerup', function (e) {
+      if (!start || e.pointerId !== start.id) return;
+      var dx = e.clientX - start.x;
+      var dy = e.clientY - start.y;
+      var horizontal = start.horizontal;
+      start = null;
+      var dir = horizontal ? swipeDirection(dx, dy) : 0;
+      if (!dir) return;
+      suppressClickUntil = Date.now() + 400;
+      onSwipe(dir);
+    });
+
+    el.addEventListener('pointercancel', function () { start = null; });
+
+    el.addEventListener('click', function (e) {
+      if (Date.now() < suppressClickUntil) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    }, true);
+  }
+
+  function setCardIndex(media, index) {
+    var slides = media.querySelectorAll('.card-slide');
+    var dots = media.querySelectorAll('.card-dot');
+    if (!slides.length) return;
+    index = wrapIndex(index, slides.length);
+    media.setAttribute('data-gallery-index', String(index));
+    slides.forEach(function (slide, i) {
+      slide.classList.toggle('is-active', i === index);
+    });
+    dots.forEach(function (dot, i) {
+      dot.classList.toggle('is-active', i === index);
+    });
+  }
+
+  function bindCardGalleries(root) {
+    if (!root) return;
+    root.querySelectorAll('.card-media').forEach(function (media) {
+      var count = parseInt(media.getAttribute('data-gallery-count'), 10) || 1;
+      if (count < 2) return;
+      bindSwipe(media, function (dir) {
+        var current = parseInt(media.getAttribute('data-gallery-index'), 10) || 0;
+        setCardIndex(media, current + dir);
+      });
+    });
+  }
+
   var CHECKOUT_URL = 'https://5307397047125.blacksea.in.ua/checkout';
   var PRODUCT_PAGE_URL = 'https://eugene55555.github.io/the-quiet-room/product.html';
 
@@ -256,10 +345,24 @@
 
   /* ---------- Product card ---------- */
   function cardHTML(p) {
+    var images = productImages(p);
+    var slides = images.map(function (src, i) {
+      return '<img class="card-slide' + (i === 0 ? ' is-active' : '') + '"'
+        + ' loading="lazy" draggable="false" src="' + esc(src) + '"'
+        + ' alt="' + esc(p.name) + ' — image ' + (i + 1) + ' of ' + images.length + '"'
+        + ' width="500" height="625">';
+    }).join('');
+    var dots = images.length > 1
+      ? '<span class="card-dots" aria-hidden="true">' + images.map(function (src, i) {
+          return '<span class="card-dot' + (i === 0 ? ' is-active' : '') + '"></span>';
+        }).join('') + '</span>'
+      : '';
     return '<article class="card">'
-      + '<a class="card-media" href="product.html?id=' + esc(p.id) + '">'
+      + '<a class="card-media" href="product.html?id=' + esc(p.id) + '"'
+      + ' data-gallery-index="0" data-gallery-count="' + images.length + '">'
       + '<span class="card-badge">' + esc(p.cat) + '</span>'
-      + '<img loading="lazy" src="' + esc(p.img) + '" alt="' + esc(p.name) + ' — The Quiet Room print" width="500" height="625">'
+      + '<span class="card-slides">' + slides + '</span>'
+      + dots
       + '</a>'
       + '<div class="card-body">'
       + '<a class="card-title" href="product.html?id=' + esc(p.id) + '">' + esc(p.name) + '</a>'
@@ -287,6 +390,8 @@
     grid.innerHTML = pageItems.length
       ? pageItems.map(cardHTML).join('')
       : '<p class="empty-state">No prints match your search. Try a different search or reset the filters.</p>';
+
+    bindCardGalleries(grid);
 
     if (pag) {
       var p = '';
@@ -385,7 +490,7 @@
     page.innerHTML =
       '<div class="product-layout">'
       + '<div class="product-gallery">'
-      + '<div class="product-media"><img id="product-main-image" src="' + esc(images[0]) + '" alt="' + esc(p.name) + ' — The Quiet Room print"></div>'
+      + '<div class="product-media" data-gallery-index="0"><img id="product-main-image" draggable="false" src="' + esc(images[0]) + '" alt="' + esc(p.name) + ' — The Quiet Room print"></div>'
       + '<div class="product-thumbs" role="group" aria-label="Product images">' + thumbs + '</div>'
       + '</div>'
       + '<div class="product-info">'
@@ -414,18 +519,31 @@
       + '</div></section>';
 
     var mainImage = document.getElementById('product-main-image');
+    var media = page.querySelector('.product-media');
     var thumbButtons = page.querySelectorAll('.product-thumb');
+    var current = 0;
+
+    function showImage(index) {
+      index = wrapIndex(index, images.length);
+      current = index;
+      if (mainImage && images[index]) mainImage.src = images[index];
+      if (media) media.setAttribute('data-gallery-index', String(index));
+      thumbButtons.forEach(function (b) {
+        var active = parseInt(b.getAttribute('data-index'), 10) === index;
+        b.classList.toggle('is-active', active);
+        b.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+    }
+
     thumbButtons.forEach(function (btn) {
       btn.addEventListener('click', function () {
-        var index = parseInt(btn.getAttribute('data-index'), 10);
-        if (mainImage && images[index]) mainImage.src = images[index];
-        thumbButtons.forEach(function (b) {
-          var active = b === btn;
-          b.classList.toggle('is-active', active);
-          b.setAttribute('aria-pressed', active ? 'true' : 'false');
-        });
+        showImage(parseInt(btn.getAttribute('data-index'), 10));
       });
     });
+    if (media && images.length > 1) {
+      bindSwipe(media, function (dir) { showImage(current + dir); });
+    }
+    bindCardGalleries(page);
   }
 
   /* ---------- Start ---------- */

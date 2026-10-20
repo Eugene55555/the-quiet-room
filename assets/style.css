@@ -18,8 +18,11 @@ body {
   font-size: 16px;
   line-height: 1.6;
   color: var(--ink);
-  background: linear-gradient(180deg, #7E1B30 0%, #8E2137 26%, #7A1A2E 100%);
-  background-attachment: fixed;
+  background-color: #7A1A2E;
+  background-image: linear-gradient(180deg, #7E1B30 0%, #8E2137 26%, #7A1A2E 100%);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  min-height: 100vh;
   -webkit-font-smoothing: antialiased;
 }
 img { max-width: 100%; display: block; }
@@ -281,11 +284,34 @@ select, input, button { font-family: var(--font); }
   border-radius: 8px;
   overflow: hidden;
   aspect-ratio: 4 / 5;
+  touch-action: pan-y;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
 }
 .card-media img {
   width: 100%; height: 100%; object-fit: cover;
   transition: transform .5s ease;
 }
+.card-media .card-slide {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: cover;
+  opacity: 0; visibility: hidden;
+  transition: opacity .28s ease, visibility .28s, transform .5s ease;
+}
+.card-media .card-slide.is-active { opacity: 1; visibility: visible; }
+.card-dots {
+  position: absolute; left: 0; right: 0; bottom: 8px; z-index: 2;
+  display: flex; justify-content: center; gap: 5px;
+  pointer-events: none;
+}
+.card-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: rgba(255, 255, 255, .55);
+  box-shadow: 0 0 2px rgba(0, 0, 0, .35);
+  transition: background .2s, transform .2s;
+}
+.card-dot.is-active { background: #FDEFDC; transform: scale(1.15); }
 .card:hover .card-media img { transform: scale(1.05); }
 .card-badge {
   position: absolute; top: 12px; left: 12px; z-index: 2;
@@ -403,7 +429,14 @@ select, input, button { font-family: var(--font); }
 /* ============ Product page ============ */
 .product-page { padding-top: 36px; padding-bottom: 50px; }
 .product-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 44px; align-items: start; }
-.product-media { position: relative; background: #F7F6F3; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(40, 5, 12, .3); }
+.product-media {
+  position: relative; background: #F7F6F3; border-radius: 12px; overflow: hidden;
+  box-shadow: 0 10px 30px rgba(40, 5, 12, .3);
+  touch-action: pan-y;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
 .product-media img { width: 100%; }
 .product-gallery { display: flex; flex-direction: column; gap: 10px; }
 .product-thumbs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }

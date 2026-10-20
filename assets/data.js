@@ -1,8 +1,53 @@
 /* The Quiet Room catalog — 4 prints */
 window.TQR_PRODUCTS = [
-  { id: 'baby-tiger',             name: 'Baby Tiger in a Tropical Paradise', cat: 'Tropical',  img: 'assets/img/baby-tiger.png',             formats: 'PNG + PDF', price: 2.60, buy: 'https://5307397047125.blacksea.in.ua/l/lek', order: 1 },
-  { id: 'golden-butterfly-cat',   name: 'Golden Butterfly Cat',              cat: 'Butterfly', img: 'assets/img/golden-butterfly-cat.png',   formats: 'PNG + PDF', price: 1.30, buy: 'https://5307397047125.blacksea.in.ua/l/ksi', order: 2 },
-  { id: 'enchanted-rainbow-cat',  name: 'Enchanted Rainbow Cat',             cat: 'Rainbow',   img: 'assets/img/enchanted-rainbow-cat.png',  formats: 'PNG + PDF', price: 1.95, buy: 'https://5307397047125.blacksea.in.ua/l/oko', order: 3 },
-  { id: 'cat-tree-dreams',        name: 'Cat on the Tree of Dreams',         cat: 'Dreams',    img: 'assets/img/cat-tree-dreams.jpg',        formats: 'PNG + PDF', price: 2.60, buy: 'https://5307397047125.blacksea.in.ua/l/xmv', order: 4 }
+  {
+    id: 'baby-tiger', name: 'Baby Tiger in a Tropical Paradise', cat: 'Tropical',
+    img: 'assets/img/baby-tiger.png',
+    images: [
+      'assets/img/baby-tiger.png',
+      'assets/img/baby-tiger-2.jpg',
+      'assets/img/baby-tiger-3.jpg',
+      'assets/img/baby-tiger-4.jpg'
+    ],
+    formats: 'PNG + PDF', price: 2.60,
+    buy: 'https://5307397047125.blacksea.in.ua/checkout?product=lek&quantity=1&referrer=https%3A%2F%2Feugene55555.github.io%2Fthe-quiet-room%2F',
+    order: 1
+  },
+  {
+    id: 'golden-butterfly-cat', name: 'Golden Butterfly Cat', cat: 'Butterfly',
+    img: 'assets/img/golden-butterfly-cat.png',
+    images: [
+      'assets/img/golden-butterfly-cat.png',
+      'assets/img/golden-butterfly-cat-2.jpg',
+      'assets/img/golden-butterfly-cat-3.jpg'
+    ],
+    formats: 'PNG + PDF', price: 1.30,
+    buy: 'https://5307397047125.blacksea.in.ua/checkout?product=ksi&quantity=1&referrer=https%3A%2F%2Feugene55555.github.io%2Fthe-quiet-room%2F',
+    order: 2
+  },
+  {
+    id: 'enchanted-rainbow-cat', name: 'Enchanted Rainbow Cat', cat: 'Rainbow',
+    img: 'assets/img/enchanted-rainbow-cat.png',
+    images: [
+      'assets/img/enchanted-rainbow-cat.png',
+      'assets/img/enchanted-rainbow-cat-2.jpg',
+      'assets/img/enchanted-rainbow-cat-3.jpg'
+    ],
+    formats: 'PNG + PDF', price: 1.95,
+    buy: 'https://5307397047125.blacksea.in.ua/checkout?product=oko&quantity=1&referrer=https%3A%2F%2Feugene55555.github.io%2Fthe-quiet-room%2F',
+    order: 3
+  },
+  {
+    id: 'cat-tree-dreams', name: 'Cat on the Tree of Dreams', cat: 'Dreams',
+    img: 'assets/img/cat-tree-dreams.jpg',
+    images: [
+      'assets/img/cat-tree-dreams.jpg',
+      'assets/img/cat-tree-dreams-2.jpg',
+      'assets/img/cat-tree-dreams-3.jpg'
+    ],
+    formats: 'PNG + PDF', price: 2.60,
+    buy: 'https://5307397047125.blacksea.in.ua/checkout?product=xmv&quantity=1&referrer=https%3A%2F%2Feugene55555.github.io%2Fthe-quiet-room%2F',
+    order: 4
+  }
 ];
 window.TQR_SITE = 'https://eugene55555.github.io/the-quiet-room/';

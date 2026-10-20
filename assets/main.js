@@ -14,6 +14,10 @@
     return '$' + Number(n).toFixed(2);
   }
 
+  function productImages(p) {
+    return (p.images && p.images.length) ? p.images : [p.img];
+  }
+
   var header = document.getElementById('site-header');
   var grid = document.getElementById('catalog');
   var pag = document.getElementById('pagination');
@@ -253,7 +257,7 @@
       + '<div class="card-price-row">'
       + '<span class="price-sale">' + money(p.price) + '</span>'
       + '</div>'
-      + '<a class="card-btn" href="' + esc(p.buy) + '" target="_blank" rel="noopener noreferrer">Buy now</a>'
+      + '<a class="card-btn" href="' + esc(p.buy) + '">Buy now</a>'
       + '</div></article>';
   }
 
@@ -351,19 +355,30 @@
 
     var title = p.name + ' — The Quiet Room';
     var description = 'Digital print file “' + p.name + '” in PNG and PDF. Delivered instantly by email after purchase.';
+    var images = productImages(p);
     document.title = title;
     setMeta('meta[name="description"]', description);
     setMeta('meta[property="og:title"]', title);
     setMeta('meta[property="og:description"]', description);
     setMeta('meta[property="og:url"]', window.location.href);
-    setMeta('meta[property="og:image"]', new URL(p.img, window.location.href).href);
+    setMeta('meta[property="og:image"]', new URL(images[0], window.location.href).href);
     setMeta('meta[name="twitter:title"]', title);
     setMeta('meta[name="twitter:description"]', description);
 
     var related = PRODUCTS.filter(function (x) { return x.id !== p.id; }).slice(0, 4);
+    var thumbs = images.map(function (src, i) {
+      return '<button type="button" class="product-thumb' + (i === 0 ? ' is-active' : '') + '"'
+        + ' data-index="' + i + '" aria-pressed="' + (i === 0 ? 'true' : 'false') + '"'
+        + ' aria-label="Show image ' + (i + 1) + ' of ' + images.length + '">'
+        + '<img src="' + esc(src) + '" alt="' + esc(p.name) + ' — view ' + (i + 1) + '" width="160" height="160">'
+        + '</button>';
+    }).join('');
     page.innerHTML =
       '<div class="product-layout">'
-      + '<div class="product-media"><img src="' + esc(p.img) + '" alt="' + esc(p.name) + ' — The Quiet Room print"></div>'
+      + '<div class="product-gallery">'
+      + '<div class="product-media"><img id="product-main-image" src="' + esc(images[0]) + '" alt="' + esc(p.name) + ' — The Quiet Room print"></div>'
+      + '<div class="product-thumbs" role="group" aria-label="Product images">' + thumbs + '</div>'
+      + '</div>'
       + '<div class="product-info">'
       + '<p class="product-cat">' + esc(p.cat) + '</p>'
       + '<h1>' + esc(p.name) + '</h1>'
@@ -381,13 +396,27 @@
       + '<li><i class="fa-solid fa-circle-check"></i>For personal use and small businesses</li>'
       + '<li><i class="fa-solid fa-circle-check"></i>Digital download — no physical item is shipped</li>'
       + '</ul>'
-      + '<a class="product-buy" href="' + esc(p.buy) + '" target="_blank" rel="noopener noreferrer">Buy now — ' + money(p.price) + '</a>'
+      + '<a class="product-buy" href="' + esc(p.buy) + '">Buy now — ' + money(p.price) + '</a>'
       + '<p class="product-safe"><i class="fa-solid fa-lock"></i> Secure card payment · 3-D Secure</p>'
       + '<p class="product-checkout-note">Checkout is hosted by BlackSea. Each print has its own checkout link.</p>'
       + '</div></div>'
       + '<section class="product-related"><h2>You may also like</h2><div class="grid">'
       + related.map(cardHTML).join('')
       + '</div></section>';
+
+    var mainImage = document.getElementById('product-main-image');
+    var thumbButtons = page.querySelectorAll('.product-thumb');
+    thumbButtons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var index = parseInt(btn.getAttribute('data-index'), 10);
+        if (mainImage && images[index]) mainImage.src = images[index];
+        thumbButtons.forEach(function (b) {
+          var active = b === btn;
+          b.classList.toggle('is-active', active);
+          b.setAttribute('aria-pressed', active ? 'true' : 'false');
+        });
+      });
+    });
   }
 
   /* ---------- Start ---------- */

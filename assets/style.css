@@ -279,6 +279,7 @@ select, input, button { font-family: var(--font); }
   padding: 10px;
 }
 .card-media {
+  display: block;
   position: relative;
   background: #F7F6F3;
   border-radius: 8px;
@@ -292,6 +293,10 @@ select, input, button { font-family: var(--font); }
 .card-media img {
   width: 100%; height: 100%; object-fit: cover;
   transition: transform .5s ease;
+}
+.card-slides {
+  position: absolute; inset: 0;
+  display: block;
 }
 .card-media .card-slide {
   position: absolute; inset: 0;

@@ -10,6 +10,10 @@
     return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
   }
 
+  function money(n) {
+    return '$' + Number(n).toFixed(2);
+  }
+
   var header = document.getElementById('site-header');
   var grid = document.getElementById('catalog');
   var pag = document.getElementById('pagination');
@@ -224,8 +228,8 @@
       return (p.name + ' ' + p.cat).toLowerCase().indexOf(state.q) !== -1;
     });
     if (state.cat) list = list.filter(function (p) { return p.cat === state.cat; });
-    if (state.price === 'sale') list = list.filter(function (p) { return p.old > 0; });
-    if (state.price === '55') list = list.filter(function (p) { return p.price <= 60; });
+    if (state.price === 'under2') list = list.filter(function (p) { return p.price < 2; });
+    if (state.price === 'over2') list = list.filter(function (p) { return p.price >= 2; });
     switch (state.sort) {
       case 'az': list.sort(function (a, b) { return a.name.localeCompare(b.name, 'en'); }); break;
       case 'za': list.sort(function (a, b) { return b.name.localeCompare(a.name, 'en'); }); break;
@@ -237,30 +241,19 @@
     return list;
   }
 
-  /* ---------- Checkout link with referrer: Continue shopping returns to the source page ---------- */
-  function buyURL() {
-    var base = window.TQR_BUY || 'https://6820536600065.blacksea.in.ua/checkout?product=eaq&quantity=1';
-    try {
-      var back = window.location.href.split('#')[0];
-      return base + (base.indexOf('?') === -1 ? '?' : '&') + 'referrer=' + encodeURIComponent(back);
-    } catch (e) { return base; }
-  }
-
   /* ---------- Product card ---------- */
   function cardHTML(p) {
-    var fmts = p.formats.replace(/ \+ /g, ' ');
     return '<article class="card">'
       + '<a class="card-media" href="product.html?id=' + esc(p.id) + '">'
       + '<span class="card-badge">' + esc(p.cat) + '</span>'
       + '<img loading="lazy" src="' + esc(p.img) + '" alt="' + esc(p.name) + ' — The Quiet Room print" width="500" height="625">'
       + '</a>'
       + '<div class="card-body">'
-      + '<a class="card-title" href="product.html?id=' + esc(p.id) + '">' + esc(p.name) + ': ' + esc(fmts) + '</a>'
+      + '<a class="card-title" href="product.html?id=' + esc(p.id) + '">' + esc(p.name) + '</a>'
       + '<div class="card-price-row">'
-      + (p.old ? '<span class="price-old">' + esc(p.old) + ' ₴</span>' : '')
-      + '<span class="price-sale">' + esc(p.price) + ' ₴</span>'
+      + '<span class="price-sale">' + money(p.price) + '</span>'
       + '</div>'
-      + '<a class="card-btn" href="' + esc(buyURL()) + '">Buy on BlackSea</a>'
+      + '<a class="card-btn" href="' + esc(p.buy) + '" target="_blank" rel="noopener noreferrer">Buy now</a>'
       + '</div></article>';
   }
 
@@ -357,7 +350,7 @@
     }
 
     var title = p.name + ' — The Quiet Room';
-    var description = 'Digital print file “' + p.name + '” in PNG, SVG and PDF, 4500×5400 px at 300 dpi. Delivered instantly by email after purchase.';
+    var description = 'Digital print file “' + p.name + '” in PNG and PDF. Delivered instantly by email after purchase.';
     document.title = title;
     setMeta('meta[name="description"]', description);
     setMeta('meta[property="og:title"]', title);
@@ -370,15 +363,14 @@
     var related = PRODUCTS.filter(function (x) { return x.id !== p.id; }).slice(0, 4);
     page.innerHTML =
       '<div class="product-layout">'
-      + '<div class="product-media"><img src="' + esc(p.img) + '" alt="' + esc(p.name) + ' — The Quiet Room print" width="560" height="700"></div>'
+      + '<div class="product-media"><img src="' + esc(p.img) + '" alt="' + esc(p.name) + ' — The Quiet Room print"></div>'
       + '<div class="product-info">'
       + '<p class="product-cat">' + esc(p.cat) + '</p>'
       + '<h1>' + esc(p.name) + '</h1>'
       + '<div class="product-price">'
-      + '<span class="price-sale">' + esc(p.price) + ' ₴</span>'
-      + (p.old ? '<span class="price-old">' + esc(p.old) + ' ₴</span><span class="discount-badge">' + (Math.round((1 - p.price / p.old) * 100)) + '% off</span>' : '')
+      + '<span class="price-sale">' + money(p.price) + '</span>'
       + '</div>'
-      + '<p class="product-formats">Formats: ' + esc(p.formats) + ' · 4500×5400 px · 300 dpi · Transparent background</p>'
+      + '<p class="product-formats">Formats: ' + esc(p.formats) + '</p>'
       + '<div class="product-desc">'
       + '<p>A digital print file of “' + esc(p.name) + '” in The Quiet Room’s signature style. It works beautifully on T-shirts, hoodies, mugs, posters and other products.</p>'
       + '<p>Buy once and print as often as you like. After payment, the file is delivered instantly to your inbox and saved in your BlackSea library.</p>'
@@ -389,9 +381,9 @@
       + '<li><i class="fa-solid fa-circle-check"></i>For personal use and small businesses</li>'
       + '<li><i class="fa-solid fa-circle-check"></i>Digital download — no physical item is shipped</li>'
       + '</ul>'
-      + '<a class="product-buy" href="' + esc(buyURL()) + '">Buy on BlackSea — ' + esc(p.price) + ' ₴</a>'
+      + '<a class="product-buy" href="' + esc(p.buy) + '" target="_blank" rel="noopener noreferrer">Buy now — ' + money(p.price) + '</a>'
       + '<p class="product-safe"><i class="fa-solid fa-lock"></i> Secure card payment · 3-D Secure</p>'
-      + '<p class="product-checkout-note">Checkout is hosted by BlackSea. All designs currently share the same print-collection checkout; product-specific checkout links are not configured yet.</p>'
+      + '<p class="product-checkout-note">Checkout is hosted by BlackSea. Each print has its own checkout link.</p>'
       + '</div></div>'
       + '<section class="product-related"><h2>You may also like</h2><div class="grid">'
       + related.map(cardHTML).join('')

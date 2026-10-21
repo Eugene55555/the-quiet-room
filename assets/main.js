@@ -552,10 +552,19 @@
         + '<img src="' + esc(src) + '" alt="' + esc(p.name) + ' — view ' + (i + 1) + '" width="160" height="160">'
         + '</button>';
     }).join('');
+    var dots = images.length > 1
+      ? '<div class="product-dots" role="group" aria-label="Product image pagination">' + images.map(function (src, i) {
+          return '<button type="button" class="product-dot' + (i === 0 ? ' is-active' : '') + '"'
+            + ' data-index="' + i + '" aria-pressed="' + (i === 0 ? 'true' : 'false') + '"'
+            + ' aria-label="Show image ' + (i + 1) + ' of ' + images.length + '"></button>';
+        }).join('') + '</div>'
+      : '';
+    // Product fields are escaped and gallery indices are generated integers.
     page.innerHTML =
       '<div class="product-layout" id="product-card-' + esc(p.id) + '">'
       + '<div class="product-gallery">'
-      + '<div class="product-media" data-gallery-index="0"><img id="product-main-image" draggable="false" src="' + esc(images[0]) + '" alt="' + esc(p.name) + ' — The Quiet Room print"></div>'
+      + '<div class="product-media" data-gallery-index="0"><img id="product-main-image" draggable="false" src="' + esc(images[0]) + '" alt="' + esc(p.name) + ' — image 1 of ' + images.length + '"></div>'
+      + dots
       + '<div class="product-thumbs" role="group" aria-label="Product images">' + thumbs + '</div>'
       + '</div>'
       + '<div class="product-info">'
@@ -588,14 +597,23 @@
     var mainImage = document.getElementById('product-main-image');
     var media = page.querySelector('.product-media');
     var thumbButtons = page.querySelectorAll('.product-thumb');
+    var dotButtons = page.querySelectorAll('.product-dot');
     var current = 0;
 
     function showImage(index) {
       index = wrapIndex(index, images.length);
       current = index;
-      if (mainImage && images[index]) mainImage.src = images[index];
+      if (mainImage && images[index]) {
+        mainImage.src = images[index];
+        mainImage.alt = p.name + ' — image ' + (index + 1) + ' of ' + images.length;
+      }
       if (media) media.setAttribute('data-gallery-index', String(index));
       thumbButtons.forEach(function (b) {
+        var active = parseInt(b.getAttribute('data-index'), 10) === index;
+        b.classList.toggle('is-active', active);
+        b.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+      dotButtons.forEach(function (b) {
         var active = parseInt(b.getAttribute('data-index'), 10) === index;
         b.classList.toggle('is-active', active);
         b.setAttribute('aria-pressed', active ? 'true' : 'false');
@@ -603,6 +621,11 @@
     }
 
     thumbButtons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        showImage(parseInt(btn.getAttribute('data-index'), 10));
+      });
+    });
+    dotButtons.forEach(function (btn) {
       btn.addEventListener('click', function () {
         showImage(parseInt(btn.getAttribute('data-index'), 10));
       });

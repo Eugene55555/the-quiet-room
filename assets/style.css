@@ -312,17 +312,21 @@ select, input, button { font-family: var(--font); }
 }
 .card-media .card-slide.is-active { opacity: 1; visibility: visible; }
 .card-dots {
-  position: absolute; left: 0; right: 0; bottom: 8px; z-index: 2;
-  display: flex; justify-content: center; gap: 5px;
+  position: absolute; left: 50%; right: auto; bottom: 10px; z-index: 2;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 6px 9px; border-radius: 999px;
+  background: rgba(34, 11, 17, .72);
+  transform: translateX(-50%);
   pointer-events: none;
 }
 .card-dot {
-  width: 5px; height: 5px; border-radius: 50%;
-  background: rgba(255, 255, 255, .55);
+  flex: 0 0 7px; width: 7px; height: 7px; border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, .8);
+  background: rgba(255, 255, 255, .65);
   box-shadow: 0 0 2px rgba(0, 0, 0, .35);
   transition: background .2s, transform .2s;
 }
-.card-dot.is-active { background: #FDEFDC; transform: scale(1.15); }
+.card-dot.is-active { background: #FDEFDC; border-color: #FDEFDC; transform: scale(1.2); }
 .card:hover .card-media img { transform: scale(1.05); }
 .card-badge {
   position: absolute; top: 12px; left: 12px; z-index: 2;
@@ -450,6 +454,20 @@ select, input, button { font-family: var(--font); }
 }
 .product-media img { width: 100%; }
 .product-gallery { display: flex; flex-direction: column; gap: 10px; }
+.product-dots { display: flex; justify-content: center; align-items: center; gap: 2px; min-height: 24px; }
+.product-dot {
+  display: grid; place-items: center;
+  width: 24px; height: 24px; padding: 0; border: 0; border-radius: 50%;
+  background: transparent; cursor: pointer;
+}
+.product-dot::before {
+  content: ''; display: block; width: 9px; height: 9px;
+  border: 1px solid rgba(253, 239, 220, .85); border-radius: 50%; background: transparent;
+  transition: background .2s, transform .2s;
+}
+.product-dot:hover::before, .product-dot.is-active::before { background: #FDEFDC; }
+.product-dot.is-active::before { transform: scale(1.2); }
+.product-dot:focus-visible { outline: 2px solid #FDEFDC; outline-offset: 1px; }
 .product-thumbs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
 .product-thumb {
   padding: 0; border: 2px solid transparent; border-radius: 8px; overflow: hidden;

@@ -5,8 +5,6 @@
 })(typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : this), function () {
   'use strict';
 
-  var MAX_QUANTITY = 99;
-
   function productById(id, products) {
     products = Array.isArray(products) ? products : [];
     for (var i = 0; i < products.length; i++) {
@@ -15,35 +13,28 @@
     return null;
   }
 
-  function quantity(value, fallback) {
-    var parsed = Number(value);
-    if (!Number.isFinite(parsed) || parsed < 1) return fallback;
-    return Math.min(MAX_QUANTITY, Math.floor(parsed));
-  }
-
   function normalizeCart(cart, products) {
     var normalized = {};
-    if (!cart || typeof cart !== 'object' || Array.isArray(cart)) return normalized;
+    if (!cart || typeof cart !== 'object') return normalized;
+    if (Array.isArray(cart)) {
+      cart.forEach(function (id) {
+        if (productById(id, products)) normalized[id] = true;
+      });
+      return normalized;
+    }
     Object.keys(cart).forEach(function (id) {
       if (!productById(id, products)) return;
-      var qty = quantity(cart[id], 0);
-      if (qty) normalized[id] = qty;
+      var storedValue;
+      try { storedValue = Number(cart[id]); } catch (err) { return; }
+      if (Number.isFinite(storedValue) && storedValue >= 1) normalized[id] = true;
     });
     return normalized;
   }
 
-  function addItem(cart, id, amount, products) {
+  function addItem(cart, id, products) {
     var next = normalizeCart(cart, products);
     if (!productById(id, products)) return next;
-    var qty = quantity(amount, 1);
-    next[id] = Math.min(MAX_QUANTITY, (next[id] || 0) + qty);
-    return next;
-  }
-
-  function setQuantity(cart, id, amount, products) {
-    var next = normalizeCart(cart, products);
-    if (!productById(id, products)) return next;
-    next[id] = quantity(amount, 1);
+    next[id] = true;
     return next;
   }
 
@@ -57,7 +48,7 @@
     var normalized = normalizeCart(cart, products);
     return Object.keys(normalized).reduce(function (sum, id) {
       var product = productById(id, products);
-      return sum + Math.round(Number(product.price) * 100) * normalized[id];
+      return sum + Math.round(Number(product.price) * 100);
     }, 0);
   }
 
@@ -67,14 +58,13 @@
       var product = productById(id, products);
       var item = {};
       Object.keys(product).forEach(function (key) { item[key] = product[key]; });
-      item.quantity = normalized[id];
       return item;
     });
   }
 
-  function countUnits(cart, products) {
+  function countProducts(cart, products) {
     var normalized = normalizeCart(cart, products);
-    return Object.keys(normalized).reduce(function (sum, id) { return sum + normalized[id]; }, 0);
+    return Object.keys(normalized).length;
   }
 
   function safeReturnURL(candidate, siteURL) {
@@ -110,21 +100,19 @@
       return '';
     }
     if (url.protocol !== 'https:') return '';
+    url.searchParams.delete('quantity');
     url.searchParams.set('product', product.slug);
-    url.searchParams.set('quantity', String(normalized[ids[0]]));
     url.searchParams.set('referrer', referrer);
     return url.href;
   }
 
   return {
-    MAX_QUANTITY: MAX_QUANTITY,
     addItem: addItem,
     buildCheckoutLink: buildCheckoutLink,
-    countUnits: countUnits,
+    countProducts: countProducts,
     listItems: listItems,
     normalizeCart: normalizeCart,
     removeItem: removeItem,
-    setQuantity: setQuantity,
     subtotalCents: subtotalCents
   };
 });

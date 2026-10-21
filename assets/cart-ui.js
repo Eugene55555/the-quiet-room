@@ -34,11 +34,17 @@
   function loadCart() {
     var store = storage();
     if (!store) return {};
-    try {
-      return Core.normalizeCart(JSON.parse(store.getItem(CART_KEY) || '{}'), PRODUCTS);
-    } catch (err) {
-      return {};
+    var raw;
+    try { raw = store.getItem(CART_KEY) || '{}'; } catch (err) { return {}; }
+    var storedCart;
+    try { storedCart = JSON.parse(raw); } catch (err) { return {}; }
+    var normalized;
+    try { normalized = Core.normalizeCart(storedCart, PRODUCTS); } catch (err) { normalized = {}; }
+    var serialized = JSON.stringify(normalized);
+    if (raw !== serialized) {
+      try { store.setItem(CART_KEY, serialized); } catch (err) {}
     }
+    return normalized;
   }
 
   function loadReturnURL() {
@@ -106,35 +112,22 @@
 
   window.TQR_CLOSE_CART = function () { setPanel(false, false); };
 
-  function setQuantityInput(input, value) {
-    if (!input) return;
-    var parsed = Number(value);
-    if (!Number.isFinite(parsed)) parsed = 1;
-    input.value = String(Math.max(1, Math.min(Core.MAX_QUANTITY, Math.floor(parsed))));
-  }
-
   function renderCart() {
     var items = Core.listItems(cart, PRODUCTS);
-    var units = Core.countUnits(cart, PRODUCTS);
+    var itemCount = Core.countProducts(cart, PRODUCTS);
     var subtotal = Core.subtotalCents(cart, PRODUCTS);
 
     if (cartItems) {
-      // All item fields come from the fixed catalog; localStorage is normalized to known IDs and integer quantities.
+      // All item fields come from the fixed catalog; each known design appears once.
       cartItems.innerHTML = items.length ? items.map(function (item) {
-        var lineCents = Math.round(Number(item.price) * 100) * item.quantity;
+        var lineCents = Math.round(Number(item.price) * 100);
         return '<article class="cart-item" data-cart-line="' + esc(item.id) + '">'
           + '<a class="cart-item-image" href="product.html?id=' + encodeURIComponent(item.id) + '">'
           + '<img src="' + esc(item.img) + '" alt="' + esc(item.name) + '" loading="lazy" width="84" height="105">'
           + '</a>'
           + '<div class="cart-item-details">'
           + '<a class="cart-item-title" href="product.html?id=' + encodeURIComponent(item.id) + '">' + esc(item.name) + '</a>'
-          + '<span class="cart-item-unit">' + moneyCents(Math.round(Number(item.price) * 100)) + ' each</span>'
           + '<div class="cart-item-controls">'
-          + '<div class="quantity-control quantity-control-cart" aria-label="Quantity for ' + esc(item.name) + '">'
-          + '<button type="button" data-cart-action="decrease" data-product-id="' + esc(item.id) + '" aria-label="Decrease quantity for ' + esc(item.name) + '">−</button>'
-          + '<input type="number" min="1" max="' + Core.MAX_QUANTITY + '" step="1" value="' + item.quantity + '" inputmode="numeric" data-cart-qty data-product-id="' + esc(item.id) + '" aria-label="Quantity for ' + esc(item.name) + '">'
-          + '<button type="button" data-cart-action="increase" data-product-id="' + esc(item.id) + '" aria-label="Increase quantity for ' + esc(item.name) + '">+</button>'
-          + '</div>'
           + '<span class="cart-line-total">' + moneyCents(lineCents) + '</span>'
           + '<button class="cart-remove" type="button" data-cart-action="remove" data-product-id="' + esc(item.id) + '" aria-label="Remove ' + esc(item.name) + ' from cart"><i class="fa-regular fa-trash-can" aria-hidden="true"></i></button>'
           + '</div></div></article>';
@@ -142,14 +135,14 @@
     }
 
     if (cartCount) {
-      cartCount.textContent = String(units);
-      cartCount.classList.toggle('is-hidden', units === 0);
+      cartCount.textContent = String(itemCount);
+      cartCount.classList.toggle('is-hidden', itemCount === 0);
     }
     if (cartToggle) {
-      cartToggle.setAttribute('aria-label', units ? 'Open shopping cart, ' + units + (units === 1 ? ' item' : ' items') : 'Open shopping cart');
+      cartToggle.setAttribute('aria-label', itemCount ? 'Open shopping cart, ' + itemCount + (itemCount === 1 ? ' item' : ' items') : 'Open shopping cart');
     }
-    if (cartHeadingCount) cartHeadingCount.textContent = units ? '(' + units + ')' : '';
-    if (cartItemSummary) cartItemSummary.textContent = items.length + (items.length === 1 ? ' product · ' : ' products · ') + units + (units === 1 ? ' print' : ' prints');
+    if (cartHeadingCount) cartHeadingCount.textContent = itemCount ? '(' + itemCount + ')' : '';
+    if (cartItemSummary) cartItemSummary.textContent = items.length + (items.length === 1 ? ' product' : ' products');
     if (cartTotal) cartTotal.textContent = moneyCents(subtotal);
     if (cartNote) {
       cartNote.textContent = items.length > 1
@@ -157,23 +150,20 @@
         : 'This bag is saved on this site. Removing a product in BlackSea does not remove it here; use Clear cart to empty this bag.';
     }
     if (cartCheckout) cartCheckout.disabled = items.length !== 1;
-    if (cartClear) cartClear.disabled = units === 0;
+    if (cartClear) cartClear.disabled = itemCount === 0;
   }
 
-  function addProduct(id, amount, targetURL, opener) {
-    cart = Core.addItem(cart, id, amount, PRODUCTS);
+  function addProduct(id, targetURL, opener) {
+    var alreadySelected = Object.prototype.hasOwnProperty.call(cart, id);
+    cart = Core.addItem(cart, id, PRODUCTS);
     if (targetURL) returnURL = targetURL;
     saveCart();
     renderCart();
     var product = PRODUCTS.filter(function (item) { return item.id === id; })[0];
-    if (cartStatus) cartStatus.textContent = product ? product.name + ' added to your shopping bag.' : '';
+    if (cartStatus) cartStatus.textContent = product
+      ? product.name + (alreadySelected ? ' is already in your shopping bag.' : ' added to your shopping bag.')
+      : '';
     setPanel(true, true, opener);
-  }
-
-  function updateProductQuantity(id, amount) {
-    cart = Core.setQuantity(cart, id, amount, PRODUCTS);
-    saveCart();
-    renderCart();
   }
 
   function removeProduct(id) {
@@ -191,14 +181,6 @@
     if (cartStatus) cartStatus.textContent = 'Shopping bag cleared.';
   }
 
-  function handleQuantityStep(button) {
-    var group = button.closest('.quantity-control');
-    var input = group && group.querySelector('[data-quantity-input]');
-    if (!input) return;
-    var delta = Number(button.getAttribute('data-quantity-step')) || 0;
-    setQuantityInput(input, Number(input.value || 1) + delta);
-  }
-
   document.addEventListener('click', function (event) {
     var target = event.target;
     if (!target || !target.closest) return;
@@ -206,16 +188,7 @@
     var addButton = target.closest('[data-cart-add]');
     if (addButton) {
       event.preventDefault();
-      var wrapper = addButton.closest('.card') || addButton.closest('.product-info');
-      var input = wrapper && wrapper.querySelector('[data-quantity-input]');
-      addProduct(addButton.getAttribute('data-cart-add'), input ? input.value : 1, addButton.getAttribute('data-cart-return'), addButton);
-      return;
-    }
-
-    var quantityStep = target.closest('[data-quantity-step]');
-    if (quantityStep) {
-      event.preventDefault();
-      handleQuantityStep(quantityStep);
+      addProduct(addButton.getAttribute('data-cart-add'), addButton.getAttribute('data-cart-return'), addButton);
       return;
     }
 
@@ -224,24 +197,8 @@
     event.preventDefault();
     var id = action.getAttribute('data-product-id');
     var kind = action.getAttribute('data-cart-action');
-    if (kind === 'remove') {
-      removeProduct(id);
-      return;
-    }
-    var current = cart[id] || 1;
-    updateProductQuantity(id, current + (kind === 'increase' ? 1 : -1));
-  });
-
-  document.addEventListener('change', function (event) {
-    var target = event.target;
-    if (!target || !target.closest) return;
-    var cartInput = target.closest('[data-cart-qty]');
-    if (cartInput) {
-      updateProductQuantity(cartInput.getAttribute('data-product-id'), cartInput.value);
-      return;
-    }
-    var quantityInput = target.closest('[data-quantity-input]');
-    if (quantityInput) setQuantityInput(quantityInput, quantityInput.value);
+    if (kind !== 'remove') return;
+    removeProduct(id);
   });
 
   if (cartToggle) cartToggle.addEventListener('click', function () {
@@ -253,8 +210,8 @@
   if (cartCheckout) cartCheckout.addEventListener('click', function (event) {
     event.preventDefault();
     var items = Core.listItems(cart, PRODUCTS);
-    if (items.length > 1) {
-      if (cartStatus) cartStatus.textContent = 'BlackSea accepts one product per link. No items were sent; remove other designs from this site’s bag before continuing.';
+    if (items.length !== 1) {
+      if (items.length > 1 && cartStatus) cartStatus.textContent = 'BlackSea accepts one product per link. No items were sent; remove other designs from this site’s bag before continuing.';
       return;
     }
     var url = Core.buildCheckoutLink(cart, PRODUCTS, returnURL, CHECKOUT_URL, SITE_URL);

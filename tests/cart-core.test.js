@@ -21,56 +21,57 @@ function run(name, fn) {
   process.stdout.write('PASS ' + name + '\n');
 }
 
-run('adding the same product merges its quantity', function () {
-  const once = cart.addItem({}, 'tiger', 2, products);
-  assert.deepEqual(cart.addItem(once, 'tiger', 3, products), { tiger: 5 });
+run('cart normalization keeps one copy of each known design', function () {
+  assert.deepEqual(cart.normalizeCart({ tiger: 99, missing: 2, butterfly: 0, rainbow: 4 }, products), {
+    tiger: true,
+    rainbow: true
+  });
 });
 
-run('cart normalization drops unknown products and clamps quantity', function () {
-  assert.deepEqual(cart.normalizeCart({ tiger: 150, missing: 2, butterfly: 0 }, products), { tiger: 99 });
+run('adding the same design twice never creates a quantity', function () {
+  const once = cart.addItem({}, 'tiger', products);
+  assert.deepEqual(once, { tiger: true });
+  assert.deepEqual(cart.addItem(once, 'tiger', products), { tiger: true });
 });
 
-run('setting quantity clamps valid cart lines', function () {
-  assert.deepEqual(cart.setQuantity({ tiger: 2 }, 'tiger', 100, products), { tiger: 99 });
+run('removing one design preserves the others', function () {
+  assert.deepEqual(cart.removeItem({ tiger: 2, butterfly: 1 }, 'tiger', products), { butterfly: true });
 });
 
-run('removing a line leaves the other products intact', function () {
-  assert.deepEqual(cart.removeItem({ tiger: 2, butterfly: 1 }, 'tiger', products), { butterfly: 1 });
+run('subtotal counts each selected design once in whole cents', function () {
+  assert.equal(cart.subtotalCents({ tiger: 2, butterfly: 3, rainbow: 1 }, products), 585);
 });
 
-run('subtotal uses whole cents for every catalog item', function () {
-  assert.equal(cart.subtotalCents({ tiger: 2, butterfly: 3, rainbow: 1 }, products), 1105);
-});
-
-run('listed cart rows include catalog data and quantities', function () {
+run('listed cart rows contain catalog data without a quantity field', function () {
   assert.deepEqual(cart.listItems({ butterfly: 2, tiger: 1 }, products), [
-    Object.assign({}, products[1], { quantity: 2 }),
-    Object.assign({}, products[0], { quantity: 1 })
+    Object.assign({}, products[1]),
+    Object.assign({}, products[0])
   ]);
 });
 
-run('unit count sums quantities across lines', function () {
-  assert.equal(cart.countUnits({ butterfly: 2, tiger: 1 }, products), 3);
+run('item count counts distinct selected designs', function () {
+  assert.equal(cart.countProducts({ butterfly: 2, tiger: 1 }, products), 2);
 });
 
-run('single-product checkout preserves quantity and the local return URL', function () {
+run('single-design checkout omits quantity and preserves the local return URL', function () {
   const returnUrl = 'https://eugene55555.github.io/the-quiet-room/#product-card-tiger';
   const url = new URL(cart.buildCheckoutLink(
-    { tiger: 2 },
+    { tiger: 8 },
     products,
     returnUrl,
-    'https://5307397047125.blacksea.in.ua/checkout',
+    'https://5307397047125.blacksea.in.ua/checkout?quantity=7&campaign=site',
     'https://eugene55555.github.io/the-quiet-room/'
   ));
   assert.equal(url.searchParams.get('product'), 'lek');
-  assert.equal(url.searchParams.get('quantity'), '2');
+  assert.equal(url.searchParams.has('quantity'), false);
+  assert.equal(url.searchParams.get('campaign'), 'site');
   assert.equal(url.searchParams.get('referrer'), returnUrl);
   assert.equal(url.searchParams.has('products'), false);
 });
 
-run('multi-product checkout fails closed instead of sending only one line', function () {
+run('multi-design checkout fails closed instead of sending only one line', function () {
   assert.equal(cart.buildCheckoutLink(
-    { tiger: 2, butterfly: 3 },
+    { tiger: true, butterfly: true },
     products,
     'https://eugene55555.github.io/the-quiet-room/',
     'https://5307397047125.blacksea.in.ua/checkout',
@@ -78,7 +79,7 @@ run('multi-product checkout fails closed instead of sending only one line', func
   ), '');
 });
 
-run('real BlackSea catalog allows one product and rejects multiple products', function () {
+run('real BlackSea catalog allows one design and rejects multiple designs', function () {
   const one = new URL(cart.buildCheckoutLink(
     { 'golden-butterfly-cat': 3 },
     catalogProducts,
@@ -87,7 +88,7 @@ run('real BlackSea catalog allows one product and rejects multiple products', fu
     catalogSite
   ));
   assert.equal(one.searchParams.get('product'), 'ksi');
-  assert.equal(one.searchParams.get('quantity'), '3');
+  assert.equal(one.searchParams.has('quantity'), false);
   assert.equal(cart.buildCheckoutLink(
     {
       'baby-tiger': 2,
@@ -102,10 +103,10 @@ run('real BlackSea catalog allows one product and rejects multiple products', fu
   ), '');
 });
 
-run('checkout handoff refuses to silently skip a product without a vendor slug', function () {
+run('checkout refuses to silently skip a product without a vendor slug', function () {
   const missingSlugProducts = [{ id: 'tiger', name: 'Baby Tiger', price: 2.60 }];
   assert.equal(cart.buildCheckoutLink(
-    { tiger: 1 },
+    { tiger: true },
     missingSlugProducts,
     'https://eugene55555.github.io/the-quiet-room/',
     'https://5307397047125.blacksea.in.ua/checkout',

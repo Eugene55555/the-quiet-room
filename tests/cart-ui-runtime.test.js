@@ -33,6 +33,7 @@ const products = [
   { id: 'tiger', slug: 'lek', name: 'Baby Tiger', cat: 'Tropical', img: 'assets/tiger.png', price: 2.60 },
   { id: 'butterfly', slug: 'ksi', name: 'Golden Butterfly Cat', cat: 'Butterfly', img: 'assets/butterfly.png', price: 1.30 }
 ];
+const siteUrl = 'https://eugene55555.github.io/the-quiet-room/';
 const elementIds = [
   'cart-toggle', 'cart-drawer', 'cart-overlay', 'cart-close', 'cart-items',
   'cart-count', 'cart-heading-count', 'cart-item-summary', 'cart-total',
@@ -52,12 +53,12 @@ const document = {
   addEventListener(type, fn) { this.listeners[type] = fn; }
 };
 const location = {
-  href: 'https://eugene55555.github.io/the-quiet-room/',
+  href: siteUrl,
   assign(url) { assigned.push(url); }
 };
 const window = {
   TQR_PRODUCTS: products,
-  TQR_SITE: 'https://eugene55555.github.io/the-quiet-room/',
+  TQR_SITE: siteUrl,
   TQR_CART_CORE: core,
   location,
   localStorage: storage,
@@ -67,34 +68,49 @@ const window = {
 vm.runInNewContext(uiSource, { window, document, URL, URLSearchParams, Number, Math, Object, Array, String });
 assert.equal(elements['cart-clear'].disabled, true, 'clear button starts disabled while cart is empty');
 
-function clickAdd(id, amount) {
-  const qtyInput = { value: String(amount) };
-  const card = { querySelector(selector) { return selector === '[data-quantity-input]' ? qtyInput : null; } };
+const legacyCartKey = 'tqr-cart-v1';
+saved[legacyCartKey] = JSON.stringify({ tiger: 4 });
+vm.runInNewContext(uiSource, { window, document, URL, URLSearchParams, Number, Math, Object, Array, String });
+assert.deepEqual(JSON.parse(saved[legacyCartKey]), { tiger: true }, 'legacy quantities are persisted as one copy of the design');
+saved[legacyCartKey] = JSON.stringify({ tiger: { toString: null, valueOf: null }, butterfly: 2 });
+vm.runInNewContext(uiSource, { window, document, URL, URLSearchParams, Number, Math, Object, Array, String });
+assert.deepEqual(JSON.parse(saved[legacyCartKey]), { butterfly: true }, 'corrupt cart values are discarded without breaking cart initialization');
+
+function clickAdd(id) {
   const button = {
     getAttribute(name) {
       return {
         'data-cart-add': id,
-        'data-cart-return': 'https://eugene55555.github.io/the-quiet-room/#product-card-' + id
+        'data-cart-return': siteUrl + '#product-card-' + id
       }[name] || null;
     },
     closest(selector) {
       if (selector === '[data-cart-add]') return this;
-      if (selector === '.card') return card;
+      if (selector === '.card') return { querySelector() { return null; } };
       return null;
     }
   };
   document.listeners.click({ target: button, preventDefault() {} });
 }
 
-clickAdd('tiger', 2);
-clickAdd('butterfly', 3);
+clickAdd('tiger');
+clickAdd('butterfly');
+clickAdd('tiger');
 const cartKey = Object.keys(saved).find(key => key.indexOf('tqr-cart') === 0);
 assert.ok(cartKey, 'cart is saved in localStorage');
-assert.deepEqual(JSON.parse(saved[cartKey]), { tiger: 2, butterfly: 3 });
+assert.deepEqual(JSON.parse(saved[cartKey]), { tiger: true, butterfly: true });
 assert.equal(elements['cart-toggle'].getAttribute('aria-expanded'), 'true');
-assert.equal(elements['cart-count'].textContent, '5');
-assert.equal(elements['cart-total'].textContent, '$9.10');
-assert.equal(elements['cart-clear'].disabled, false, 'clear button is enabled when cart contains items');
+assert.equal(elements['cart-count'].textContent, '2');
+assert.equal(elements['cart-item-summary'].textContent, '2 products');
+assert.equal(elements['cart-total'].textContent, '$3.90');
+assert.equal(elements['cart-clear'].disabled, false, 'clear button is enabled when cart contains designs');
+assert.doesNotMatch(elements['cart-items'].innerHTML, /quantity|data-cart-qty|type="number"| each/);
+assert.equal(elements['cart-checkout'].disabled, true, 'checkout remains blocked for multiple designs');
+assert.match(elements['cart-note'].textContent, /Multi-product checkout is disabled/);
+assert.match(elements['cart-status'].textContent, /already in your shopping bag/);
+elements['cart-checkout'].listeners.click({ preventDefault() {} });
+assert.equal(assigned.length, 0, 'multiple designs are not sent as a partial checkout');
+assert.match(elements['cart-status'].textContent, /No items were sent/);
 
 function clickCartAction(kind, id) {
   const button = {
@@ -106,38 +122,20 @@ function clickCartAction(kind, id) {
   document.listeners.click({ target: button, preventDefault() {} });
 }
 
-clickCartAction('increase', 'tiger');
-assert.deepEqual(JSON.parse(saved[cartKey]), { tiger: 3, butterfly: 3 });
-const quantityInput = {
-  value: '4',
-  getAttribute(name) { return name === 'data-product-id' ? 'tiger' : null; },
-  closest(selector) { return selector === '[data-cart-qty]' ? this : null; }
-};
-document.listeners.change({ target: quantityInput });
-assert.deepEqual(JSON.parse(saved[cartKey]), { tiger: 4, butterfly: 3 });
-assert.equal(elements['cart-total'].textContent, '$14.30');
-
-const checkout = elements['cart-checkout'];
-assert.equal(checkout.disabled, true, 'checkout is disabled when the local bag has multiple designs');
-assert.match(elements['cart-note'].textContent, /Multi-product checkout is disabled/);
-checkout.listeners.click({ preventDefault() {} });
-assert.equal(assigned.length, 0, 'multi-product local cart is never redirected as a partial checkout');
-assert.match(elements['cart-status'].textContent, /No items were sent/);
-
 clickCartAction('remove', 'butterfly');
-assert.deepEqual(JSON.parse(saved[cartKey]), { tiger: 4 });
-assert.equal(elements['cart-count'].textContent, '4');
-assert.equal(elements['cart-total'].textContent, '$10.40');
-assert.equal(checkout.disabled, false, 'one product can be checked out');
+assert.deepEqual(JSON.parse(saved[cartKey]), { tiger: true });
+assert.equal(elements['cart-count'].textContent, '1');
+assert.equal(elements['cart-total'].textContent, '$2.60');
+assert.equal(elements['cart-checkout'].disabled, false, 'a single design can be checked out');
 assert.match(elements['cart-note'].textContent, /Removing a product in BlackSea does not remove it here/);
-checkout.listeners.click({ preventDefault() {} });
+elements['cart-checkout'].listeners.click({ preventDefault() {} });
 assert.equal(assigned.length, 1);
 const singleProduct = new URL(assigned[0]);
 assert.equal(singleProduct.searchParams.get('product'), 'lek');
-assert.equal(singleProduct.searchParams.get('quantity'), '4');
+assert.equal(singleProduct.searchParams.has('quantity'), false);
 assert.equal(singleProduct.searchParams.has('products'), false);
 
-elements['cart-clear'].listeners.click({ preventDefault() {} });
+ elements['cart-clear'].listeners.click({ preventDefault() {} });
 assert.deepEqual(JSON.parse(saved[cartKey]), {}, 'clear button empties persisted local cart');
 assert.equal(elements['cart-count'].textContent, '0');
 assert.equal(elements['cart-total'].textContent, '$0.00');
@@ -145,4 +143,4 @@ assert.equal(elements['cart-checkout'].disabled, true);
 assert.equal(elements['cart-clear'].disabled, true);
 assert.match(elements['cart-items'].innerHTML, /Your shopping bag is empty/);
 assert.equal(elements['cart-status'].textContent, 'Shopping bag cleared.');
-process.stdout.write('PASS cart persists quantities, totals correctly, and blocks partial multi-product checkout and preserves single-product handoff\n');
+process.stdout.write('PASS one-copy local cart removes quantity controls and blocks partial multi-design checkout\n');

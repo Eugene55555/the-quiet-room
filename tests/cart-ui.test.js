@@ -7,6 +7,8 @@ const vm = require('node:vm');
 const indexMarkup = fs.readFileSync(require.resolve('../index.html'), 'utf8');
 const productDocument = fs.readFileSync(require.resolve('../product.html'), 'utf8');
 const source = fs.readFileSync(require.resolve('../assets/main.js'), 'utf8');
+const cartUiSource = fs.readFileSync(require.resolve('../assets/cart-ui.js'), 'utf8');
+const styleSource = fs.readFileSync(require.resolve('../assets/style.css'), 'utf8');
 
 function makeElement() {
   return {
@@ -89,28 +91,33 @@ function renderProductPage() {
 
 const markup = renderCatalogCard();
 assert.match(markup, /data-cart-add="tiger"/);
-assert.match(markup, /data-quantity-input/);
-process.stdout.write('PASS rendered cards expose add-to-cart and quantity controls\n');
+assert.doesNotMatch(markup, /quantity-control|data-quantity-input|type="number"/);
+process.stdout.write('PASS rendered catalog cards add one design without quantity controls\n');
 
 const productMarkup = renderProductPage();
 assert.match(productMarkup, /data-cart-add="tiger"/);
-assert.match(productMarkup, /data-quantity-input/);
-process.stdout.write('PASS product details expose add-to-cart and quantity controls\n');
+assert.doesNotMatch(productMarkup, /quantity-control|data-quantity-input|type="number"/);
+process.stdout.write('PASS product details add one design without quantity controls\n');
+
+assert.doesNotMatch(cartUiSource, /quantity-control|data-cart-qty|data-quantity-step|data-quantity-input|MAX_QUANTITY/);
+assert.doesNotMatch(styleSource, /quantity-control/);
+process.stdout.write('PASS local cart UI and styles contain no quantity controls\n');
 
 for (const [name, html] of [['catalog', indexMarkup], ['product page', productDocument]]) {
   assert.match(html, /id="cart-toggle"/);
   assert.match(html, /id="cart-drawer"/);
   assert.match(html, /id="cart-checkout"/);
   assert.match(html, /id="cart-clear"/);
-  assert.ok(html.includes('assets/cart-core.js?v=2'));
+  assert.ok(html.includes('assets/cart-core.js?v=3'));
   assert.ok(html.includes('BlackSea links add one product at a time'));
   assert.ok(html.includes('multi-product checkout is disabled to prevent a partial order'));
   assert.ok(html.includes('aria-describedby="cart-note"'));
-  assert.match(html, /assets\/cart-ui\.js\?v=3/);
-  assert.match(html, /assets\/style\.css\?v=23/);
+  assert.match(html, /assets\/cart-ui\.js\?v=4/);
+  assert.match(html, /assets\/style\.css\?v=24/);
+  assert.match(html, /assets\/main\.js\?v=23/);
   const coreIndex = html.indexOf('assets/cart-core.js');
   const uiIndex = html.indexOf('assets/cart-ui.js');
   const mainIndex = html.indexOf('assets/main.js');
   assert.ok(coreIndex >= 0 && uiIndex > coreIndex && mainIndex > uiIndex, 'cart scripts must load before main.js');
-  console.log('PASS ' + name + ' includes the shared cart drawer and ordered cart scripts');
+  console.log('PASS ' + name + ' includes the shared one-copy cart and ordered scripts');
 }

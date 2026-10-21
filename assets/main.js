@@ -5,6 +5,15 @@
   var PRODUCTS = window.TQR_PRODUCTS || [];
   var PER_PAGE = 8;
   var state = { q: '', cat: '', price: '', sort: 'featured', page: 1 };
+  var CHECKOUT_URL = 'https://5307397047125.blacksea.in.ua/checkout';
+
+  try {
+    var oldCartStorage = window.localStorage;
+    if (oldCartStorage && typeof oldCartStorage.removeItem === 'function') {
+      oldCartStorage.removeItem('tqr-cart-v1');
+      oldCartStorage.removeItem('tqr-cart-return-v1');
+    }
+  } catch (err) {}
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#39;');
@@ -109,20 +118,33 @@
 
   var pendingProductCardScroll = window.location.hash.indexOf('#product-card-') === 0;
 
-  function currentURLWithoutHash() {
-    var url = new URL(window.location.href);
-    var productId = /\/product\.html$/.test(url.pathname) ? url.searchParams.get('id') : null;
-    url.search = '';
-    url.hash = '';
-    if (productId) url.searchParams.set('id', productId);
-    return url.href;
-  }
-
   function cardReferrer(id) {
-    var url = new URL(currentURLWithoutHash());
+    var url = new URL(window.location.href);
     url.hash = 'product-card-' + encodeURIComponent(id);
     return url.href;
   }
+
+  function buyURL(p, referrer) {
+    var url = new URL(CHECKOUT_URL);
+    url.searchParams.set('product', p.slug);
+    url.searchParams.set('quantity', '1');
+    url.searchParams.set('referrer', referrer);
+    return url.href;
+  }
+
+  document.addEventListener('click', function (e) {
+    if (e.defaultPrevented || (typeof e.button === 'number' && e.button !== 0) || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var link = e.target && e.target.closest ? e.target.closest('a[data-return-url]') : null;
+    if (!link) return;
+    var returnURL = link.getAttribute('data-return-url');
+    if (!returnURL || !window.history || typeof window.history.replaceState !== 'function') return;
+    try {
+      var current = new URL(window.location.href);
+      var target = new URL(returnURL, current);
+      if (target.origin !== current.origin) return;
+      window.history.replaceState(window.history.state, '', target.href);
+    } catch (err) {}
+  });
 
 
   var header = document.getElementById('site-header');
@@ -160,16 +182,13 @@
   var filterOpenBtn = document.getElementById('filter-open');
 
   function syncBodyLock() {
-    var cartDrawer = document.getElementById('cart-drawer');
     var open = (menuDrawer && menuDrawer.classList.contains('show')) ||
-               (filterDrawer && filterDrawer.classList.contains('show')) ||
-               (cartDrawer && cartDrawer.classList.contains('show'));
+               (filterDrawer && filterDrawer.classList.contains('show'));
     document.body.style.overflow = open ? 'hidden' : '';
   }
 
   function setMenu(open) {
     if (!menuDrawer) return;
-    if (open && typeof window.TQR_CLOSE_CART === 'function') window.TQR_CLOSE_CART();
     menuDrawer.classList.toggle('show', open);
     if (menuOverlay) menuOverlay.classList.toggle('show', open);
     if (burger) burger.setAttribute('aria-expanded', open ? 'true' : 'false');
@@ -178,7 +197,6 @@
 
   function setFilterPanel(open) {
     if (!filterDrawer) return;
-    if (open && typeof window.TQR_CLOSE_CART === 'function') window.TQR_CLOSE_CART();
     filterDrawer.classList.toggle('show', open);
     if (filterOverlay) filterOverlay.classList.toggle('show', open);
     if (filterOpenBtn) filterOpenBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
@@ -383,7 +401,7 @@
       + '<span class="price-sale">' + money(p.price) + '</span>'
       + '</div>'
       + '<div class="card-actions">'
-      + '<button type="button" class="card-btn" data-cart-add="' + esc(p.id) + '" data-cart-return="' + esc(referrer) + '"><i class="fa-solid fa-cart-plus" aria-hidden="true"></i><span>Add to cart</span></button>'
+      + '<a class="card-btn" href="' + esc(buyURL(p, referrer)) + '" data-return-url="' + esc(referrer) + '">Buy now</a>'
       + '</div>'
       + '</div></article>';
   }
@@ -535,7 +553,7 @@
         + '</button>';
     }).join('');
     page.innerHTML =
-      '<div class="product-layout">'
+      '<div class="product-layout" id="product-card-' + esc(p.id) + '">'
       + '<div class="product-gallery">'
       + '<div class="product-media" data-gallery-index="0"><img id="product-main-image" draggable="false" src="' + esc(images[0]) + '" alt="' + esc(p.name) + ' — The Quiet Room print"></div>'
       + '<div class="product-thumbs" role="group" aria-label="Product images">' + thumbs + '</div>'
@@ -557,11 +575,11 @@
       + '<li><i class="fa-solid fa-circle-check"></i>For personal use and small businesses</li>'
       + '<li><i class="fa-solid fa-circle-check"></i>Digital download — no physical item is shipped</li>'
       + '</ul>'
-      + '<div class="product-add-row">'
-      + '<button class="product-buy" type="button" data-cart-add="' + esc(p.id) + '" data-cart-return="' + esc(currentURLWithoutHash()) + '"><i class="fa-solid fa-cart-plus" aria-hidden="true"></i> Add to cart — ' + money(p.price) + '</button>'
+      + '<div class="product-buy-row">'
+      + '<a class="product-buy" href="' + esc(buyURL(p, cardReferrer(p.id))) + '" data-return-url="' + esc(cardReferrer(p.id)) + '">Buy now — ' + money(p.price) + '</a>'
       + '</div>'
       + '<p class="product-safe"><i class="fa-solid fa-lock"></i> Secure card payment · 3-D Secure</p>'
-      + '<p class="product-checkout-note">Add prints to your basket here; the final payment is hosted by BlackSea.</p>'
+      + '<p class="product-checkout-note">Checkout is hosted by BlackSea. You can add more prints to your BlackSea basket before paying.</p>'
       + '</div></div>'
       + '<section class="product-related"><h2>You may also like</h2><div class="grid">'
       + related.map(function (x) { return cardHTML(x, cardReferrer(x.id)); }).join('')

@@ -101,6 +101,9 @@ for (const [name, html] of [['catalog', indexMarkup], ['product page', productDo
   assert.match(html, /id="cart-toggle"/);
   assert.match(html, /id="cart-drawer"/);
   assert.match(html, /id="cart-checkout"/);
+  assert.match(html, /id="cart-clear"/);
+  assert.match(html, /assets\/cart-ui\.js\?v=2/);
+  assert.match(html, /assets\/style\.css\?v=23/);
   const coreIndex = html.indexOf('assets/cart-core.js');
   const uiIndex = html.indexOf('assets/cart-ui.js');
   const mainIndex = html.indexOf('assets/main.js');

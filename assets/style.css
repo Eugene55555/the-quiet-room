@@ -316,6 +316,9 @@ select, input, button { font-family: var(--font); }
 .cart-summary { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: 13px; }
 .cart-summary-total { padding-top: 8px; border-top: 1px solid var(--line); color: var(--ink); font-size: 15px; }
 .cart-summary-total strong { color: var(--wine); font-size: 19px; }
+.cart-clear { align-self: flex-end; border: 0; padding: 0 2px; background: none; color: var(--wine); font-size: 12px; text-decoration: underline; cursor: pointer; }
+.cart-clear:hover:not(:disabled) { color: var(--wine-deep); }
+.cart-clear:disabled { color: var(--muted); opacity: .45; text-decoration: none; cursor: not-allowed; }
 .cart-note { padding: 10px 11px; border-left: 3px solid #C9A24A; border-radius: 0 6px 6px 0; background: #FBF7EF; color: #625B4D; font-size: 11.5px; line-height: 1.5; }
 .cart-status { min-height: 0; color: var(--wine); font-size: 12px; }
 .cart-checkout { width: 100%; min-height: 48px; border: 0; border-radius: 8px; background: var(--wine); color: #fff; font-size: 14px; cursor: pointer; transition: background .2s, opacity .2s; }

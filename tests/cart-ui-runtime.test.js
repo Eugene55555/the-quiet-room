@@ -36,7 +36,7 @@ const products = [
 const elementIds = [
   'cart-toggle', 'cart-drawer', 'cart-overlay', 'cart-close', 'cart-items',
   'cart-count', 'cart-heading-count', 'cart-item-summary', 'cart-total',
-  'cart-note', 'cart-status', 'cart-checkout'
+  'cart-note', 'cart-status', 'cart-checkout', 'cart-clear'
 ];
 const elements = Object.fromEntries(elementIds.map(id => [id, makeElement()]));
 const saved = {};
@@ -65,6 +65,7 @@ const window = {
 };
 
 vm.runInNewContext(uiSource, { window, document, URL, URLSearchParams, Number, Math, Object, Array, String });
+assert.equal(elements['cart-clear'].disabled, true, 'clear button starts disabled while cart is empty');
 
 function clickAdd(id, amount) {
   const qtyInput = { value: String(amount) };
@@ -93,6 +94,7 @@ assert.deepEqual(JSON.parse(saved[cartKey]), { tiger: 2, butterfly: 3 });
 assert.equal(elements['cart-toggle'].getAttribute('aria-expanded'), 'true');
 assert.equal(elements['cart-count'].textContent, '5');
 assert.equal(elements['cart-total'].textContent, '$9.10');
+assert.equal(elements['cart-clear'].disabled, false, 'clear button is enabled when cart contains items');
 
 function clickCartAction(kind, id) {
   const button = {
@@ -129,4 +131,13 @@ clickCartAction('remove', 'butterfly');
 assert.deepEqual(JSON.parse(saved[cartKey]), { tiger: 4 });
 assert.equal(elements['cart-count'].textContent, '4');
 assert.equal(elements['cart-total'].textContent, '$10.40');
+
+elements['cart-clear'].listeners.click({ preventDefault() {} });
+assert.deepEqual(JSON.parse(saved[cartKey]), {}, 'clear button empties persisted local cart');
+assert.equal(elements['cart-count'].textContent, '0');
+assert.equal(elements['cart-total'].textContent, '$0.00');
+assert.equal(elements['cart-checkout'].disabled, true);
+assert.equal(elements['cart-clear'].disabled, true);
+assert.match(elements['cart-items'].innerHTML, /Your shopping bag is empty/);
+assert.equal(elements['cart-status'].textContent, 'Shopping bag cleared.');
 process.stdout.write('PASS cart persists quantities, totals correctly, and creates a two-product BlackSea handoff\n');

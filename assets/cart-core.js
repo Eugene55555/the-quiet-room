@@ -94,35 +94,32 @@
     }
   }
 
-  function buildCheckoutChain(cart, products, returnURL, checkoutURL, siteURL) {
+  function buildCheckoutLink(cart, products, returnURL, checkoutURL, siteURL) {
     var normalized = normalizeCart(cart, products);
     var ids = Object.keys(normalized);
-    if (!ids.length) return '';
+    if (ids.length !== 1) return '';
 
-    var next = safeReturnURL(returnURL, siteURL);
-    if (!next) return '';
-    for (var i = ids.length - 1; i >= 0; i--) {
-      var product = productById(ids[i], products);
-      if (!product || typeof product.slug !== 'string' || !product.slug.trim()) return '';
-      var url;
-      try {
-        url = new URL(checkoutURL);
-      } catch (err) {
-        return '';
-      }
-      if (url.protocol !== 'https:') return '';
-      url.searchParams.set('product', product.slug);
-      url.searchParams.set('quantity', String(normalized[ids[i]]));
-      url.searchParams.set('referrer', next);
-      next = url.href;
+    var product = productById(ids[0], products);
+    if (!product || typeof product.slug !== 'string' || !product.slug.trim()) return '';
+    var referrer = safeReturnURL(returnURL, siteURL);
+    if (!referrer) return '';
+    var url;
+    try {
+      url = new URL(checkoutURL);
+    } catch (err) {
+      return '';
     }
-    return next;
+    if (url.protocol !== 'https:') return '';
+    url.searchParams.set('product', product.slug);
+    url.searchParams.set('quantity', String(normalized[ids[0]]));
+    url.searchParams.set('referrer', referrer);
+    return url.href;
   }
 
   return {
     MAX_QUANTITY: MAX_QUANTITY,
     addItem: addItem,
-    buildCheckoutChain: buildCheckoutChain,
+    buildCheckoutLink: buildCheckoutLink,
     countUnits: countUnits,
     listItems: listItems,
     normalizeCart: normalizeCart,

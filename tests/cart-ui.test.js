@@ -102,7 +102,11 @@ for (const [name, html] of [['catalog', indexMarkup], ['product page', productDo
   assert.match(html, /id="cart-drawer"/);
   assert.match(html, /id="cart-checkout"/);
   assert.match(html, /id="cart-clear"/);
-  assert.match(html, /assets\/cart-ui\.js\?v=2/);
+  assert.ok(html.includes('assets/cart-core.js?v=2'));
+  assert.ok(html.includes('BlackSea links add one product at a time'));
+  assert.ok(html.includes('multi-product checkout is disabled to prevent a partial order'));
+  assert.ok(html.includes('aria-describedby="cart-note"'));
+  assert.match(html, /assets\/cart-ui\.js\?v=3/);
   assert.match(html, /assets\/style\.css\?v=23/);
   const coreIndex = html.indexOf('assets/cart-core.js');
   const uiIndex = html.indexOf('assets/cart-ui.js');

@@ -61,9 +61,9 @@
     <div class="cart-summary"><span>Items</span><span id="cart-item-summary">0</span></div>
     <button class="cart-clear" id="cart-clear" type="button" disabled>Clear cart</button>
     <div class="cart-summary cart-summary-total"><span>Total</span><strong id="cart-total">$0.00</strong></div>
-    <p class="cart-note" id="cart-note">Items are handed to BlackSea one at a time. On each intermediate page, choose “Continue shopping” until every item appears. Start with an empty BlackSea cart; existing items are not cleared or updated. Check all items and quantities before paying.</p>
+    <p class="cart-note" id="cart-note">This bag is saved on this site. BlackSea links add one product at a time; multi-product checkout is disabled to prevent a partial order. Removing a product in BlackSea does not remove it here.</p>
     <p class="cart-status" id="cart-status" role="status" aria-live="polite"></p>
-    <button class="cart-checkout" id="cart-checkout" type="button" disabled>Continue to BlackSea checkout</button>
+    <button class="cart-checkout" id="cart-checkout" type="button" aria-describedby="cart-note" disabled>Continue to BlackSea checkout</button>
   </div>
 </aside>
 
@@ -213,8 +213,8 @@
 </footer>
 
 <script src="assets/data.js?v=19"></script>
-<script src="assets/cart-core.js?v=1"></script>
-<script src="assets/cart-ui.js?v=2"></script>
+<script src="assets/cart-core.js?v=2"></script>
+<script src="assets/cart-ui.js?v=3"></script>
 <script src="assets/main.js?v=22"></script>
 </body>
 </html>

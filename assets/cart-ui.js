@@ -20,6 +20,7 @@
   var cartItemSummary = document.getElementById('cart-item-summary');
   var cartTotal = document.getElementById('cart-total');
   var cartStatus = document.getElementById('cart-status');
+  var cartNote = document.getElementById('cart-note');
   var cartCheckout = document.getElementById('cart-checkout');
   var cartClear = document.getElementById('cart-clear');
   var cart = loadCart();
@@ -150,7 +151,12 @@
     if (cartHeadingCount) cartHeadingCount.textContent = units ? '(' + units + ')' : '';
     if (cartItemSummary) cartItemSummary.textContent = items.length + (items.length === 1 ? ' product · ' : ' products · ') + units + (units === 1 ? ' print' : ' prints');
     if (cartTotal) cartTotal.textContent = moneyCents(subtotal);
-    if (cartCheckout) cartCheckout.disabled = units === 0;
+    if (cartNote) {
+      cartNote.textContent = items.length > 1
+        ? 'BlackSea links from this site add one product at a time. Multi-product checkout is disabled to prevent a partial order. Your items stay saved here; removing them in BlackSea does not clear this bag.'
+        : 'This bag is saved on this site. Removing a product in BlackSea does not remove it here; use Clear cart to empty this bag.';
+    }
+    if (cartCheckout) cartCheckout.disabled = items.length !== 1;
     if (cartClear) cartClear.disabled = units === 0;
   }
 
@@ -246,7 +252,12 @@
   if (cartClear) cartClear.addEventListener('click', clearCart);
   if (cartCheckout) cartCheckout.addEventListener('click', function (event) {
     event.preventDefault();
-    var url = Core.buildCheckoutChain(cart, PRODUCTS, returnURL, CHECKOUT_URL, SITE_URL);
+    var items = Core.listItems(cart, PRODUCTS);
+    if (items.length > 1) {
+      if (cartStatus) cartStatus.textContent = 'BlackSea accepts one product per link. No items were sent; remove other designs from this site’s bag before continuing.';
+      return;
+    }
+    var url = Core.buildCheckoutLink(cart, PRODUCTS, returnURL, CHECKOUT_URL, SITE_URL);
     if (!url) {
       if (cartStatus) cartStatus.textContent = 'Could not prepare the BlackSea checkout link. Please try again.';
       return;

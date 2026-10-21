@@ -118,19 +118,24 @@ assert.deepEqual(JSON.parse(saved[cartKey]), { tiger: 4, butterfly: 3 });
 assert.equal(elements['cart-total'].textContent, '$14.30');
 
 const checkout = elements['cart-checkout'];
+assert.equal(checkout.disabled, true, 'checkout is disabled when the local bag has multiple designs');
+assert.match(elements['cart-note'].textContent, /Multi-product checkout is disabled/);
 checkout.listeners.click({ preventDefault() {} });
-assert.equal(assigned.length, 1);
-const first = new URL(assigned[0]);
-const second = new URL(first.searchParams.get('referrer'));
-assert.equal(first.searchParams.get('product'), 'lek');
-assert.equal(first.searchParams.get('quantity'), '4');
-assert.equal(second.searchParams.get('product'), 'ksi');
-assert.equal(second.searchParams.get('quantity'), '3');
+assert.equal(assigned.length, 0, 'multi-product local cart is never redirected as a partial checkout');
+assert.match(elements['cart-status'].textContent, /No items were sent/);
 
 clickCartAction('remove', 'butterfly');
 assert.deepEqual(JSON.parse(saved[cartKey]), { tiger: 4 });
 assert.equal(elements['cart-count'].textContent, '4');
 assert.equal(elements['cart-total'].textContent, '$10.40');
+assert.equal(checkout.disabled, false, 'one product can be checked out');
+assert.match(elements['cart-note'].textContent, /Removing a product in BlackSea does not remove it here/);
+checkout.listeners.click({ preventDefault() {} });
+assert.equal(assigned.length, 1);
+const singleProduct = new URL(assigned[0]);
+assert.equal(singleProduct.searchParams.get('product'), 'lek');
+assert.equal(singleProduct.searchParams.get('quantity'), '4');
+assert.equal(singleProduct.searchParams.has('products'), false);
 
 elements['cart-clear'].listeners.click({ preventDefault() {} });
 assert.deepEqual(JSON.parse(saved[cartKey]), {}, 'clear button empties persisted local cart');
@@ -140,4 +145,4 @@ assert.equal(elements['cart-checkout'].disabled, true);
 assert.equal(elements['cart-clear'].disabled, true);
 assert.match(elements['cart-items'].innerHTML, /Your shopping bag is empty/);
 assert.equal(elements['cart-status'].textContent, 'Shopping bag cleared.');
-process.stdout.write('PASS cart persists quantities, totals correctly, and creates a two-product BlackSea handoff\n');
+process.stdout.write('PASS cart persists quantities, totals correctly, and blocks partial multi-product checkout and preserves single-product handoff\n');

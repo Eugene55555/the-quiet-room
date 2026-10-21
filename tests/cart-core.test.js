@@ -53,26 +53,42 @@ run('unit count sums quantities across lines', function () {
   assert.equal(cart.countUnits({ butterfly: 2, tiger: 1 }, products), 3);
 });
 
-run('checkout handoff chains every product and quantity through BlackSea', function () {
-  const returnUrl = 'https://eugene55555.github.io/the-quiet-room/#product-card-butterfly';
-  const first = new URL(cart.buildCheckoutChain(
-    { tiger: 2, butterfly: 3 },
+run('single-product checkout preserves quantity and the local return URL', function () {
+  const returnUrl = 'https://eugene55555.github.io/the-quiet-room/#product-card-tiger';
+  const url = new URL(cart.buildCheckoutLink(
+    { tiger: 2 },
     products,
     returnUrl,
     'https://5307397047125.blacksea.in.ua/checkout',
     'https://eugene55555.github.io/the-quiet-room/'
   ));
-  const second = new URL(first.searchParams.get('referrer'));
-  assert.equal(first.searchParams.get('product'), 'lek');
-  assert.equal(first.searchParams.get('quantity'), '2');
-  assert.equal(second.searchParams.get('product'), 'ksi');
-  assert.equal(second.searchParams.get('quantity'), '3');
-  assert.equal(second.searchParams.get('referrer'), returnUrl);
+  assert.equal(url.searchParams.get('product'), 'lek');
+  assert.equal(url.searchParams.get('quantity'), '2');
+  assert.equal(url.searchParams.get('referrer'), returnUrl);
+  assert.equal(url.searchParams.has('products'), false);
 });
 
-run('checkout handoff includes every configured product in the real catalog', function () {
-  const finalReturn = catalogSite + '#product-card-golden-butterfly-cat';
-  let url = new URL(cart.buildCheckoutChain(
+run('multi-product checkout fails closed instead of sending only one line', function () {
+  assert.equal(cart.buildCheckoutLink(
+    { tiger: 2, butterfly: 3 },
+    products,
+    'https://eugene55555.github.io/the-quiet-room/',
+    'https://5307397047125.blacksea.in.ua/checkout',
+    'https://eugene55555.github.io/the-quiet-room/'
+  ), '');
+});
+
+run('real BlackSea catalog allows one product and rejects multiple products', function () {
+  const one = new URL(cart.buildCheckoutLink(
+    { 'golden-butterfly-cat': 3 },
+    catalogProducts,
+    catalogSite,
+    'https://5307397047125.blacksea.in.ua/checkout',
+    catalogSite
+  ));
+  assert.equal(one.searchParams.get('product'), 'ksi');
+  assert.equal(one.searchParams.get('quantity'), '3');
+  assert.equal(cart.buildCheckoutLink(
     {
       'baby-tiger': 2,
       'golden-butterfly-cat': 3,
@@ -80,22 +96,15 @@ run('checkout handoff includes every configured product in the real catalog', fu
       'cat-tree-dreams': 4
     },
     catalogProducts,
-    finalReturn,
+    catalogSite,
     'https://5307397047125.blacksea.in.ua/checkout',
     catalogSite
-  ));
-  const expected = [['lek', '2'], ['ksi', '3'], ['oko', '1'], ['xmv', '4']];
-  expected.forEach(function (line) {
-    assert.equal(url.searchParams.get('product'), line[0]);
-    assert.equal(url.searchParams.get('quantity'), line[1]);
-    url = new URL(url.searchParams.get('referrer'));
-  });
-  assert.equal(url.href, finalReturn);
+  ), '');
 });
 
 run('checkout handoff refuses to silently skip a product without a vendor slug', function () {
   const missingSlugProducts = [{ id: 'tiger', name: 'Baby Tiger', price: 2.60 }];
-  assert.equal(cart.buildCheckoutChain(
+  assert.equal(cart.buildCheckoutLink(
     { tiger: 1 },
     missingSlugProducts,
     'https://eugene55555.github.io/the-quiet-room/',

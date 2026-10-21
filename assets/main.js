@@ -7,7 +7,7 @@
   var state = { q: '', cat: '', price: '', sort: 'featured', page: 1 };
 
   function esc(s) {
-    return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+    return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#39;');
   }
 
   function money(n) {
@@ -107,7 +107,6 @@
     });
   }
 
-  var CHECKOUT_URL = 'https://5307397047125.blacksea.in.ua/checkout';
   var pendingProductCardScroll = window.location.hash.indexOf('#product-card-') === 0;
 
   function currentURLWithoutHash() {
@@ -125,10 +124,6 @@
     return url.href;
   }
 
-  function buyURL(p, referrer) {
-    return CHECKOUT_URL + '?product=' + encodeURIComponent(p.slug)
-      + '&quantity=1&referrer=' + encodeURIComponent(referrer);
-  }
 
   var header = document.getElementById('site-header');
   var grid = document.getElementById('catalog');
@@ -165,13 +160,16 @@
   var filterOpenBtn = document.getElementById('filter-open');
 
   function syncBodyLock() {
+    var cartDrawer = document.getElementById('cart-drawer');
     var open = (menuDrawer && menuDrawer.classList.contains('show')) ||
-               (filterDrawer && filterDrawer.classList.contains('show'));
+               (filterDrawer && filterDrawer.classList.contains('show')) ||
+               (cartDrawer && cartDrawer.classList.contains('show'));
     document.body.style.overflow = open ? 'hidden' : '';
   }
 
   function setMenu(open) {
     if (!menuDrawer) return;
+    if (open && typeof window.TQR_CLOSE_CART === 'function') window.TQR_CLOSE_CART();
     menuDrawer.classList.toggle('show', open);
     if (menuOverlay) menuOverlay.classList.toggle('show', open);
     if (burger) burger.setAttribute('aria-expanded', open ? 'true' : 'false');
@@ -180,6 +178,7 @@
 
   function setFilterPanel(open) {
     if (!filterDrawer) return;
+    if (open && typeof window.TQR_CLOSE_CART === 'function') window.TQR_CLOSE_CART();
     filterDrawer.classList.toggle('show', open);
     if (filterOverlay) filterOverlay.classList.toggle('show', open);
     if (filterOpenBtn) filterOpenBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
@@ -383,7 +382,14 @@
       + '<div class="card-price-row">'
       + '<span class="price-sale">' + money(p.price) + '</span>'
       + '</div>'
-      + '<a class="card-btn" href="' + esc(buyURL(p, referrer)) + '">Buy now</a>'
+      + '<div class="card-actions">'
+      + '<div class="quantity-control quantity-control-card" aria-label="Quantity for ' + esc(p.name) + '">'
+      + '<button type="button" data-quantity-step="-1" aria-label="Decrease quantity for ' + esc(p.name) + '">−</button>'
+      + '<input type="number" min="1" max="99" step="1" value="1" inputmode="numeric" data-quantity-input data-product-id="' + esc(p.id) + '" aria-label="Quantity for ' + esc(p.name) + '">'
+      + '<button type="button" data-quantity-step="1" aria-label="Increase quantity for ' + esc(p.name) + '">+</button>'
+      + '</div>'
+      + '<button type="button" class="card-btn" data-cart-add="' + esc(p.id) + '" data-cart-return="' + esc(referrer) + '"><i class="fa-solid fa-cart-plus" aria-hidden="true"></i><span>Add to cart</span></button>'
+      + '</div>'
       + '</div></article>';
   }
 
@@ -556,9 +562,16 @@
       + '<li><i class="fa-solid fa-circle-check"></i>For personal use and small businesses</li>'
       + '<li><i class="fa-solid fa-circle-check"></i>Digital download — no physical item is shipped</li>'
       + '</ul>'
-      + '<a class="product-buy" href="' + esc(buyURL(p, currentURLWithoutHash())) + '">Buy now — ' + money(p.price) + '</a>'
+      + '<div class="product-add-row">'
+      + '<div class="quantity-control quantity-control-product" aria-label="Quantity for ' + esc(p.name) + '">'
+      + '<button type="button" data-quantity-step="-1" aria-label="Decrease quantity for ' + esc(p.name) + '">−</button>'
+      + '<input type="number" min="1" max="99" step="1" value="1" inputmode="numeric" data-quantity-input data-product-id="' + esc(p.id) + '" aria-label="Quantity for ' + esc(p.name) + '">'
+      + '<button type="button" data-quantity-step="1" aria-label="Increase quantity for ' + esc(p.name) + '">+</button>'
+      + '</div>'
+      + '<button class="product-buy" type="button" data-cart-add="' + esc(p.id) + '" data-cart-return="' + esc(currentURLWithoutHash()) + '"><i class="fa-solid fa-cart-plus" aria-hidden="true"></i> Add to cart — ' + money(p.price) + '</button>'
+      + '</div>'
       + '<p class="product-safe"><i class="fa-solid fa-lock"></i> Secure card payment · 3-D Secure</p>'
-      + '<p class="product-checkout-note">Checkout is hosted by BlackSea. Each print has its own checkout link.</p>'
+      + '<p class="product-checkout-note">Add prints to your basket here; the final payment is hosted by BlackSea.</p>'
       + '</div></div>'
       + '<section class="product-related"><h2>You may also like</h2><div class="grid">'
       + related.map(function (x) { return cardHTML(x, cardReferrer(x.id)); }).join('')

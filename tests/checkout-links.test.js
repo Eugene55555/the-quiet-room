@@ -196,7 +196,8 @@ assert.equal(catalogBuy.text, 'Buy now');
 assert.match(catalog.markup, /id="product-card-tiger"/);
 assert.equal((catalog.markup.match(/class="card-title"/g) || []).length, 5, 'all five catalog cards render');
 assert.equal((catalog.markup.match(/class="card-dots"/g) || []).length, 4, 'multi-image catalog cards expose their gallery pagination');
-assert.match(catalog.markup, /<p class="card-desc">Tiger cub summary &amp; botanicals\.<\/p>/, 'catalog cards show the product summary safely escaped');
+assert.match(catalog.markup, /<div class="card-desc"><p class="card-summary">Tiger cub summary &amp; botanicals\.<\/p>/, 'catalog cards show the product summary safely escaped');
+assert.match(catalog.markup, /<p>Tiger cub story &amp; botanicals\.<\/p><p>A second paragraph\.<\/p><\/div>/, 'catalog cards also show the full product description');
 const catalogTigerGallery = catalog.cardGalleries[0];
 catalogTigerGallery.media.listeners.pointerdown({ isPrimary: true, pointerType: 'touch', pointerId: 1, clientX: 100, clientY: 100 });
 catalogTigerGallery.media.listeners.pointermove({ pointerId: 1, clientX: 60, clientY: 100 });
@@ -274,8 +275,8 @@ for (const path of htmlFiles) {
   const html = fs.readFileSync(require.resolve(path), 'utf8');
   assert.doesNotMatch(html, /cart-fab|cart-drawer|cart-toggle|cart-clear|assets\/cart-(?:core|ui)\.js/);
   assert.match(html, /assets\/data\.js\?v=20/);
-  assert.match(html, /assets\/main\.js\?v=26/);
-  assert.match(html, /assets\/style\.css\?v=27/);
+  assert.match(html, /assets\/main\.js\?v=27/);
+  assert.match(html, /assets\/style\.css\?v=28/);
 }
 assert.doesNotMatch(mainSource, /TQR_CLOSE_CART|data-cart-add|cart-drawer|cart-toggle/);
 assert.doesNotMatch(cssSource, /cart-fab|cart-drawer|cart-count|cart-items|cart-clear|cart-checkout/);

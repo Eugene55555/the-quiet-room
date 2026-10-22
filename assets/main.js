@@ -377,6 +377,7 @@
   /* ---------- Product card ---------- */
   function cardHTML(p, referrer) {
     var images = productImages(p);
+    var summary = typeof p.summary === 'string' ? p.summary.trim() : '';
     var slides = images.map(function (src, i) {
       return '<img class="card-slide' + (i === 0 ? ' is-active' : '') + '"'
         + ' loading="lazy" draggable="false" src="' + esc(src) + '"'
@@ -397,6 +398,7 @@
       + '</a>'
       + '<div class="card-body">'
       + '<a class="card-title" href="product.html?id=' + esc(p.id) + '">' + esc(p.name) + '</a>'
+      + (summary ? '<p class="card-desc">' + esc(summary) + '</p>' : '')
       + '<div class="card-price-row">'
       + '<span class="price-sale">' + money(p.price) + '</span>'
       + '</div>'
@@ -533,7 +535,12 @@
     }
 
     var title = p.name + ' — The Quiet Room';
-    var description = 'Digital print file “' + p.name + '” in PNG and PDF. Delivered instantly by email after purchase.';
+    var description = typeof p.summary === 'string' && p.summary.trim()
+      ? p.summary.trim()
+      : 'Digital print file “' + p.name + '” in PNG and PDF. Delivered instantly by email after purchase.';
+    var detailDescription = Array.isArray(p.description)
+      ? p.description.filter(function (paragraph) { return typeof paragraph === 'string' && paragraph.trim(); })
+      : [];
     var images = productImages(p);
     document.title = title;
     setMeta('meta[name="description"]', description);
@@ -575,7 +582,7 @@
       + '</div>'
       + '<p class="product-formats">Formats: ' + esc(p.formats) + '</p>'
       + '<div class="product-desc">'
-      + '<p>A digital print file of “' + esc(p.name) + '” in The Quiet Room’s signature style. It works beautifully on T-shirts, hoodies, mugs, posters and other products.</p>'
+      + detailDescription.map(function (paragraph) { return '<p>' + esc(paragraph) + '</p>'; }).join('')
       + '<p>Buy once and print as often as you like. After payment, the file is delivered instantly to your inbox and saved in your BlackSea library.</p>'
       + '</div>'
       + '<ul class="product-feats">'

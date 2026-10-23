@@ -9,12 +9,16 @@ vm.runInNewContext(fs.readFileSync(require.resolve('../assets/data.js'), 'utf8')
 const products = context.window.TQR_PRODUCTS;
 
 assert.equal(products.length, 5, 'catalog mirrors all five public BlackSea listings');
-assert.equal(products.find(product => product.id === 'white-wolf').name,
-  'White Wolf Digital Art Print PNG PDF', 'White Wolf uses the required exact display title');
 assert.deepEqual(
-  JSON.parse(JSON.stringify(products.filter(product => product.id !== 'white-wolf').map(product => product.name))),
-  ['Wild Blossom Tiger Cub', 'Golden Butterfly Cat', 'Enchanted Rainbow Cat', 'Enchanted Sunset Cat'],
-  'other product display titles are unchanged'
+  JSON.parse(JSON.stringify(products.map(product => product.name))),
+  [
+    'White Wolf Digital Art Print PNG PDF',
+    'Wild Blossom Tiger Cub — Enchanted Nature Digital Art Print PDF PNG',
+    'Golden Butterfly Cat — Golden Elegance PNG PDF',
+    'Enchanted Rainbow Cat — Whispers of Autumn PNG PDF',
+    'Enchanted Sunset Cat — Magical Fantasy Art Print PNG PDF'
+  ],
+  'all five display titles exactly match the BlackSea source order and punctuation'
 );
 assert.deepEqual(
   JSON.parse(JSON.stringify(products.map(({ id, slug, price }) => [id, slug, price]))),

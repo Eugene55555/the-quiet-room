@@ -120,8 +120,14 @@ for (const product of products) {
   const card = cards[product.id];
   assert.ok(card, product.id + ' card is rendered');
   const cardImages = [...card.matchAll(/<img\b[^>]*\bsrc="([^"]+)"/g)].map(match => match[1]);
-  assert.deepEqual(cardImages, [esc(images[0])], product.id + ' card shows only its first image');
-  assert.doesNotMatch(card, /card-dots|card-dot/, product.id + ' card has no gallery indicators');
+  assert.deepEqual(cardImages, Array.from(images, esc), product.id + ' card shows all of its source images in order');
+  if (images.length > 1) {
+    assert.equal((card.match(/class="card-dot(?: is-active)?"/g) || []).length, images.length,
+      product.id + ' card has one gallery indicator per image');
+    assert.match(card, /class="card-dot is-active"/, product.id + ' card starts with its first indicator active');
+  } else {
+    assert.doesNotMatch(card, /card-dots|card-dot/, product.id + ' single-image card has no gallery indicators');
+  }
   const descriptions = [...card.matchAll(/<p class="card-desc">([\s\S]*?)<\/p>/g)];
   assert.equal(descriptions.length, 1, product.id + ' card renders exactly one summary paragraph');
   assert.equal(descriptions[0][1], esc(summary), product.id + ' card renders its own summary');

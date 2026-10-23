@@ -195,8 +195,8 @@ assertBlackSeaLink(catalogBuy, 'lek', catalogReturn);
 assert.equal(catalogBuy.text, 'Buy now');
 assert.match(catalog.markup, /id="product-card-tiger"/);
 assert.equal((catalog.markup.match(/class="card-title"/g) || []).length, 5, 'all five catalog cards render');
-assert.equal((catalog.markup.match(/<img class="card-slide/g) || []).length, 5, 'catalog cards render only one cover image each');
-assert.doesNotMatch(catalog.markup, /class="card-dots"/, 'catalog cards do not render gallery pagination');
+assert.equal((catalog.markup.match(/<img class="card-slide/g) || []).length, 12, 'catalog cards render every source image');
+assert.equal((catalog.markup.match(/class="card-dots"/g) || []).length, 4, 'catalog cards expose persistent gallery pagination before swiping');
 assert.match(catalog.markup, /<p class="card-desc">Tiger cub summary &amp; botanicals\.<\/p>/, 'catalog cards show only the short summary safely escaped');
 assert.doesNotMatch(catalog.markup, /<div class="card-desc">/, 'catalog cards do not render the full description');
 assert.doesNotMatch(catalog.markup, /Tiger cub story/, 'catalog cards do not leak detail body copy');
@@ -245,8 +245,8 @@ assert.deepEqual(product.historyUpdates, [productUrl + '#product-card-tiger']);
 
 const relatedBuy = extractLink(product.markup, 'card-btn');
 assert.equal((product.markup.match(/class="card-title"/g) || []).length, 4, 'all related product cards render');
-assert.equal((product.markup.match(/<img class="card-slide/g) || []).length, 4, 'related cards render only one cover image each');
-assert.doesNotMatch(product.markup, /class="card-dots"/, 'related cards do not render gallery pagination');
+assert.equal((product.markup.match(/<img class="card-slide/g) || []).length, 9, 'related cards render every source image');
+assert.equal((product.markup.match(/class="card-dots"/g) || []).length, 3, 'related cards expose persistent gallery pagination before swiping');
 assertBlackSeaLink(relatedBuy, 'ksi', productUrl + '#product-card-butterfly');
 assert.equal(dispatchCheckoutClick(product, relatedBuy), productUrl + '#product-card-butterfly');
 assert.deepEqual(product.historyUpdates, [productUrl + '#product-card-tiger', productUrl + '#product-card-butterfly']);
@@ -265,7 +265,7 @@ for (const path of htmlFiles) {
   const html = fs.readFileSync(require.resolve(path), 'utf8');
   assert.doesNotMatch(html, /cart-fab|cart-drawer|cart-toggle|cart-clear|assets\/cart-(?:core|ui)\.js/);
   assert.match(html, /assets\/data\.js\?v=24/);
-  assert.match(html, /assets\/main\.js\?v=29/);
+  assert.match(html, /assets\/main\.js\?v=30/);
   assert.match(html, /assets\/style\.css\?v=32/);
 }
 assert.doesNotMatch(mainSource, /TQR_CLOSE_CART|data-cart-add|cart-drawer|cart-toggle/);

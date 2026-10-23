@@ -273,7 +273,7 @@ assert.match(cssSource, /@media\s*\(max-width:\s*900px\)\s*\{[\s\S]*?\.product-l
 for (const path of ['../index.html', '../product.html']) {
   const html = fs.readFileSync(require.resolve(path), 'utf8');
   assert.match(html, /assets\/data\.js\?v=24/, path + ' loads the cache-busted five source titles');
-  assert.match(html, /assets\/main\.js\?v=37/, path + ' loads the cache-busted relocated-button renderer');
+  assert.match(html, /assets\/main\.js\?v=38/, path + ' loads the cache-busted relocated-button renderer');
   assert.match(html, /assets\/style\.css\?v=36/, path + ' loads the cache-busted card layout and red CTA CSS');
 }
 

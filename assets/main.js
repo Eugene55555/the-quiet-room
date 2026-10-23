@@ -378,6 +378,14 @@
   function cardHTML(p, referrer) {
     var images = productImages(p);
     var summary = typeof p.summary === 'string' ? p.summary.trim() : '';
+    var description = Array.isArray(p.description)
+      ? p.description.filter(function (paragraph) { return typeof paragraph === 'string' && paragraph.trim(); })
+      : [];
+    var descriptionHTML = description.length
+      ? '<div class="card-desc">'
+        + description.map(function (paragraph) { return '<p>' + esc(paragraph) + '</p>'; }).join('')
+        + '</div>'
+      : (summary ? '<p class="card-desc">' + esc(summary) + '</p>' : '');
     var slides = images.map(function (src, i) {
       return '<img class="card-slide' + (i === 0 ? ' is-active' : '') + '"'
         + ' loading="lazy" draggable="false" src="' + esc(src) + '"'
@@ -398,7 +406,7 @@
       + '</a>'
       + '<div class="card-body">'
       + '<a class="card-title" href="product.html?id=' + esc(p.id) + '">' + esc(p.name) + '</a>'
-      + (summary ? '<p class="card-desc">' + esc(summary) + '</p>' : '')
+      + descriptionHTML
       + '<div class="card-price-row">'
       + '<span class="price-sale">' + money(p.price) + '</span>'
       + '</div>'

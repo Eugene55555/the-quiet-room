@@ -131,24 +131,29 @@ for (const product of products) {
   const layoutOpen = markup.indexOf('<div class="product-layout"');
   const visualOpen = markup.indexOf('<div class="product-visual">');
   const galleryOpen = markup.indexOf('<div class="product-gallery">');
+  const infoOpen = markup.indexOf('<div class="product-info">');
   const buyRowOpen = markup.indexOf('<div class="product-buy-row">');
   const buyAnchor = markup.indexOf('<a class="product-buy"');
-  const infoOpen = markup.indexOf('<div class="product-info">');
+  const detailsOpen = markup.indexOf('<section class="product-details">');
+  const relatedOpen = markup.indexOf('<section class="product-related">');
   assert.ok(layoutOpen >= 0 && visualOpen > layoutOpen, product.id + ': detail has a gallery/action column');
   assert.ok(galleryOpen > visualOpen, product.id + ': gallery is the first block in the image column');
-  assert.ok(buyRowOpen > galleryOpen, product.id + ': Buy row follows the gallery container');
+  assert.ok(infoOpen > visualOpen, product.id + ': product information follows the image column');
+  assert.ok(buyRowOpen > infoOpen, product.id + ': Buy row follows price and format details in the information column');
   assert.ok(buyAnchor > buyRowOpen, product.id + ': Buy link is inside the Buy row');
-  assert.ok(infoOpen > buyAnchor, product.id + ': Buy row stays before and outside the description column');
+  assert.ok(detailsOpen > buyRowOpen && relatedOpen > detailsOpen, product.id + ': description follows the Buy row and related products follow the layout');
 
   const galleryEnd = elementEnd(markup, galleryOpen);
-  const buyRowEnd = elementEnd(markup, buyRowOpen);
   const visualEnd = elementEnd(markup, visualOpen);
+  const layoutEnd = elementEnd(markup, layoutOpen);
+  const buyRowEnd = elementEnd(markup, buyRowOpen);
   const infoEnd = elementEnd(markup, infoOpen);
-  assert.ok(galleryEnd > 0 && galleryEnd <= buyRowOpen, product.id + ': entire gallery precedes the Buy row');
-  assert.ok(buyRowEnd > 0 && buyRowEnd <= visualEnd, product.id + ': Buy row remains inside the image column');
-  assert.ok(visualEnd <= infoOpen && infoEnd > infoOpen, product.id + ': description column follows the image column');
-  assert.doesNotMatch(markup.slice(infoOpen, infoEnd), /class="product-buy"/,
-    product.id + ': description column no longer owns the primary Buy button');
+  assert.ok(galleryEnd > 0 && galleryEnd <= visualEnd && visualEnd <= infoOpen, product.id + ': gallery stays entirely in the left image column');
+  assert.ok(buyRowEnd > buyRowOpen && buyRowEnd <= detailsOpen, product.id + ': Buy row stays inside the right column before the description');
+  assert.ok(infoEnd > detailsOpen && infoEnd <= layoutEnd, product.id + ': complete description stays inside the right information column');
+  assert.ok(relatedOpen >= layoutEnd, product.id + ': related products follow the two-column product area');
+  assert.ok(markup.slice(infoOpen, buyRowOpen).includes('class="product-formats"'),
+    product.id + ': Buy button follows the format information');
 
   assert.equal((markup.match(/class="product-buy"/g) || []).length, 1,
     product.id + ': exactly one primary Buy button renders');
@@ -262,19 +267,25 @@ const visualRule = cssRulesList.find(rule => rule.selector === '.product-visual'
 assert.ok(visualRule, 'image column wrapper is styled');
 assert.match(visualRule.body, /display\s*:\s*flex\b/);
 assert.match(visualRule.body, /flex-direction\s*:\s*column\b/);
+assert.match(cssSource, /@media\s*\(min-width:\s*901px\)\s*\{[\s\S]*?\.product-layout\s*\{[^}]*grid-template-columns\s*:\s*minmax\(0,\s*\.8fr\)\s+minmax\(0,\s*1\.2fr\)/,
+  'desktop gives the information column more width than the gallery');
+assert.match(cssSource, /@media\s*\(min-width:\s*901px\)\s*\{[\s\S]*?\.product-visual\s*\{[^}]*position\s*:\s*sticky/,
+  'desktop keeps the product gallery visible while reading long descriptions');
+assert.match(cssSource, /\.product-main-trigger\s+img\s*\{[^}]*max-height\s*:\s*100%[^}]*object-fit\s*:\s*contain/,
+  'large product images preserve their full aspect ratio inside the desktop stage');
 const buyLayoutRule = cssRulesList.find(rule => rule.selector === '.product-buy-row .product-buy');
 assert.ok(buyLayoutRule, 'detail Buy layout hook follows the relocated button');
 assert.match(buyLayoutRule.body, /flex\s*:\s*1\b/);
 assert.doesNotMatch(cssSource, /\.product-buy[^{}]*\{[^}]*display\s*:\s*none/,
   'the primary Buy button is never hidden, including mobile layouts');
 assert.match(cssSource, /@media\s*\(max-width:\s*900px\)\s*\{[\s\S]*?\.product-layout\s*\{\s*grid-template-columns\s*:\s*1fr/,
-  'mobile keeps the image column with its Buy button before the description column');
+  'mobile keeps a single-column product layout');
 
 for (const path of ['../index.html', '../product.html']) {
   const html = fs.readFileSync(require.resolve(path), 'utf8');
   assert.match(html, /assets\/data\.js\?v=24/, path + ' loads the cache-busted five source titles');
-  assert.match(html, /assets\/main\.js\?v=38/, path + ' loads the cache-busted relocated-button renderer');
-  assert.match(html, /assets\/style\.css\?v=36/, path + ' loads the cache-busted card layout and red CTA CSS');
+  assert.match(html, /assets\/main\.js\?v=39/, path + ' loads the cache-busted relocated-button renderer');
+  assert.match(html, /assets\/style\.css\?v=37/, path + ' loads the cache-busted desktop layout CSS');
 }
 
-process.stdout.write('PASS all five detail pages place the single Buy button directly after the gallery in the image column, with checkout links and catalog card buttons unchanged\n');
+process.stdout.write('PASS all five detail pages place the Buy button and full description in the wider information column, with checkout links and catalog cards unchanged\n');

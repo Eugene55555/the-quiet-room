@@ -215,7 +215,7 @@ for (const product of products) {
     product.id + ' detail page has one gallery dot per source image');
   assert.match(detailMarkup, new RegExp('data-gallery-count="' + gallery.length + '"'),
     product.id + ' gallery count matches the source image count');
-  const description = markup.match(/<div class="product-desc">([\s\S]*?)<\/div>/);
+  const description = markup.match(/<div class="product-desc">([\s\S]*?)<\/div>\s*<ul class="product-feats">/);
   assert.ok(description, product.id + ' detail page renders a description block');
   const section = description[1];
 
@@ -275,7 +275,7 @@ assert.match(xssMarkup, /&lt;b&gt;bold&lt;\/b&gt;/, 'inline text is escaped');
 assert.match(xssMarkup, /&lt;svg onload=alert\(1\)&gt;/, 'list text is escaped');
 assert.match(xssMarkup, /&lt;a href=&quot;javascript:alert\(1\)&quot;&gt;x&lt;\/a&gt;/, 'unsafe links remain text');
 
-const productRules = [...cssSource.matchAll(/\.product-desc[^{]*\{([^}]*)\}/g)];
+const productRules = [...cssSource.matchAll(/\.product-desc(?![-\w])[^{}]*\{([^}]*)\}/g)];
 assert.ok(productRules.length > 0, 'detail description styling exists');
 for (const rule of productRules) {
   const body = rule[1];

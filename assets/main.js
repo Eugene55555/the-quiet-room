@@ -599,27 +599,23 @@
         }).join('') + '</div>'
       : '';
     var lightboxNav = images.length > 1
-      ? '<button type="button" class="product-lightbox-control product-lightbox-prev" id="product-lightbox-prev" aria-label="Previous image"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>'
-        + '<button type="button" class="product-lightbox-control product-lightbox-next" id="product-lightbox-next" aria-label="Next image"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>'
+      ? '<button type="button" class="product-lightbox-arrow product-lightbox-prev" id="product-lightbox-prev" aria-label="Previous image"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>'
+        + '<button type="button" class="product-lightbox-arrow product-lightbox-next" id="product-lightbox-next" aria-label="Next image"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>'
+      : '';
+    var lightboxCount = images.length > 1
+      ? '<span class="product-lightbox-count" id="product-lightbox-count" aria-live="polite">1 / ' + images.length + '</span>'
       : '';
     var lightboxMarkup =
       '<dialog class="product-lightbox" id="product-lightbox" aria-modal="true" aria-labelledby="product-lightbox-title" aria-describedby="product-lightbox-hint">'
-      + '<div class="product-lightbox-panel" id="product-lightbox-panel">'
-      + '<div class="product-lightbox-head">'
-      + '<div class="product-lightbox-copy">'
-      + '<h2 class="product-lightbox-title" id="product-lightbox-title">' + esc(p.name) + ' — image 1 of ' + images.length + '</h2>'
-      + '<p class="product-lightbox-hint" id="product-lightbox-hint">Pinch or use the zoom buttons, then drag or scroll to explore.</p>'
+      + '<div class="product-lightbox-stage" id="product-lightbox-stage">'
+      + '<img class="product-lightbox-image" id="product-lightbox-image" draggable="false" src="' + esc(images[0]) + '" alt="' + esc(p.name) + ' — image 1 of ' + images.length + '">'
       + '</div>'
-      + '<button type="button" class="product-lightbox-control product-lightbox-close" id="product-lightbox-close" aria-label="Close enlarged image"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>'
-      + '</div>'
-      + '<div class="product-lightbox-stage" id="product-lightbox-stage"><img class="product-lightbox-image" id="product-lightbox-image" draggable="false" src="' + esc(images[0]) + '" alt="' + esc(p.name) + ' — image 1 of ' + images.length + '"></div>'
-      + '<div class="product-lightbox-controls" role="group" aria-label="Image zoom and navigation">'
       + lightboxNav
-      + '<button type="button" class="product-lightbox-control product-lightbox-zoom" id="product-lightbox-zoom-out" aria-label="Zoom out"><i class="fa-solid fa-magnifying-glass-minus" aria-hidden="true"></i></button>'
-      + '<span class="product-lightbox-zoom-value" id="product-lightbox-zoom-value" aria-live="polite">1×</span>'
-      + '<button type="button" class="product-lightbox-control product-lightbox-reset" id="product-lightbox-reset" aria-label="Reset zoom">Reset</button>'
-      + '<button type="button" class="product-lightbox-control product-lightbox-zoom" id="product-lightbox-zoom-in" aria-label="Zoom in"><i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i></button>'
-      + '</div></div></dialog>';
+      + '<button type="button" class="product-lightbox-close" id="product-lightbox-close" aria-label="Close image viewer"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>'
+      + lightboxCount
+      + '<h2 class="product-lightbox-sr" id="product-lightbox-title">' + esc(p.name) + ' — image 1 of ' + images.length + '</h2>'
+      + '<p class="product-lightbox-sr" id="product-lightbox-hint">Use the mouse wheel, pinch or plus and minus to zoom. Drag to pan. Press Escape to close.</p>'
+      + '</dialog>';
     // Product fields are escaped and gallery indices are generated integers.
     page.innerHTML =
       '<div class="product-layout" id="product-card-' + esc(p.id) + '">'
@@ -670,11 +666,8 @@
     var lightboxImage = document.getElementById('product-lightbox-image');
     var lightboxStage = document.getElementById('product-lightbox-stage');
     var lightboxTitle = document.getElementById('product-lightbox-title');
-    var zoomValue = document.getElementById('product-lightbox-zoom-value');
+    var countLabel = document.getElementById('product-lightbox-count');
     var closeButton = document.getElementById('product-lightbox-close');
-    var zoomInButton = document.getElementById('product-lightbox-zoom-in');
-    var zoomOutButton = document.getElementById('product-lightbox-zoom-out');
-    var resetButton = document.getElementById('product-lightbox-reset');
     var prevButton = document.getElementById('product-lightbox-prev');
     var nextButton = document.getElementById('product-lightbox-next');
     var current = 0;
@@ -682,6 +675,8 @@
     var ZOOM_MAX = 4;
     var ZOOM_STEP = 0.5;
     var lightboxZoom = ZOOM_MIN;
+    var panX = 0;
+    var panY = 0;
     var lightboxOpen = false;
     var lightboxLastTrigger = null;
     var savedBodyOverflow = '';
@@ -689,10 +684,8 @@
     var panStart = null;
     var pinchStart = null;
     var touchPointers = {};
-
-    function zoomLabel(value) {
-      return String(value).replace(/\.0$/, '') + '×';
-    }
+    var lastTap = null;
+    var suppressClickUntil = 0;
 
     function updateLightboxImage() {
       if (lightboxImage && images[current]) {
@@ -702,38 +695,80 @@
       if (lightboxTitle) {
         lightboxTitle.textContent = p.name + ' — image ' + (current + 1) + ' of ' + images.length;
       }
-      if (lightboxStage) {
-        lightboxStage.scrollLeft = 0;
-        lightboxStage.scrollTop = 0;
+      if (countLabel) {
+        countLabel.textContent = (current + 1) + ' / ' + images.length;
       }
     }
 
     function applyZoom() {
       var zoomed = lightboxZoom > ZOOM_MIN;
-      if (lightboxImage) {
-        if (zoomed) {
-          lightboxImage.style.width = (lightboxZoom * 100) + '%';
-          lightboxImage.style.maxWidth = 'none';
-          lightboxImage.style.maxHeight = 'none';
-          lightboxImage.style.cursor = 'grab';
-        } else {
-          lightboxImage.style.width = 'auto';
-          lightboxImage.style.maxWidth = '100%';
-          lightboxImage.style.maxHeight = '100%';
-          lightboxImage.style.cursor = 'zoom-in';
-        }
+      if (!zoomed) {
+        panX = 0;
+        panY = 0;
       }
-      if (lightboxStage) lightboxStage.classList.toggle('is-zoomed', zoomed);
-      if (lightbox) lightbox.setAttribute('data-zoom', String(lightboxZoom));
-      if (zoomOutButton) zoomOutButton.disabled = lightboxZoom <= ZOOM_MIN;
-      if (resetButton) resetButton.disabled = lightboxZoom <= ZOOM_MIN;
-      if (zoomInButton) zoomInButton.disabled = lightboxZoom >= ZOOM_MAX;
-      if (zoomValue) zoomValue.textContent = zoomLabel(lightboxZoom);
+      if (lightboxImage) {
+        lightboxImage.style.transform = 'translate(' + panX + 'px, ' + panY + 'px) scale(' + lightboxZoom + ')';
+        lightboxImage.style.cursor = zoomed ? (panStart ? 'grabbing' : 'grab') : 'zoom-in';
+      }
+      if (lightboxStage) {
+        lightboxStage.classList.toggle('is-zoomed', zoomed);
+        lightboxStage.classList.toggle('is-panning', !!panStart);
+      }
+      if (lightbox) {
+        lightbox.setAttribute('data-zoom', String(lightboxZoom));
+        lightbox.setAttribute('data-pan-x', String(panX));
+        lightbox.setAttribute('data-pan-y', String(panY));
+      }
     }
 
-    function setZoom(next) {
-      lightboxZoom = Math.round(Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, next)) * 10) / 10;
+    function resetZoom() {
+      lightboxZoom = ZOOM_MIN;
+      panX = 0;
+      panY = 0;
       applyZoom();
+    }
+
+    function zoomAt(next, clientX, clientY) {
+      var previous = lightboxZoom;
+      next = Math.round(Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, next)) * 10) / 10;
+      if (next === previous) {
+        if (next === ZOOM_MIN) {
+          panX = 0;
+          panY = 0;
+          applyZoom();
+        }
+        return;
+      }
+      if (typeof clientX === 'number' && typeof clientY === 'number' && lightboxStage && typeof lightboxStage.getBoundingClientRect === 'function') {
+        var rect = lightboxStage.getBoundingClientRect();
+        var anchorX = clientX - (rect.left + rect.width / 2);
+        var anchorY = clientY - (rect.top + rect.height / 2);
+        var ratio = next / previous;
+        panX = anchorX - ratio * (anchorX - panX);
+        panY = anchorY - ratio * (anchorY - panY);
+      } else {
+        panX = panX * next / previous;
+        panY = panY * next / previous;
+      }
+      lightboxZoom = next;
+      if (next === ZOOM_MIN) {
+        panX = 0;
+        panY = 0;
+      }
+      applyZoom();
+    }
+
+    function onLightboxWheel(e) {
+      if (!lightboxOpen) return;
+      if (e && e.preventDefault) e.preventDefault();
+      if (!e || !e.deltaY) return;
+      zoomAt(lightboxZoom + (e.deltaY < 0 ? ZOOM_STEP : -ZOOM_STEP), e.clientX, e.clientY);
+    }
+
+    function onLightboxDoubleClick(e) {
+      if (!lightboxOpen) return;
+      if (e && e.preventDefault) e.preventDefault();
+      zoomAt(lightboxZoom > ZOOM_MIN ? ZOOM_MIN : 2, e && e.clientX, e && e.clientY);
     }
 
     function touchPointCount() {
@@ -760,9 +795,14 @@
       return Math.sqrt(dx * dx + dy * dy);
     }
 
+    function eventTime(e) {
+      return e && typeof e.timeStamp === 'number' && e.timeStamp > 0 ? e.timeStamp : Date.now();
+    }
+
     function clearPan() {
       panStart = null;
       if (lightboxStage) lightboxStage.classList.remove('is-panning');
+      applyZoom();
     }
 
     function clearPinch() {
@@ -773,10 +813,41 @@
     function beginPinch(points) {
       pinchStart = {
         distance: Math.max(1, touchDistance(points[0], points[1])),
-        zoom: lightboxZoom
+        zoom: lightboxZoom,
+        panX: panX,
+        panY: panY,
+        centerX: (points[0].x + points[1].x) / 2,
+        centerY: (points[0].y + points[1].y) / 2
       };
       clearPan();
       if (lightboxStage) lightboxStage.classList.add('is-pinching');
+    }
+
+    function applyPinch(points) {
+      if (!pinchStart) return;
+      var distance = Math.max(1, touchDistance(points[0], points[1]));
+      var next = Math.round(Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, pinchStart.zoom * distance / pinchStart.distance)) * 10) / 10;
+      var ratio = next / pinchStart.zoom;
+      if (lightboxStage && typeof lightboxStage.getBoundingClientRect === 'function') {
+        var rect = lightboxStage.getBoundingClientRect();
+        var anchorX = pinchStart.centerX - (rect.left + rect.width / 2);
+        var anchorY = pinchStart.centerY - (rect.top + rect.height / 2);
+        panX = anchorX - ratio * (anchorX - pinchStart.panX);
+        panY = anchorY - ratio * (anchorY - pinchStart.panY);
+      } else {
+        panX = pinchStart.panX * ratio;
+        panY = pinchStart.panY * ratio;
+      }
+      lightboxZoom = next;
+      if (next === ZOOM_MIN) {
+        panX = 0;
+        panY = 0;
+      }
+      applyZoom();
+    }
+
+    function toggleTapZoom(x, y) {
+      zoomAt(lightboxZoom > ZOOM_MIN ? ZOOM_MIN : 2, x, y);
     }
 
     function cleanupLightbox() {
@@ -786,12 +857,14 @@
       }
       if (lightbox) lightbox.classList.remove('is-open', 'product-lightbox--fallback');
       if (lightboxStage) {
-        lightboxStage.classList.remove('is-panning', 'is-pinching');
+        lightboxStage.classList.remove('is-panning', 'is-pinching', 'is-zoomed');
         if (lightboxStage.style) lightboxStage.style.touchAction = savedStageTouchAction;
       }
       panStart = null;
       pinchStart = null;
       touchPointers = {};
+      lastTap = null;
+      suppressClickUntil = 0;
     }
 
     function returnLightboxFocus() {
@@ -817,6 +890,8 @@
     function openLightbox() {
       if (!lightbox || !lightboxImage || lightboxOpen) return;
       lightboxOpen = true;
+      lastTap = null;
+      suppressClickUntil = 0;
       if (lightboxStage && lightboxStage.style) {
         savedStageTouchAction = lightboxStage.style.touchAction || '';
         lightboxStage.style.touchAction = 'none';
@@ -828,7 +903,7 @@
         document.body.classList.add('lightbox-open');
       }
       updateLightboxImage();
-      setZoom(ZOOM_MIN);
+      resetZoom();
       lightbox.classList.add('is-open');
       var modalShown = false;
       if (typeof lightbox.showModal === 'function') {
@@ -843,22 +918,22 @@
         lightbox.classList.add('product-lightbox--fallback');
         if (typeof lightbox.setAttribute === 'function') lightbox.setAttribute('open', '');
       }
-      var focusTarget = closeButton || zoomInButton || lightboxImage;
+      var focusTarget = closeButton || lightboxImage;
       if (focusTarget && typeof focusTarget.focus === 'function') focusTarget.focus();
     }
 
     function trapLightboxFocus(e) {
-      var focusable = [prevButton, zoomOutButton, resetButton, zoomInButton, nextButton, closeButton].filter(function (el) {
+      var focusable = [prevButton, nextButton, closeButton].filter(function (el) {
         return el && !el.disabled && !el.hidden;
       });
       if (!focusable.length) return;
       var first = focusable[0];
       var last = focusable[focusable.length - 1];
-      var active = document.activeElement;
-      if (e.shiftKey && active === first) {
+      var index = focusable.indexOf(document.activeElement);
+      if (e.shiftKey && index <= 0) {
         e.preventDefault();
         last.focus();
-      } else if (!e.shiftKey && active === last) {
+      } else if (!e.shiftKey && (index === -1 || index === focusable.length - 1)) {
         e.preventDefault();
         first.focus();
       }
@@ -887,7 +962,7 @@
       });
       if (lightboxOpen) {
         updateLightboxImage();
-        setZoom(ZOOM_MIN);
+        resetZoom();
       }
     }
 
@@ -904,8 +979,126 @@
     if (media && images.length > 1) {
       bindSwipe(media, function (dir) { showImage(current + dir); });
     }
-    function listen(el, type, fn) {
-      if (el && typeof el.addEventListener === 'function') el.addEventListener(type, fn);
+    function listen(el, type, fn, options) {
+      if (el && typeof el.addEventListener === 'function') el.addEventListener(type, fn, options);
+    }
+
+    function startPan(e) {
+      panStart = {
+        id: e.pointerId,
+        x: e.clientX,
+        y: e.clientY,
+        panX: panX,
+        panY: panY,
+        moved: false
+      };
+      if (lightboxStage && lightboxStage.setPointerCapture) {
+        try { lightboxStage.setPointerCapture(e.pointerId); } catch (err) {}
+      }
+      applyZoom();
+    }
+
+    function onStagePointerDown(e) {
+      if (!lightboxOpen || !e) return;
+      if (e.pointerType === 'touch') {
+        touchPointers[e.pointerId] = {
+          id: e.pointerId,
+          x: e.clientX,
+          y: e.clientY,
+          startX: e.clientX,
+          startY: e.clientY,
+          startTime: eventTime(e),
+          moved: false
+        };
+        if (lightboxStage && lightboxStage.setPointerCapture) {
+          try { lightboxStage.setPointerCapture(e.pointerId); } catch (err) {}
+        }
+        var points = firstTouchPoints();
+        if (points.length === 2) {
+          beginPinch(points);
+          lastTap = null;
+          if (e.preventDefault) e.preventDefault();
+          return;
+        }
+        if (lightboxZoom > ZOOM_MIN) startPan(e);
+        return;
+      }
+      if (e.pointerType !== 'mouse' && e.pointerType !== 'pen') return;
+      if (e.button !== undefined && e.button !== 0) return;
+      if (lightboxZoom <= ZOOM_MIN) return;
+      startPan(e);
+    }
+
+    function onStagePointerMove(e) {
+      if (!lightboxOpen || !e) return;
+      if (e.pointerType === 'touch') {
+        var point = touchPointers[e.pointerId];
+        if (!point) return;
+        if (Math.abs(e.clientX - point.startX) > 8 || Math.abs(e.clientY - point.startY) > 8) point.moved = true;
+        point.x = e.clientX;
+        point.y = e.clientY;
+        if (pinchStart) {
+          var points = firstTouchPoints();
+          if (points.length === 2) applyPinch(points);
+          if (e.preventDefault) e.preventDefault();
+          return;
+        }
+        if (panStart && panStart.id === e.pointerId) {
+          if (Math.abs(e.clientX - panStart.x) > 2 || Math.abs(e.clientY - panStart.y) > 2) panStart.moved = true;
+          panX = panStart.panX + (e.clientX - panStart.x);
+          panY = panStart.panY + (e.clientY - panStart.y);
+          if (e.preventDefault) e.preventDefault();
+          applyZoom();
+        }
+        return;
+      }
+      if (!panStart || e.pointerId !== panStart.id) return;
+      if (Math.abs(e.clientX - panStart.x) > 2 || Math.abs(e.clientY - panStart.y) > 2) panStart.moved = true;
+      panX = panStart.panX + (e.clientX - panStart.x);
+      panY = panStart.panY + (e.clientY - panStart.y);
+      if (e.preventDefault) e.preventDefault();
+      applyZoom();
+    }
+
+    function onStagePointerUp(e, cancelled) {
+      if (!e) return;
+      var now = eventTime(e);
+      if (e.pointerType === 'touch') {
+        var point = touchPointers[e.pointerId];
+        delete touchPointers[e.pointerId];
+        if (lightboxStage && lightboxStage.releasePointerCapture) {
+          try { lightboxStage.releasePointerCapture(e.pointerId); } catch (err) {}
+        }
+        if (pinchStart && touchPointCount() < 2) {
+          clearPinch();
+          lastTap = null;
+          return;
+        }
+        var wasPanning = panStart && panStart.id === e.pointerId;
+        if (wasPanning) {
+          if (panStart.moved) suppressClickUntil = now + 400;
+          clearPan();
+        }
+        if (cancelled) {
+          lastTap = null;
+          return;
+        }
+        if (point && !point.moved && now - point.startTime <= 500) {
+          if (lastTap && now - lastTap.time <= 320 && touchDistance(point, lastTap) <= 30) {
+            toggleTapZoom(point.x, point.y);
+            suppressClickUntil = now + 400;
+            lastTap = null;
+          } else {
+            lastTap = { time: now, x: point.x, y: point.y };
+          }
+        } else {
+          lastTap = null;
+        }
+        return;
+      }
+      if (!panStart || e.pointerId !== panStart.id) return;
+      if (panStart.moved) suppressClickUntil = now + 400;
+      clearPan();
     }
 
     if (trigger && lightbox) {
@@ -913,7 +1106,12 @@
     }
     if (lightbox) {
       listen(lightbox, 'click', function (e) {
-        if (e.target === lightbox) closeLightbox();
+        if (eventTime(e) <= suppressClickUntil) {
+          if (e.preventDefault) e.preventDefault();
+          if (e.stopPropagation) e.stopPropagation();
+          return;
+        }
+        if (e.target === lightbox || e.target === lightboxStage) closeLightbox();
       });
       listen(lightbox, 'cancel', function (e) {
         if (e && e.preventDefault) e.preventDefault();
@@ -931,9 +1129,32 @@
           closeLightbox();
           return;
         }
-        if (e.key === 'Tab' && lightbox.classList.contains('product-lightbox--fallback')) {
-          trapLightboxFocus(e);
+        if (e.key === '+' || e.key === '=') {
+          e.preventDefault();
+          zoomAt(lightboxZoom + ZOOM_STEP);
+          return;
         }
+        if (e.key === '-' || e.key === '_') {
+          e.preventDefault();
+          zoomAt(lightboxZoom - ZOOM_STEP);
+          return;
+        }
+        if (e.key === '0') {
+          e.preventDefault();
+          resetZoom();
+          return;
+        }
+        if (e.key === 'ArrowLeft' && images.length > 1) {
+          e.preventDefault();
+          showImage(current - 1);
+          return;
+        }
+        if (e.key === 'ArrowRight' && images.length > 1) {
+          e.preventDefault();
+          showImage(current + 1);
+          return;
+        }
+        if (e.key === 'Tab') trapLightboxFocus(e);
       });
     }
     if (closeButton) {
@@ -942,92 +1163,15 @@
         closeLightbox();
       });
     }
-    listen(zoomInButton, 'click', function () { setZoom(lightboxZoom + ZOOM_STEP); });
-    listen(zoomOutButton, 'click', function () { setZoom(lightboxZoom - ZOOM_STEP); });
-    listen(resetButton, 'click', function () { setZoom(ZOOM_MIN); });
     listen(prevButton, 'click', function () { showImage(current - 1); });
     listen(nextButton, 'click', function () { showImage(current + 1); });
     if (lightboxStage) {
-      listen(lightboxStage, 'pointerdown', function (e) {
-        if (e.pointerType === 'touch') {
-          touchPointers[e.pointerId] = { id: e.pointerId, x: e.clientX, y: e.clientY };
-          if (lightboxStage.setPointerCapture) {
-            try { lightboxStage.setPointerCapture(e.pointerId); } catch (err) {}
-          }
-          var points = firstTouchPoints();
-          if (points.length === 2) {
-            beginPinch(points);
-            if (e.preventDefault) e.preventDefault();
-            return;
-          }
-        } else {
-          if (e.pointerType !== 'mouse' && e.pointerType !== 'pen') return;
-          if (e.button !== undefined && e.button !== 0) return;
-        }
-        if (lightboxZoom <= ZOOM_MIN) return;
-        panStart = {
-          id: e.pointerId,
-          x: e.clientX,
-          y: e.clientY,
-          left: lightboxStage.scrollLeft || 0,
-          top: lightboxStage.scrollTop || 0
-        };
-        if (lightboxStage.setPointerCapture) {
-          try { lightboxStage.setPointerCapture(e.pointerId); } catch (err) {}
-        }
-        lightboxStage.classList.add('is-panning');
-      });
-      listen(lightboxStage, 'pointermove', function (e) {
-        if (e.pointerType === 'touch') {
-          var touch = touchPointers[e.pointerId];
-          if (!touch) return;
-          touch.x = e.clientX;
-          touch.y = e.clientY;
-          if (pinchStart) {
-            var points = firstTouchPoints();
-            if (points.length === 2) {
-              var distance = Math.max(1, touchDistance(points[0], points[1]));
-              setZoom(pinchStart.zoom * (distance / pinchStart.distance));
-            }
-            if (e.preventDefault) e.preventDefault();
-            return;
-          }
-          if (panStart && panStart.id === e.pointerId && lightboxZoom > ZOOM_MIN) {
-            if (e.preventDefault) e.preventDefault();
-            lightboxStage.scrollLeft = panStart.left - (e.clientX - panStart.x);
-            lightboxStage.scrollTop = panStart.top - (e.clientY - panStart.y);
-          }
-          return;
-        }
-        if (!panStart || e.pointerId !== panStart.id) return;
-        if (e.preventDefault) e.preventDefault();
-        lightboxStage.scrollLeft = panStart.left - (e.clientX - panStart.x);
-        lightboxStage.scrollTop = panStart.top - (e.clientY - panStart.y);
-      });
-      listen(lightboxStage, 'pointerup', function (e) {
-        if (e.pointerType === 'touch') {
-          delete touchPointers[e.pointerId];
-          if (pinchStart && touchPointCount() < 2) clearPinch();
-          if (panStart && panStart.id === e.pointerId) clearPan();
-          if (lightboxStage.releasePointerCapture) {
-            try { lightboxStage.releasePointerCapture(e.pointerId); } catch (err) {}
-          }
-          return;
-        }
-        clearPan();
-      });
-      listen(lightboxStage, 'pointercancel', function (e) {
-        if (e.pointerType === 'touch') {
-          delete touchPointers[e.pointerId];
-          if (pinchStart && touchPointCount() < 2) clearPinch();
-          if (panStart && panStart.id === e.pointerId) clearPan();
-          if (lightboxStage.releasePointerCapture) {
-            try { lightboxStage.releasePointerCapture(e.pointerId); } catch (err) {}
-          }
-          return;
-        }
-        clearPan();
-      });
+      listen(lightboxStage, 'wheel', onLightboxWheel, { passive: false });
+      listen(lightboxStage, 'dblclick', onLightboxDoubleClick);
+      listen(lightboxStage, 'pointerdown', onStagePointerDown);
+      listen(lightboxStage, 'pointermove', onStagePointerMove);
+      listen(lightboxStage, 'pointerup', function (e) { onStagePointerUp(e, false); });
+      listen(lightboxStage, 'pointercancel', function (e) { onStagePointerUp(e, true); });
     }
     bindCardGalleries(page);
 

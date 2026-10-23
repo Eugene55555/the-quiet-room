@@ -67,6 +67,7 @@ function renderProduct(href, list, reduceMotion) {
     const classes = new Set();
     const listeners = {};
     const attributes = {};
+    const pointerCaptures = new Set();
     let html = '';
     const controlCache = new Map();
     const element = {
@@ -83,6 +84,7 @@ function renderProduct(href, list, reduceMotion) {
       style: {},
       listeners,
       attributes,
+      pointerCaptures,
       classList: {
         add() { [...arguments].forEach(name => classes.add(name)); },
         remove() { [...arguments].forEach(name => classes.delete(name)); },
@@ -94,6 +96,9 @@ function renderProduct(href, list, reduceMotion) {
         }
       },
       addEventListener(type, fn) { (listeners[type] = listeners[type] || []).push(fn); },
+      setPointerCapture(pointerId) { pointerCaptures.add(pointerId); },
+      releasePointerCapture(pointerId) { pointerCaptures.delete(pointerId); },
+      hasPointerCapture(pointerId) { return pointerCaptures.has(pointerId); },
       setAttribute(name, value) { attributes[name] = String(value); },
       getAttribute(name) { return Object.prototype.hasOwnProperty.call(attributes, name) ? attributes[name] : null; },
       hasAttribute(name) { return Object.prototype.hasOwnProperty.call(attributes, name); },
@@ -259,6 +264,30 @@ async function flushOpen() {
   await new Promise(resolve => setImmediate(resolve));
 }
 
+function simulatePointerClick(detail) {
+  const media = detail.element('product-media');
+  const trigger = detail.element('product-main-trigger');
+  const target = detail.element('product-main-image');
+  const pointerId = 41;
+  // Model the browser retargeting pointerup/click to the capture target.
+  fire(media, 'pointerdown', {
+    target,
+    pointerId,
+    pointerType: 'mouse',
+    button: 0,
+    isPrimary: true,
+    clientX: 100,
+    clientY: 100
+  });
+  const captureTarget = [target, trigger, media].find(element => element.hasPointerCapture(pointerId));
+  const clickTarget = captureTarget || target;
+  fire(media, 'pointerup', { target: clickTarget, pointerId, clientX: 100, clientY: 100 });
+  fire(media, 'click', { target: clickTarget });
+  if (clickTarget === target || clickTarget === trigger) fire(trigger, 'click', { target: clickTarget });
+  if (captureTarget) captureTarget.releasePointerCapture(pointerId);
+  return clickTarget;
+}
+
 async function run() {
   const multiProduct = products.find(product => imagesOf(product).length > 1);
   assert.ok(multiProduct, 'a product with multiple images exists');
@@ -269,6 +298,14 @@ async function run() {
   assert.equal(attr(triggerTag[0], 'aria-haspopup'), 'dialog', 'the trigger announces the accessible gallery dialog');
   assert.match(decode(attr(triggerTag[0], 'aria-label')), /Open larger view/, 'the trigger has an accessible name');
   assert.doesNotMatch(detail.markup, /<dialog\b|product-lightbox-stage|product-lightbox-image/, 'the bespoke viewer markup is removed');
+
+  const pointerClickDetail = renderProduct(siteRoot + 'product.html?id=' + multiProduct.id, products);
+  simulatePointerClick(pointerClickDetail);
+  await flushOpen();
+  assert.equal(pointerClickDetail.photoSwipeLightboxes.length, 1,
+    'a pointer click on the image reaches its Zoom button despite swipe support');
+  assert.equal(pointerClickDetail.photoSwipeLightboxes[0].calls.length, 1,
+    'a pointer click opens the PhotoSwipe viewer');
 
   const mainImage = detail.element('product-main-image');
   const trigger = detail.element('product-main-trigger');
@@ -380,11 +417,11 @@ async function run() {
 
   const productHtml = fs.readFileSync(require.resolve('../product.html'), 'utf8');
   assert.match(productHtml, /assets\/vendor\/photoswipe\/photoswipe\.css\?v=1/, 'product page loads the local PhotoSwipe stylesheet');
-  assert.match(productHtml, /photoswipe\.umd\.min\.js\?v=1[\s\S]*photoswipe-lightbox\.umd\.min\.js\?v=1[\s\S]*assets\/main\.js\?v=37/,
+  assert.match(productHtml, /photoswipe\.umd\.min\.js\?v=1[\s\S]*photoswipe-lightbox\.umd\.min\.js\?v=1[\s\S]*assets\/main\.js\?v=38/,
     'product page loads the pinned PhotoSwipe UMD files before the site logic');
   assert.match(productHtml, /assets\/style\.css\?v=36/, 'product page loads the updated site styling');
   const indexHtml = fs.readFileSync(require.resolve('../index.html'), 'utf8');
-  assert.match(indexHtml, /assets\/main\.js\?v=37/, 'home page uses the cache-busted renderer');
+  assert.match(indexHtml, /assets\/main\.js\?v=38/, 'home page uses the cache-busted renderer');
   assert.match(indexHtml, /assets\/style\.css\?v=36/, 'home page uses the updated stylesheet version');
   assert.doesNotMatch(indexHtml, /photoswipe/, 'the gallery library is only loaded on product pages');
 

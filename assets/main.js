@@ -51,8 +51,9 @@
       if (e.isPrimary === false || (e.pointerType === 'mouse' && e.button !== 0)) return;
       suppressClickUntil = 0;
       start = { id: e.pointerId, x: e.clientX, y: e.clientY, horizontal: false };
-      if (el.setPointerCapture) {
-        try { el.setPointerCapture(e.pointerId); } catch (err) {}
+      var captureTarget = e.target && typeof e.target.setPointerCapture === 'function' ? e.target : null;
+      if (captureTarget) {
+        try { captureTarget.setPointerCapture(e.pointerId); } catch (err) {}
       }
     }, { passive: true });
 

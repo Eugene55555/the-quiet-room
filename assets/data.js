@@ -2,7 +2,7 @@
 window.TQR_PRODUCTS = [
   {
     "id": "white-wolf",
-    "name": "White Wolf",
+    "name": "White Wolf Digital Art Print PNG PDF",
     "cat": "Wildlife",
     "img": "assets/img/white-wolf.png",
     "images": [

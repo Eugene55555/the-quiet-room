@@ -594,10 +594,15 @@
     // Product fields are escaped and gallery indices are generated integers.
     page.innerHTML =
       '<div class="product-layout" id="product-card-' + esc(p.id) + '">'
+      + '<div class="product-visual">'
       + '<div class="product-gallery">'
       + '<div class="product-media" data-gallery-index="0" data-gallery-count="' + images.length + '"><img id="product-main-image" draggable="false" src="' + esc(images[0]) + '" alt="' + esc(p.name) + ' — image 1 of ' + images.length + '"></div>'
       + dots
       + '<div class="product-thumbs" role="group" aria-label="Product images">' + thumbs + '</div>'
+      + '</div>'
+      + '<div class="product-buy-row">'
+      + '<a class="product-buy" href="' + esc(buyURL(p, cardReferrer(p.id))) + '" data-return-url="' + esc(cardReferrer(p.id)) + '">Buy now — ' + money(p.price) + '</a>'
+      + '</div>'
       + '</div>'
       + '<div class="product-info">'
       + '<p class="product-cat">' + esc(p.cat) + '</p>'
@@ -615,9 +620,6 @@
       + '<li><i class="fa-solid fa-circle-check"></i>For personal use and small businesses</li>'
       + '<li><i class="fa-solid fa-circle-check"></i>Digital download — no physical item is shipped</li>'
       + '</ul>'
-      + '<div class="product-buy-row">'
-      + '<a class="product-buy" href="' + esc(buyURL(p, cardReferrer(p.id))) + '" data-return-url="' + esc(cardReferrer(p.id)) + '">Buy now — ' + money(p.price) + '</a>'
-      + '</div>'
       + '<p class="product-safe"><i class="fa-solid fa-lock"></i> Secure card payment · 3-D Secure</p>'
       + '<p class="product-checkout-note">Checkout is hosted by BlackSea. You can add more prints to your BlackSea basket before paying.</p>'
       + '</div></div>'

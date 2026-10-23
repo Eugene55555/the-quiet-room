@@ -264,9 +264,9 @@ assert.equal(singleImageProduct.productDots.length, 0, 'single-image gallery rem
 for (const path of htmlFiles) {
   const html = fs.readFileSync(require.resolve(path), 'utf8');
   assert.doesNotMatch(html, /cart-fab|cart-drawer|cart-toggle|cart-clear|assets\/cart-(?:core|ui)\.js/);
-  assert.match(html, /assets\/data\.js\?v=22/);
-  assert.match(html, /assets\/main\.js\?v=28/);
-  assert.match(html, /assets\/style\.css\?v=30/);
+  assert.match(html, /assets\/data\.js\?v=23/);
+  assert.match(html, /assets\/main\.js\?v=29/);
+  assert.match(html, /assets\/style\.css\?v=31/);
 }
 assert.doesNotMatch(mainSource, /TQR_CLOSE_CART|data-cart-add|cart-drawer|cart-toggle/);
 assert.doesNotMatch(cssSource, /cart-fab|cart-drawer|cart-count|cart-items|cart-clear|cart-checkout/);

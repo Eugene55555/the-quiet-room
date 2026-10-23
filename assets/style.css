@@ -271,7 +271,7 @@ select, input, button { font-family: var(--font); }
 .card-actions { display: flex; flex-direction: column; gap: 8px; margin-top: 5px; }
 .card-actions .card-btn { gap: 7px; margin-top: 0; }
 .product-buy-row { display: flex; align-items: center; gap: 10px; }
-.product-info .product-buy { flex: 1; gap: 8px; }
+.product-buy-row .product-buy { flex: 1; gap: 8px; }
 
 /* ============ Product grid ============ */
 .collection-grid { padding: 24px 0 44px; }
@@ -507,6 +507,7 @@ select, input, button { font-family: var(--font); }
 /* ============ Product page ============ */
 .product-page { padding-top: 36px; padding-bottom: 50px; }
 .product-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 44px; align-items: start; }
+.product-visual { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
 .product-media {
   position: relative; background: #F7F6F3; border-radius: 12px; overflow: hidden;
   box-shadow: 0 10px 30px rgba(40, 5, 12, .3);

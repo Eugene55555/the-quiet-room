@@ -101,7 +101,7 @@ assert.match(focusRule.body, /box-shadow\s*:[^;]*rgba\(0,\s*0,\s*0,\s*\.5\)/);
 assert.match(focusRule.body, /box-shadow\s*:[^;]*rgba\(0,\s*0,\s*0,\s*\.3\)/);
 
 const visualProps = /(?:^|;)\s*(?:background(?:-color)?|color|font(?:-size|-weight)?|line-height|letter-spacing|padding(?:-[a-z]+)?|border(?:-[a-z]+)?|border-radius|min-height|min-width|width|box-shadow|text-align|display)\s*:/;
-for (const selector of ['.card-actions .card-btn', '.product-info .product-buy']) {
+for (const selector of ['.card-actions .card-btn', '.product-buy-row .product-buy']) {
   const layoutRule = cssRules.find(rule => rule.selectors.includes(selector));
   assert.ok(layoutRule, selector + ' layout hook exists');
   assert.doesNotMatch(layoutRule.body, visualProps,
@@ -131,7 +131,7 @@ assert.doesNotMatch(mainSource, /class="(?:card-btn|product-buy)"[^\n]*target=/,
 
 for (const path of htmlFiles) {
   const html = fs.readFileSync(require.resolve(path), 'utf8');
-  assert.match(html, /assets\/style\.css\?v=30/, path + ' loads the cache-busted purchase-button CSS');
+  assert.match(html, /assets\/style\.css\?v=31/, path + ' loads the cache-busted purchase-button CSS');
 }
 
 process.stdout.write('PASS purchase CTAs match the reference primary button style; href, checkout return URL, labels, and prices are unchanged\n');

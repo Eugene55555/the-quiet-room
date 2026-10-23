@@ -266,7 +266,7 @@ for (const path of htmlFiles) {
   assert.doesNotMatch(html, /cart-fab|cart-drawer|cart-toggle|cart-clear|assets\/cart-(?:core|ui)\.js/);
   assert.match(html, /assets\/data\.js\?v=22/);
   assert.match(html, /assets\/main\.js\?v=28/);
-  assert.match(html, /assets\/style\.css\?v=29/);
+  assert.match(html, /assets\/style\.css\?v=30/);
 }
 assert.doesNotMatch(mainSource, /TQR_CLOSE_CART|data-cart-add|cart-drawer|cart-toggle/);
 assert.doesNotMatch(cssSource, /cart-fab|cart-drawer|cart-count|cart-items|cart-clear|cart-checkout/);

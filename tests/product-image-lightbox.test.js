@@ -369,6 +369,69 @@ assert.equal(zoomOut.disabled, true, 'zoom-out is disabled again at 1x');
 assert.equal(reset.disabled, true, 'reset is disabled again at 1x');
 fire(zoomOut, 'click');
 assert.equal(dialog.getAttribute('data-zoom'), '1', 'extra zoom-out clicks cannot go below 1x');
+assert.equal(stage.style.touchAction, 'none', 'the open lightbox owns touch gestures instead of the browser page');
+
+fire(stage, 'pointerdown', { pointerId: 11, pointerType: 'touch', isPrimary: true, clientX: 50, clientY: 50 });
+fire(stage, 'pointerdown', { pointerId: 12, pointerType: 'touch', isPrimary: false, clientX: 150, clientY: 50 });
+fire(stage, 'pointermove', { pointerId: 12, pointerType: 'touch', clientX: 250, clientY: 50 });
+assert.equal(dialog.getAttribute('data-zoom'), '2', 'pinching two touch pointers apart zooms from 1x to 2x');
+fire(stage, 'pointerup', { pointerId: 11, pointerType: 'touch' });
+fire(stage, 'pointerup', { pointerId: 12, pointerType: 'touch' });
+
+fire(stage, 'pointerdown', { pointerId: 13, pointerType: 'touch', clientX: 50, clientY: 50 });
+fire(stage, 'pointerdown', { pointerId: 14, pointerType: 'touch', clientX: 150, clientY: 50 });
+fire(stage, 'pointermove', { pointerId: 14, pointerType: 'touch', clientX: 100, clientY: 50 });
+assert.equal(dialog.getAttribute('data-zoom'), '1', 'pinching two touch pointers together zooms back out');
+fire(stage, 'pointerup', { pointerId: 13, pointerType: 'touch' });
+fire(stage, 'pointerup', { pointerId: 14, pointerType: 'touch' });
+
+fire(stage, 'pointerdown', { pointerId: 15, pointerType: 'touch', clientX: 0, clientY: 50 });
+fire(stage, 'pointerdown', { pointerId: 16, pointerType: 'touch', clientX: 100, clientY: 50 });
+fire(stage, 'pointermove', { pointerId: 16, pointerType: 'touch', clientX: 1000, clientY: 50 });
+assert.equal(dialog.getAttribute('data-zoom'), '4', 'pinch zoom clamps at 4x');
+fire(stage, 'pointerup', { pointerId: 15, pointerType: 'touch' });
+fire(stage, 'pointerup', { pointerId: 16, pointerType: 'touch' });
+
+fire(stage, 'pointerdown', { pointerId: 17, pointerType: 'touch', clientX: 0, clientY: 50 });
+fire(stage, 'pointerdown', { pointerId: 18, pointerType: 'touch', clientX: 100, clientY: 50 });
+fire(stage, 'pointermove', { pointerId: 18, pointerType: 'touch', clientX: 10, clientY: 50 });
+assert.equal(dialog.getAttribute('data-zoom'), '1', 'pinch zoom clamps at 1x');
+fire(stage, 'pointerup', { pointerId: 17, pointerType: 'touch' });
+fire(stage, 'pointerup', { pointerId: 18, pointerType: 'touch' });
+
+fire(stage, 'pointerdown', { pointerId: 19, pointerType: 'touch', clientX: 100, clientY: 100 });
+fire(stage, 'pointermove', { pointerId: 19, pointerType: 'touch', clientX: 250, clientY: 250 });
+assert.equal(dialog.getAttribute('data-zoom'), '1', 'a single touch pointer never starts pinch zoom');
+fire(stage, 'pointerup', { pointerId: 19, pointerType: 'touch' });
+
+fire(stage, 'pointerdown', { pointerId: 23, pointerType: 'touch', clientX: 50, clientY: 50 });
+fire(stage, 'pointerdown', { pointerId: 24, pointerType: 'touch', clientX: 150, clientY: 50 });
+fire(stage, 'pointermove', { pointerId: 24, pointerType: 'touch', clientX: 250, clientY: 50 });
+assert.equal(dialog.getAttribute('data-zoom'), '2', 'a fresh two-pointer pinch scales the image');
+fire(stage, 'pointerup', { pointerId: 23, pointerType: 'touch' });
+fire(stage, 'pointermove', { pointerId: 24, pointerType: 'touch', clientX: 400, clientY: 50 });
+assert.equal(dialog.getAttribute('data-zoom'), '2', 'pointerup clears the pinch without further scaling');
+fire(stage, 'pointerup', { pointerId: 24, pointerType: 'touch' });
+fire(reset, 'click');
+assert.equal(dialog.getAttribute('data-zoom'), '1', 'reset prepares the next pinch case');
+
+fire(stage, 'pointerdown', { pointerId: 20, pointerType: 'touch', clientX: 50, clientY: 50 });
+fire(stage, 'pointerdown', { pointerId: 21, pointerType: 'touch', clientX: 150, clientY: 50 });
+fire(stage, 'pointermove', { pointerId: 21, pointerType: 'touch', clientX: 250, clientY: 50 });
+assert.equal(dialog.getAttribute('data-zoom'), '2', 'a second pinch starts from the current zoom');
+fire(stage, 'pointercancel', { pointerId: 20, pointerType: 'touch' });
+fire(stage, 'pointermove', { pointerId: 21, pointerType: 'touch', clientX: 500, clientY: 50 });
+assert.equal(dialog.getAttribute('data-zoom'), '2', 'pointercancel clears the pinch without further scaling');
+fire(stage, 'pointerup', { pointerId: 21, pointerType: 'touch' });
+
+stage.scrollLeft = 10;
+stage.scrollTop = 10;
+fire(stage, 'pointerdown', { pointerId: 22, pointerType: 'touch', clientX: 100, clientY: 100 });
+fire(stage, 'pointermove', { pointerId: 22, pointerType: 'touch', clientX: 60, clientY: 50 });
+assert.equal(stage.scrollLeft, 50, 'a zoomed image can be dragged horizontally by touch');
+assert.equal(stage.scrollTop, 60, 'a zoomed image can be dragged vertically by touch');
+fire(stage, 'pointerup', { pointerId: 22, pointerType: 'touch' });
+fire(reset, 'click');
 
 fire(next, 'click');
 assert.equal(dialog.getAttribute('data-zoom'), '1', 'moving frames resets zoom to 1x');
@@ -387,6 +450,7 @@ assert.equal(dialog.classList.contains('is-open'), false, 'the open state is rem
 assert.equal(detail.body.style.overflow, 'auto', 'closing restores the previous page scroll style');
 assert.equal(detail.document.activeElement, trigger, 'focus returns to the image trigger');
 assert.equal(mainImage.src, multiImages[1], 'closing keeps the frame selected in the lightbox');
+assert.equal(stage.style.touchAction, '', 'closing restores the stage touch-action');
 
 trigger.focus();
 fire(trigger, 'click');
@@ -466,7 +530,7 @@ assert.equal(buyURL.searchParams.get('referrer'), siteRoot + '#product-card-' + 
 
 for (const path of ['../index.html', '../product.html']) {
   const html = fs.readFileSync(require.resolve(path), 'utf8');
-  assert.match(html, /assets\/main\.js\?v=31/, path + ' loads the cache-busted lightbox renderer');
+  assert.match(html, /assets\/main\.js\?v=32/, path + ' loads the cache-busted lightbox renderer');
   assert.match(html, /assets\/style\.css\?v=33/, path + ' loads the cache-busted lightbox styles');
   assert.match(html, /assets\/data\.js\?v=24/, path + ' keeps the unchanged data cache version');
 }

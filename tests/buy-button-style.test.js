@@ -161,7 +161,7 @@ assert.doesNotMatch(mainSource, /class="(?:card-btn|product-buy)"[^\n]*target=/,
 for (const path of htmlFiles) {
   const html = fs.readFileSync(require.resolve(path), 'utf8');
   assert.match(html, /assets\/data\.js\?v=24/, path + ' loads the cache-busted five source titles');
-  assert.match(html, /assets\/main\.js\?v=31/, path + ' loads the cache-busted relocated-button renderer');
+  assert.match(html, /assets\/main\.js\?v=32/, path + ' loads the cache-busted relocated-button renderer');
   assert.match(html, /assets\/style\.css\?v=33/, path + ' loads the cache-busted red CTA and equal-card CSS');
 }
 

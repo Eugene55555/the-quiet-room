@@ -100,6 +100,8 @@ for (const product of products) {
 
   const description = card.match(/<div class="card-desc">([\s\S]*?)<\/div>/);
   assert.ok(description, product.id + ' card renders a description block');
+  assert.equal(description[1].includes('class="card-summary"'), false,
+    product.id + ' card does not repeat the summary alongside the full description');
 
   for (const paragraph of product.description) {
     const expected = '<p>' + esc(paragraph) + '</p>';

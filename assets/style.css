@@ -344,7 +344,6 @@ select, input, button { font-family: var(--font); }
 .card-desc { font-size: 12px; color: #D8B3A0; line-height: 1.5; margin-top: 2px; overflow-wrap: anywhere; }
 .card-desc p { margin: 0 0 7px; }
 .card-desc p:last-child { margin-bottom: 0; }
-.card-summary { font-weight: 700; color: #F2D9C4; }
 .card-price-row { display: flex; align-items: center; gap: 8px; margin-top: 1px; min-height: 26px; flex-wrap: wrap; }
 .empty-state {
   grid-column: 1 / -1;

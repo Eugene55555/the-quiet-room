@@ -383,7 +383,6 @@
       : [];
     var descriptionHTML = description.length
       ? '<div class="card-desc">'
-        + (summary ? '<p class="card-summary">' + esc(summary) + '</p>' : '')
         + description.map(function (paragraph) { return '<p>' + esc(paragraph) + '</p>'; }).join('')
         + '</div>'
       : (summary ? '<p class="card-desc">' + esc(summary) + '</p>' : '');

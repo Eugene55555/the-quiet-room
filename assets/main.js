@@ -530,19 +530,33 @@
 
   function richDescriptionHTML(blocks) {
     if (!Array.isArray(blocks)) return '';
-    return blocks.map(function (block) {
+    var html = '';
+    var sectionIndex = 0;
+    var inSection = false;
+    blocks.forEach(function (block) {
       if (!block || typeof block !== 'object') return '';
-      if (block.type === 'p' || block.type === 'h1' || block.type === 'h2' || block.type === 'h3') {
-        return '<' + block.type + '>' + richInline(block.content) + '</' + block.type + '>';
+      if (block.type === 'h2') {
+        if (inSection) html += '</div></details>';
+        sectionIndex += 1;
+        html += '<details class="product-desc-section"' + (sectionIndex === 1 ? ' open' : '') + '>'
+          + '<summary><h2>' + richInline(block.content) + '</h2></summary>'
+          + '<div class="product-desc-section-body">';
+        inSection = true;
+        return;
+      }
+      if (block.type === 'p' || block.type === 'h1' || block.type === 'h3') {
+        html += '<' + block.type + '>' + richInline(block.content) + '</' + block.type + '>';
+        return;
       }
       if (block.type === 'ul' || block.type === 'ol') {
         var items = Array.isArray(block.items) ? block.items : [];
-        return '<' + block.type + '>' + items.map(function (item) {
+        html += '<' + block.type + '>' + items.map(function (item) {
           return '<li>' + richInline(item) + '</li>';
         }).join('') + '</' + block.type + '>';
       }
-      return '';
-    }).join('');
+    });
+    if (inSection) html += '</div></details>';
+    return html;
   }
 
   /* ---------- Product page ---------- */
@@ -612,9 +626,6 @@
       + dots
       + '<div class="product-thumbs" role="group" aria-label="Product images">' + thumbs + '</div>'
       + '</div>'
-      + '<div class="product-buy-row">'
-      + '<a class="product-buy" href="' + esc(buyURL(p, cardReferrer(p.id))) + '" data-return-url="' + esc(cardReferrer(p.id)) + '">Buy now — ' + money(p.price) + '</a>'
-      + '</div>'
       + '</div>'
       + '<div class="product-info">'
       + '<p class="product-cat">' + esc(p.cat) + '</p>'
@@ -623,7 +634,9 @@
       + '<span class="price-sale">' + money(p.price) + '</span>'
       + '</div>'
       + '<p class="product-formats">Formats: ' + esc(p.formats) + '</p>'
-      + '</div></div>'
+      + '<div class="product-buy-row">'
+      + '<a class="product-buy" href="' + esc(buyURL(p, cardReferrer(p.id))) + '" data-return-url="' + esc(cardReferrer(p.id)) + '">Buy now — ' + money(p.price) + '</a>'
+      + '</div>'
       + '<section class="product-details">'
       + '<div class="product-desc">'
       + detailDescriptionHTML
@@ -636,7 +649,7 @@
       + '</ul>'
       + '<p class="product-safe"><i class="fa-solid fa-lock"></i> Secure card payment · 3-D Secure</p>'
       + '<p class="product-checkout-note">Checkout is hosted by BlackSea. You can add more prints to your BlackSea basket before paying.</p>'
-      + '</section>'
+      + '</section></div></div>'
       + '<section class="product-related"><h2>You may also like</h2><div class="grid">'
       + related.map(function (x) { return cardHTML(x, cardReferrer(x.id)); }).join('')
       + '</div></section>';

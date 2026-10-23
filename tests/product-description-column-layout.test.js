@@ -94,7 +94,7 @@ function expectedInline(nodes) {
 }
 
 function expectedDescriptionHTML(product) {
-  return product.description.map(block => {
+  function blockHTML(block) {
     if (block.type === 'p' || block.type === 'h1' || block.type === 'h2' || block.type === 'h3') {
       return '<' + block.type + '>' + expectedInline(block.content) + '</' + block.type + '>';
     }
@@ -102,7 +102,24 @@ function expectedDescriptionHTML(product) {
       return '<' + block.type + '>' + (block.items || []).map(item => '<li>' + expectedInline(item) + '</li>').join('') + '</' + block.type + '>';
     }
     return '';
-  }).join('');
+  }
+  let html = '';
+  let sectionIndex = 0;
+  let inSection = false;
+  for (const block of product.description) {
+    if (block.type === 'h2') {
+      if (inSection) html += '</div></details>';
+      sectionIndex += 1;
+      html += '<details class="product-desc-section"' + (sectionIndex === 1 ? ' open' : '') + '>'
+        + '<summary><h2>' + expectedInline(block.content) + '</h2></summary>'
+        + '<div class="product-desc-section-body">';
+      inSection = true;
+    } else {
+      html += blockHTML(block);
+    }
+  }
+  if (inSection) html += '</div></details>';
+  return html;
 }
 
 function openingTag(html, className, tag) {
@@ -139,31 +156,44 @@ for (const product of products) {
 
   const layoutOpen = openingTag(markup, 'product-layout', 'div');
   const layoutEnd = elementEnd(markup, layoutOpen, 'div');
+  const visualOpen = openingTag(markup, 'product-visual', 'div');
   const infoOpen = openingTag(markup, 'product-info', 'div');
   const infoEnd = elementEnd(markup, infoOpen, 'div');
   const detailsOpen = openingTag(markup, 'product-details', 'section');
+  const detailsEnd = elementEnd(markup, detailsOpen, 'section');
   const relatedOpen = markup.indexOf('<section class="product-related">');
   const descOpen = openingTag(markup, 'product-desc', 'div');
   const descEnd = elementEnd(markup, descOpen, 'div');
+  const buyRowOpen = openingTag(markup, 'product-buy-row', 'div');
+  const buyRowEnd = elementEnd(markup, buyRowOpen, 'div');
+  const buyAnchor = markup.indexOf('<a class="product-buy"');
 
   assert.ok(layoutOpen >= 0 && layoutEnd > layoutOpen, product.id + ': product layout renders');
-  assert.ok(infoOpen > layoutOpen && infoEnd > infoOpen, product.id + ': summary column renders');
-  assert.ok(!(descOpen >= infoOpen && descOpen < infoEnd),
-    product.id + ': full product description is not constrained inside the right .product-info column');
-
-  const detailsEnd = elementEnd(markup, detailsOpen, 'section');
-  assert.ok(detailsOpen >= layoutEnd && detailsEnd > detailsOpen,
-    product.id + ': a full-width .product-details section is a sibling immediately after the closing .product-layout');
-  assert.ok(relatedOpen >= detailsEnd && relatedOpen >= 0,
-    product.id + ': .product-details is before .product-related');
-  assert.ok(descOpen > detailsOpen && descEnd <= detailsEnd,
-    product.id + ': .product-desc lives inside the full-width .product-details section');
+  assert.ok(infoOpen > layoutOpen && infoEnd > infoOpen && infoEnd <= layoutEnd,
+    product.id + ': information column stays inside the two-column product layout');
+  assert.ok(buyRowOpen > infoOpen && buyAnchor > buyRowOpen && buyRowEnd > buyRowOpen && buyRowEnd <= detailsOpen,
+    product.id + ': primary Buy button is in the right information column before the description');
+  assert.ok(detailsOpen >= buyRowEnd && detailsEnd > detailsOpen && detailsEnd <= infoEnd,
+    product.id + ': full product details are nested inside the right information column');
+  assert.ok(relatedOpen >= layoutEnd,
+    product.id + ': related products follow the complete two-column product layout');
+  assert.ok(descOpen > detailsOpen && descEnd <= detailsEnd && descEnd <= infoEnd,
+    product.id + ': .product-desc lives inside the right-column .product-details section');
 
   const descInner = markup.slice(markup.indexOf('>', descOpen) + 1, descEnd - '</div>'.length);
   assert.equal(descInner, expectedDescriptionHTML(product),
     product.id + ': full structured source description markup is preserved exactly');
-  assert.doesNotMatch(markup.slice(infoOpen, infoEnd), /class="product-desc"/,
-    product.id + ': the right summary column no longer owns .product-desc');
+  const sourceH2Count = product.description.filter(block => block.type === 'h2').length;
+  const accordionAttributes = [...descInner.matchAll(/<details class="product-desc-section"( open)?>/g)].map(match => match[1] || '');
+  assert.equal(accordionAttributes.length, sourceH2Count,
+    product.id + ': each source description section becomes one native accordion');
+  assert.equal((descInner.match(/<summary><h2>/g) || []).length, sourceH2Count,
+    product.id + ': every accordion summary retains its source heading');
+  if (sourceH2Count > 0) {
+    assert.equal(accordionAttributes[0], ' open', product.id + ': the first description section is expanded by default');
+    assert.ok(accordionAttributes.slice(1).every(attribute => attribute === ''),
+      product.id + ': remaining description sections start collapsed');
+  }
 
   const featsOpen = markup.indexOf('<ul class="product-feats">', detailsOpen);
   const safeOpen = markup.indexOf('<p class="product-safe">', detailsOpen);
@@ -174,15 +204,8 @@ for (const product of products) {
 
   const galleryOpen = openingTag(markup, 'product-gallery', 'div');
   const galleryEnd = elementEnd(markup, galleryOpen, 'div');
-  const buyRowOpen = openingTag(markup, 'product-buy-row', 'div');
-  const buyRowEnd = elementEnd(markup, buyRowOpen, 'div');
-  const buyAnchor = markup.indexOf('<a class="product-buy"');
-  assert.ok(galleryOpen > layoutOpen && galleryEnd <= buyRowOpen,
-    product.id + ': gallery stays before the Buy row');
-  assert.ok(buyAnchor > buyRowOpen && buyRowEnd > buyRowOpen,
-    product.id + ': Buy button stays directly under the gallery');
-  assert.ok(buyRowEnd <= infoOpen,
-    product.id + ': Buy button stays in the image column before the summary');
+  assert.ok(galleryOpen > visualOpen && galleryEnd < infoOpen,
+    product.id + ': gallery stays in the left image column, separate from the Buy row');
 
   const thumbCount = (markup.match(/class="product-thumb(?: is-active)?"/g) || []).length;
   assert.equal(thumbCount, images.length,
@@ -192,7 +215,7 @@ for (const product of products) {
 assert.equal(renderedImageTotal, 17, 'all 17 gallery images across the five product routes are preserved');
 
 const detailsRule = ruleBody('.product-details');
-assert.ok(detailsRule, 'the full-width detail section has a CSS rule');
+assert.ok(detailsRule, 'the right-column detail section has a CSS rule');
 assert.match(detailsRule, /max-width\s*:\s*100%/, 'the detail section is not width-constrained');
 assert.doesNotMatch(detailsRule, /(?:^|;)\s*width\s*:\s*\d{3,}px/, 'the detail section does not use a fixed desktop width');
 assert.doesNotMatch(detailsRule, /margin-left\s*:\s*-|margin-right\s*:\s*-/, 'the detail section cannot create horizontal overflow with negative margins');
@@ -201,15 +224,19 @@ const descRule = ruleBody('.product-desc');
 assert.ok(descRule, 'the full-width description keeps its existing styling');
 assert.match(descRule, /overflow-wrap\s*:\s*anywhere/, 'long unbroken description text can wrap instead of overflowing');
 assert.doesNotMatch(descRule, /(?:^|;)\s*width\s*:\s*\d{3,}px/, 'the description does not use a fixed desktop width');
+assert.match(cssSource, /\.product-desc-section\s*>\s*summary\s*\{[^}]*cursor\s*:\s*pointer/,
+  'native description accordions expose an interactive summary');
+assert.match(cssSource, /\.product-desc-section\s*>\s*summary::after/,
+  'description accordions show a visible disclosure indicator');
 
 assert.match(cssSource, /@media\s*\(max-width:\s*900px\)\s*\{[\s\S]*?\.product-layout\s*\{\s*grid-template-columns\s*:\s*1fr/,
   'mobile keeps a one-column layout with unchanged reading order');
 
 for (const [file, label] of [['../index.html', 'home'], ['../product.html', 'product']]) {
   const html = fs.readFileSync(require.resolve(file), 'utf8');
-  assert.match(html, /assets\/main\.js\?v=38/, label + ' loads the cache-busted full-width detail renderer');
-  assert.match(html, /assets\/style\.css\?v=36/, label + ' loads the cache-busted full-width detail CSS');
+  assert.match(html, /assets\/main\.js\?v=39/, label + ' loads the cache-busted right-column detail renderer');
+  assert.match(html, /assets\/style\.css\?v=37/, label + ' loads the cache-busted desktop layout CSS');
   assert.match(html, /assets\/data\.js\?v=24/, label + ' keeps the unchanged data cache version');
 }
 
-process.stdout.write('PASS product descriptions render full-width after the two-column layout with features, payment and checkout notes in order for all five routes\n');
+process.stdout.write('PASS product descriptions render in the information column with features, payment and checkout notes in order for all five routes\n');

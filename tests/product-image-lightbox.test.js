@@ -286,6 +286,15 @@ function touchSwipe(element, dx, dy, pointerId, timeStamp) {
   fire(element, 'pointerup', { pointerType: 'touch', pointerId: id, clientX: x + dx, clientY: y + dy, timeStamp: start + 32 });
 }
 
+function mouseClick(stage, dialog, image, detail, x, y, timeStamp, pointerId) {
+  const id = pointerId || 1;
+  fire(stage, 'pointerdown', { pointerType: 'mouse', pointerId: id, button: 0, clientX: x, clientY: y, timeStamp });
+  fire(stage, 'pointerup', { pointerType: 'mouse', pointerId: id, button: 0, clientX: x, clientY: y, timeStamp: timeStamp + 1 });
+  return fire(dialog, 'click', {
+    target: image, pointerType: 'mouse', button: 0, detail, clientX: x, clientY: y, timeStamp: timeStamp + 2
+  });
+}
+
 const multiProduct = products.find(product => imagesOf(product).length > 1);
 assert.ok(multiProduct, 'a multi-image detail product exists');
 const multiImages = imagesOf(multiProduct);
@@ -352,6 +361,17 @@ assert.equal(detail.document.activeElement, closeButton, 'focus moves to the com
 assert.equal(detail.body.style.overflow, 'hidden', 'the background is scroll-locked while open');
 assert.equal(stage.style.touchAction, 'none', 'the open viewer owns touch gestures');
 
+mouseClick(stage, dialog, lightboxImage, 1, 600, 400, 1000, 101);
+assert.match(markup, /Click or double-click/, 'the viewer hint explains single-click zoom');
+assert.equal(dialog.getAttribute('data-zoom'), '2', 'a single click on the open image zooms to 2x');
+assert.equal(dialog.getAttribute('data-pan-x'), '-100', 'single-click zoom is anchored at the pointer');
+assert.equal(dialog.getAttribute('data-pan-y'), '0', 'single-click zoom keeps the clicked vertical point anchored');
+assert.equal(dialog.open, true, 'single-click zoom keeps the viewer open');
+mouseClick(stage, dialog, lightboxImage, 1, 600, 400, 2000, 102);
+assert.equal(dialog.getAttribute('data-zoom'), '1', 'a second single click returns to 1x');
+assert.equal(dialog.getAttribute('data-pan-x'), '0', 'single-click reset clears the horizontal pan');
+assert.equal(dialog.open, true, 'single-click reset keeps the viewer open');
+
 const wheelIn = fire(stage, 'wheel', { deltaY: -100, clientX: 700, clientY: 400 });
 assert.equal(wheelIn.defaultPrevented, true, 'wheel zoom keeps the page from scrolling behind the viewer');
 assert.equal(dialog.getAttribute('data-zoom'), '1.5', 'wheel up zooms in inside the viewer');
@@ -376,6 +396,20 @@ assert.equal(dialog.getAttribute('data-pan-x'), '-100', 'double-click zoom is an
 fire(stage, 'dblclick', { target: lightboxImage, clientX: 600, clientY: 400 });
 assert.equal(dialog.getAttribute('data-zoom'), '1', 'desktop double-click toggles 2x back to 1x');
 assert.equal(dialog.getAttribute('data-pan-x'), '0', 'double-click reset clears the pan offset');
+mouseClick(stage, dialog, lightboxImage, 1, 600, 400, 5000, 103);
+mouseClick(stage, dialog, lightboxImage, 2, 600, 400, 5050, 104);
+fire(stage, 'dblclick', { target: lightboxImage, clientX: 600, clientY: 400, timeStamp: 5054 });
+assert.equal(dialog.getAttribute('data-zoom'), '2', 'the click-click-dblclick event sequence still toggles to 2x once');
+assert.equal(dialog.open, true, 'the double-click sequence keeps the viewer open');
+fire(dialog, 'keydown', { key: '0' });
+fire(dialog, 'keydown', { key: '+' });
+fire(dialog, 'keydown', { key: '=' });
+assert.equal(dialog.getAttribute('data-zoom'), '2', 'the viewer can enter the double-click sequence already zoomed');
+mouseClick(stage, dialog, lightboxImage, 1, 600, 400, 6000, 105);
+mouseClick(stage, dialog, lightboxImage, 2, 600, 400, 6050, 106);
+fire(stage, 'dblclick', { target: lightboxImage, clientX: 600, clientY: 400, timeStamp: 6054 });
+assert.equal(dialog.getAttribute('data-zoom'), '1', 'click-click-dblclick from 2x preserves the original double-click reset');
+assert.equal(dialog.getAttribute('data-pan-x'), '0', 'double-click reset from 2x clears pan');
 
 const plus = fire(dialog, 'keydown', { key: '+' });
 assert.equal(plus.defaultPrevented, true, 'keyboard zoom owns the key');
@@ -542,6 +576,11 @@ assert.equal(dialog.open, true, 'the click synthesized after a touch swipe does 
 assertViewerFrame(2, 'a suppressed post-swipe click');
 touchSwipe(stage, 60, 0, 86, 18000);
 assertViewerFrame(1, 'restoring the selected frame');
+fire(stage, 'pointerdown', { pointerType: 'touch', pointerId: 87, clientX: 300, clientY: 300, timeStamp: 19000 });
+fire(stage, 'pointerup', { pointerType: 'touch', pointerId: 87, clientX: 300, clientY: 300, timeStamp: 19050 });
+fire(dialog, 'click', { target: lightboxImage, pointerType: 'touch', detail: 1, clientX: 300, clientY: 300, timeStamp: 19060 });
+assert.equal(dialog.getAttribute('data-zoom'), '1', 'a single touch tap still waits for the existing double-tap gesture');
+assert.equal(dialog.open, true, 'a single touch tap does not close the viewer');
 
 fire(closeButton, 'click');
 assert.equal(dialog.open, false, 'the close button closes the dialog');
@@ -592,6 +631,11 @@ fire(singleTrigger, 'click');
 assert.equal(singleDialog.open, true, 'single-image viewer opens');
 assert.equal(singleDetail.element('product-lightbox-image').src, single.images[0], 'single-image viewer shows its only frame');
 const singleStage = singleDetail.element('product-lightbox-stage');
+const singleImage = singleDetail.element('product-lightbox-image');
+mouseClick(singleStage, singleDialog, singleImage, 1, 600, 400, 22000, 93);
+assert.equal(singleDialog.getAttribute('data-zoom'), '2', 'single-image viewer supports single-click zoom');
+mouseClick(singleStage, singleDialog, singleImage, 1, 600, 400, 23000, 94);
+assert.equal(singleDialog.getAttribute('data-zoom'), '1', 'single-image viewer single-click resets to 1x');
 fire(singleStage, 'wheel', { deltaY: -100, clientX: 600, clientY: 400 });
 assert.equal(singleDialog.getAttribute('data-zoom'), '1.5', 'single-image viewer supports wheel zoom');
 fire(singleStage, 'dblclick', { target: singleDetail.element('product-lightbox-image'), clientX: 600, clientY: 400 });
@@ -634,7 +678,7 @@ assert.equal(buyURL.searchParams.get('referrer'), siteRoot + '#product-card-' + 
 
 for (const path of ['../index.html', '../product.html']) {
   const html = fs.readFileSync(require.resolve(path), 'utf8');
-  assert.match(html, /assets\/main\.js\?v=35/, path + ' loads the cache-busted minimal viewer renderer');
+  assert.match(html, /assets\/main\.js\?v=36/, path + ' loads the cache-busted minimal viewer renderer');
   assert.match(html, /assets\/style\.css\?v=35/, path + ' loads the cache-busted minimal viewer styles');
   assert.match(html, /assets\/data\.js\?v=24/, path + ' keeps the unchanged data cache version');
 }

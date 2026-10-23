@@ -634,8 +634,8 @@ assert.equal(buyURL.searchParams.get('referrer'), siteRoot + '#product-card-' + 
 
 for (const path of ['../index.html', '../product.html']) {
   const html = fs.readFileSync(require.resolve(path), 'utf8');
-  assert.match(html, /assets\/main\.js\?v=34/, path + ' loads the cache-busted minimal viewer renderer');
-  assert.match(html, /assets\/style\.css\?v=34/, path + ' loads the cache-busted minimal viewer styles');
+  assert.match(html, /assets\/main\.js\?v=35/, path + ' loads the cache-busted minimal viewer renderer');
+  assert.match(html, /assets\/style\.css\?v=35/, path + ' loads the cache-busted minimal viewer styles');
   assert.match(html, /assets\/data\.js\?v=24/, path + ' keeps the unchanged data cache version');
 }
 

@@ -378,35 +378,20 @@
   function cardHTML(p, referrer) {
     var images = productImages(p);
     var summary = typeof p.summary === 'string' ? p.summary.trim() : '';
-    var description = Array.isArray(p.description)
-      ? p.description.filter(function (paragraph) { return typeof paragraph === 'string' && paragraph.trim(); })
-      : [];
-    var descriptionHTML = description.length
-      ? '<div class="card-desc">'
-        + description.map(function (paragraph) { return '<p>' + esc(paragraph) + '</p>'; }).join('')
-        + '</div>'
-      : (summary ? '<p class="card-desc">' + esc(summary) + '</p>' : '');
-    var slides = images.map(function (src, i) {
-      return '<img class="card-slide' + (i === 0 ? ' is-active' : '') + '"'
-        + ' loading="lazy" draggable="false" src="' + esc(src) + '"'
-        + ' alt="' + esc(p.name) + ' — image ' + (i + 1) + ' of ' + images.length + '"'
-        + ' width="500" height="625">';
-    }).join('');
-    var dots = images.length > 1
-      ? '<span class="card-dots" aria-hidden="true">' + images.map(function (src, i) {
-          return '<span class="card-dot' + (i === 0 ? ' is-active' : '') + '"></span>';
-        }).join('') + '</span>'
-      : '';
+    var cover = images[0];
+    var slides = '<img class="card-slide is-active"'
+      + ' loading="lazy" draggable="false" src="' + esc(cover) + '"'
+      + ' alt="' + esc(p.name) + ' — cover image"'
+      + ' width="500" height="625">';
     return '<article class="card" id="product-card-' + esc(p.id) + '">'
       + '<a class="card-media" href="product.html?id=' + esc(p.id) + '"'
-      + ' data-gallery-index="0" data-gallery-count="' + images.length + '">'
+      + ' data-gallery-index="0" data-gallery-count="1">'
       + '<span class="card-badge">' + esc(p.cat) + '</span>'
       + '<span class="card-slides">' + slides + '</span>'
-      + dots
       + '</a>'
       + '<div class="card-body">'
       + '<a class="card-title" href="product.html?id=' + esc(p.id) + '">' + esc(p.name) + '</a>'
-      + descriptionHTML
+      + (summary ? '<p class="card-desc">' + esc(summary) + '</p>' : '')
       + '<div class="card-price-row">'
       + '<span class="price-sale">' + money(p.price) + '</span>'
       + '</div>'
@@ -521,6 +506,37 @@
     });
   }
 
+  /* ---------- Safe rich description renderer ---------- */
+  function richInline(nodes) {
+    if (!Array.isArray(nodes)) return '';
+    return nodes.map(function (node) {
+      if (!node || typeof node !== 'object') return '';
+      if (node.t === 'br') return '<br>';
+      var value = typeof node.v === 'string' ? node.v : '';
+      if (!value) return '';
+      if (node.t === 'strong') return '<strong>' + esc(value) + '</strong>';
+      if (node.t === 'em') return '<em>' + esc(value) + '</em>';
+      return esc(value);
+    }).join('');
+  }
+
+  function richDescriptionHTML(blocks) {
+    if (!Array.isArray(blocks)) return '';
+    return blocks.map(function (block) {
+      if (!block || typeof block !== 'object') return '';
+      if (block.type === 'p' || block.type === 'h1' || block.type === 'h2' || block.type === 'h3') {
+        return '<' + block.type + '>' + richInline(block.content) + '</' + block.type + '>';
+      }
+      if (block.type === 'ul' || block.type === 'ol') {
+        var items = Array.isArray(block.items) ? block.items : [];
+        return '<' + block.type + '>' + items.map(function (item) {
+          return '<li>' + richInline(item) + '</li>';
+        }).join('') + '</' + block.type + '>';
+      }
+      return '';
+    }).join('');
+  }
+
   /* ---------- Product page ---------- */
   function setMeta(selector, value) {
     var el = document.querySelector(selector);
@@ -546,9 +562,10 @@
     var description = typeof p.summary === 'string' && p.summary.trim()
       ? p.summary.trim()
       : 'Digital print file “' + p.name + '” in PNG and PDF. Delivered instantly by email after purchase.';
-    var detailDescription = Array.isArray(p.description)
-      ? p.description.filter(function (paragraph) { return typeof paragraph === 'string' && paragraph.trim(); })
-      : [];
+    var detailDescriptionHTML = richDescriptionHTML(p.description);
+    if (!detailDescriptionHTML && typeof p.summary === 'string' && p.summary.trim()) {
+      detailDescriptionHTML = '<p>' + esc(p.summary.trim()) + '</p>';
+    }
     var images = productImages(p);
     document.title = title;
     setMeta('meta[name="description"]', description);
@@ -578,7 +595,7 @@
     page.innerHTML =
       '<div class="product-layout" id="product-card-' + esc(p.id) + '">'
       + '<div class="product-gallery">'
-      + '<div class="product-media" data-gallery-index="0"><img id="product-main-image" draggable="false" src="' + esc(images[0]) + '" alt="' + esc(p.name) + ' — image 1 of ' + images.length + '"></div>'
+      + '<div class="product-media" data-gallery-index="0" data-gallery-count="' + images.length + '"><img id="product-main-image" draggable="false" src="' + esc(images[0]) + '" alt="' + esc(p.name) + ' — image 1 of ' + images.length + '"></div>'
       + dots
       + '<div class="product-thumbs" role="group" aria-label="Product images">' + thumbs + '</div>'
       + '</div>'
@@ -590,8 +607,7 @@
       + '</div>'
       + '<p class="product-formats">Formats: ' + esc(p.formats) + '</p>'
       + '<div class="product-desc">'
-      + detailDescription.map(function (paragraph) { return '<p>' + esc(paragraph) + '</p>'; }).join('')
-      + '<p>Buy once and print as often as you like. After payment, the file is delivered instantly to your inbox and saved in your BlackSea library.</p>'
+      + detailDescriptionHTML
       + '</div>'
       + '<ul class="product-feats">'
       + '<li><i class="fa-solid fa-circle-check"></i>Instant email delivery after payment</li>'

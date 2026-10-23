@@ -507,8 +507,18 @@ select, input, button { font-family: var(--font); }
   padding: 5px 12px; letter-spacing: .3px;
 }
 .product-formats { font-size: 14px; color: #F2D9C4; margin-bottom: 18px; }
-.product-desc { font-size: 16px; font-weight: 500; color: #F7E7D6; line-height: 1.8; margin-bottom: 22px; }
-.product-desc p { margin-bottom: 12px; }
+.product-desc { font-size: 16px; font-weight: 500; color: #F7E7D6; line-height: 1.8; margin-bottom: 22px; overflow-wrap: anywhere; }
+.product-desc p { margin: 0 0 14px; }
+.product-desc h1 { font-size: 22px; font-weight: 400; line-height: 1.4; color: #FDF3E3; margin: 0 0 16px; }
+.product-desc h2 { font-size: 18px; font-weight: 700; line-height: 1.45; color: #FDF3E3; margin: 26px 0 12px; }
+.product-desc h3 { font-size: 17px; font-weight: 700; line-height: 1.5; color: #FDF3E3; margin: 22px 0 10px; }
+.product-desc ul, .product-desc ol { margin: 0 0 18px; padding-left: 24px; }
+.product-desc ul { list-style: disc; }
+.product-desc ol { list-style: decimal; }
+.product-desc li { margin: 0 0 8px; padding-left: 2px; }
+.product-desc strong { color: #FFF7EC; font-weight: 700; }
+.product-desc em { font-style: italic; }
+.product-desc > :last-child { margin-bottom: 0; }
 .product-feats { list-style: none; margin-bottom: 24px; display: grid; gap: 8px; }
 .product-feats li { font-size: 15.5px; font-weight: 500; color: #FDF3E3; }
 .product-feats i { color: #FFD9B8; margin-right: 9px; font-size: 13px; }

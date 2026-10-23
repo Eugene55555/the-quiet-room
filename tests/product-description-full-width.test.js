@@ -207,7 +207,7 @@ assert.match(cssSource, /@media\s*\(max-width:\s*900px\)\s*\{[\s\S]*?\.product-l
 
 for (const [file, label] of [['../index.html', 'home'], ['../product.html', 'product']]) {
   const html = fs.readFileSync(require.resolve(file), 'utf8');
-  assert.match(html, /assets\/main\.js\?v=35/, label + ' loads the cache-busted full-width detail renderer');
+  assert.match(html, /assets\/main\.js\?v=36/, label + ' loads the cache-busted full-width detail renderer');
   assert.match(html, /assets\/style\.css\?v=35/, label + ' loads the cache-busted full-width detail CSS');
   assert.match(html, /assets\/data\.js\?v=24/, label + ' keeps the unchanged data cache version');
 }

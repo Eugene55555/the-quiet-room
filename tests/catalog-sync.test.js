@@ -22,11 +22,13 @@ assert.deepEqual(
 );
 for (const product of products) {
   assert.ok(Array.isArray(product.description) && product.description.length > 0,
-    product.id + ' has source product description paragraphs');
-  assert.ok(product.description.every(paragraph => typeof paragraph === 'string' && paragraph.trim()),
-    product.id + ' description contains no empty paragraphs');
-  assert.ok(typeof product.summary === 'string' && product.summary.trim(),
-    product.id + ' has a short description for catalog cards');
+    product.id + ' has a structured source description');
+  assert.ok(product.description.every(block => block && ['h1', 'h2', 'h3', 'p', 'ul', 'ol'].includes(block.type)),
+    product.id + ' description uses allowed source block types');
+  assert.ok(product.description.some(block => block.type === 'h1'),
+    product.id + ' description keeps the source heading');
+  assert.ok(typeof product.summary === 'string' && product.summary.trim() && product.summary.length <= 120,
+    product.id + ' has a short subtitle for catalog cards');
 }
 
 const homepage = fs.readFileSync(require.resolve('../index.html'), 'utf8');

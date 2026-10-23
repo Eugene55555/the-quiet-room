@@ -10,11 +10,11 @@ const mainSource = fs.readFileSync(require.resolve('../assets/main.js'), 'utf8')
 const cssSource = fs.readFileSync(require.resolve('../assets/style.css'), 'utf8');
 const htmlFiles = ['../index.html', '../product.html'];
 const products = [
-  { id: 'tiger', slug: 'lek', name: 'Wild Blossom Tiger Cub', cat: 'Tropical', img: 'assets/tiger.png', images: ['assets/tiger.png', 'assets/tiger-detail.png', 'assets/tiger-alt.png'], formats: 'PNG + PDF', price: 2.60, order: 1, summary: 'Tiger cub summary & botanicals.', description: ['Tiger cub story & botanicals.', 'A second paragraph.'] },
-  { id: 'butterfly', slug: 'ksi', name: 'Golden Butterfly Cat', cat: 'Butterfly', img: 'assets/butterfly.png', images: ['assets/butterfly.png', 'assets/butterfly-detail.png'], formats: 'PNG + PDF', price: 1.30, order: 2, summary: 'Golden feline and butterflies.', description: ['Golden fur, jewelry, and butterflies.'] },
-  { id: 'rainbow', slug: 'oko', name: 'Enchanted Rainbow Cat', cat: 'Rainbow', img: 'assets/rainbow.png', images: ['assets/rainbow.png', 'assets/rainbow-detail.png', 'assets/rainbow-alt.png'], formats: 'PNG + PDF', price: 1.95, order: 3, summary: 'A rainbow cat in an autumn forest.', description: ['Vivid fantasy colors and autumn leaves.'] },
-  { id: 'tree', slug: 'xmv', name: 'Enchanted Sunset Cat', cat: 'Dreams', img: 'assets/tree.png', images: ['assets/tree.png', 'assets/tree-detail.png', 'assets/tree-alt.png'], formats: 'PNG + PDF', price: 2.20, order: 4, summary: 'A cat resting on a magical tree.', description: ['A multicolored cat beneath a glowing sunset.'] },
-  { id: 'wolf', slug: 'rldr', name: 'White Wolf', cat: 'Wildlife', img: 'assets/wolf.png', images: ['assets/wolf.png'], formats: 'PNG + PDF', price: 2.35, order: 5, summary: 'A white wolf in an icy wilderness.', description: ['A silver-white wolf surrounded by frost.'] }
+  { id: 'tiger', slug: 'lek', name: 'Wild Blossom Tiger Cub', cat: 'Tropical', img: 'assets/tiger.png', images: ['assets/tiger.png', 'assets/tiger-detail.png', 'assets/tiger-alt.png'], formats: 'PNG + PDF', price: 2.60, order: 1, summary: 'Tiger cub summary & botanicals.', description: [{ type: 'h1', content: [{ t: 'text', v: 'Tiger Art' }] }, { type: 'p', content: [{ t: 'text', v: 'Tiger cub story & botanicals.' }] }, { type: 'ul', items: [[{ t: 'strong', v: 'Amber eyes' }, { t: 'text', v: ' and stripes.' }]] }, { type: 'p', content: [{ t: 'text', v: 'A second paragraph.' }] }] },
+  { id: 'butterfly', slug: 'ksi', name: 'Golden Butterfly Cat', cat: 'Butterfly', img: 'assets/butterfly.png', images: ['assets/butterfly.png', 'assets/butterfly-detail.png'], formats: 'PNG + PDF', price: 1.30, order: 2, summary: 'Golden feline and butterflies.', description: [{ type: 'p', content: [{ t: 'text', v: 'Golden fur, jewelry, and butterflies.' }] }] },
+  { id: 'rainbow', slug: 'oko', name: 'Enchanted Rainbow Cat', cat: 'Rainbow', img: 'assets/rainbow.png', images: ['assets/rainbow.png', 'assets/rainbow-detail.png', 'assets/rainbow-alt.png'], formats: 'PNG + PDF', price: 1.95, order: 3, summary: 'A rainbow cat in an autumn forest.', description: [{ type: 'p', content: [{ t: 'text', v: 'Vivid fantasy colors and autumn leaves.' }] }] },
+  { id: 'tree', slug: 'xmv', name: 'Enchanted Sunset Cat', cat: 'Dreams', img: 'assets/tree.png', images: ['assets/tree.png', 'assets/tree-detail.png', 'assets/tree-alt.png'], formats: 'PNG + PDF', price: 2.20, order: 4, summary: 'A cat resting on a magical tree.', description: [{ type: 'p', content: [{ t: 'text', v: 'A multicolored cat beneath a glowing sunset.' }] }] },
+  { id: 'wolf', slug: 'rldr', name: 'White Wolf', cat: 'Wildlife', img: 'assets/wolf.png', images: ['assets/wolf.png'], formats: 'PNG + PDF', price: 2.35, order: 5, summary: 'A white wolf in an icy wilderness.', description: [{ type: 'p', content: [{ t: 'text', v: 'A silver-white wolf surrounded by frost.' }] }] }
 ];
 
 function makeElement() {
@@ -195,16 +195,11 @@ assertBlackSeaLink(catalogBuy, 'lek', catalogReturn);
 assert.equal(catalogBuy.text, 'Buy now');
 assert.match(catalog.markup, /id="product-card-tiger"/);
 assert.equal((catalog.markup.match(/class="card-title"/g) || []).length, 5, 'all five catalog cards render');
-assert.equal((catalog.markup.match(/class="card-dots"/g) || []).length, 4, 'multi-image catalog cards expose their gallery pagination');
-assert.match(catalog.markup, /<div class="card-desc"><p>Tiger cub story &amp; botanicals\.<\/p><p>A second paragraph\.<\/p><\/div>/, 'catalog cards show the full product description safely escaped');
-assert.doesNotMatch(catalog.markup, /Tiger cub summary &amp; botanicals\./, 'catalog cards do not repeat the summary alongside the full description');
-const catalogTigerGallery = catalog.cardGalleries[0];
-catalogTigerGallery.media.listeners.pointerdown({ isPrimary: true, pointerType: 'touch', pointerId: 1, clientX: 100, clientY: 100 });
-catalogTigerGallery.media.listeners.pointermove({ pointerId: 1, clientX: 60, clientY: 100 });
-catalogTigerGallery.media.listeners.pointerup({ pointerId: 1, clientX: 60, clientY: 100 });
-assert.equal(catalogTigerGallery.media.getAttribute('data-gallery-index'), '1', 'catalog swipe advances its gallery');
-assert.equal(catalogTigerGallery.dots[1].classList.contains('is-active'), true, 'catalog swipe updates the active indicator');
-assert.equal(catalogTigerGallery.dots[0].classList.contains('is-active'), false);
+assert.equal((catalog.markup.match(/<img class="card-slide/g) || []).length, 5, 'catalog cards render only one cover image each');
+assert.doesNotMatch(catalog.markup, /class="card-dots"/, 'catalog cards do not render gallery pagination');
+assert.match(catalog.markup, /<p class="card-desc">Tiger cub summary &amp; botanicals\.<\/p>/, 'catalog cards show only the short summary safely escaped');
+assert.doesNotMatch(catalog.markup, /<div class="card-desc">/, 'catalog cards do not render the full description');
+assert.doesNotMatch(catalog.markup, /Tiger cub story/, 'catalog cards do not leak detail body copy');
 assert.equal(dispatchCheckoutClick(catalog, catalogBuy), catalogReturn);
 assert.deepEqual(catalog.historyUpdates, [catalogReturn], 'browser Back keeps the home-page card anchor and query');
 assert.equal(catalog.location.hash, '#product-card-tiger');
@@ -219,7 +214,7 @@ const product = renderPage(productUrl, 'product');
 const productBuy = extractLink(product.markup, 'product-buy');
 assertBlackSeaLink(productBuy, 'lek', productUrl + '#product-card-tiger');
 assert.match(product.markup, /<div class="product-layout" id="product-card-tiger">/);
-assert.match(product.markup, /<div class="product-desc">[\s\S]*<p>Tiger cub story &amp; botanicals\.<\/p>[\s\S]*<p>A second paragraph\.<\/p>[\s\S]*<\/div>/, 'product detail renders all source description paragraphs safely escaped');
+assert.match(product.markup, /<div class="product-desc">[\s\S]*<h1>Tiger Art<\/h1>[\s\S]*<p>Tiger cub story &amp; botanicals\.<\/p>[\s\S]*<strong>Amber eyes<\/strong>[\s\S]*<p>A second paragraph\.<\/p>[\s\S]*<\/div>/, 'product detail renders the full structured description safely escaped');
 assert.match(product.markup, /class="product-dots" role="group" aria-label="Product image pagination"/);
 assert.equal((product.markup.match(/class="product-dot(?: is-active)?"/g) || []).length, 3, 'detail gallery shows one persistent dot per image');
 assert.match(product.markup, /class="product-dot is-active"[^>]*aria-pressed="true"/);
@@ -250,13 +245,8 @@ assert.deepEqual(product.historyUpdates, [productUrl + '#product-card-tiger']);
 
 const relatedBuy = extractLink(product.markup, 'card-btn');
 assert.equal((product.markup.match(/class="card-title"/g) || []).length, 4, 'all related product cards render');
-assert.equal((product.markup.match(/class="card-dots"/g) || []).length, 3, 'multi-image related cards show persistent indicators');
-const relatedGallery = product.cardGalleries[0];
-relatedGallery.media.listeners.pointerdown({ isPrimary: true, pointerType: 'touch', pointerId: 2, clientX: 100, clientY: 100 });
-relatedGallery.media.listeners.pointermove({ pointerId: 2, clientX: 60, clientY: 100 });
-relatedGallery.media.listeners.pointerup({ pointerId: 2, clientX: 60, clientY: 100 });
-assert.equal(relatedGallery.media.getAttribute('data-gallery-index'), '1', 'related-card swipe advances its gallery');
-assert.equal(relatedGallery.dots[1].classList.contains('is-active'), true, 'related-card swipe updates the active indicator');
+assert.equal((product.markup.match(/<img class="card-slide/g) || []).length, 4, 'related cards render only one cover image each');
+assert.doesNotMatch(product.markup, /class="card-dots"/, 'related cards do not render gallery pagination');
 assertBlackSeaLink(relatedBuy, 'ksi', productUrl + '#product-card-butterfly');
 assert.equal(dispatchCheckoutClick(product, relatedBuy), productUrl + '#product-card-butterfly');
 assert.deepEqual(product.historyUpdates, [productUrl + '#product-card-tiger', productUrl + '#product-card-butterfly']);
@@ -274,9 +264,9 @@ assert.equal(singleImageProduct.productDots.length, 0, 'single-image gallery rem
 for (const path of htmlFiles) {
   const html = fs.readFileSync(require.resolve(path), 'utf8');
   assert.doesNotMatch(html, /cart-fab|cart-drawer|cart-toggle|cart-clear|assets\/cart-(?:core|ui)\.js/);
-  assert.match(html, /assets\/data\.js\?v=21/);
-  assert.match(html, /assets\/main\.js\?v=27/);
-  assert.match(html, /assets\/style\.css\?v=28/);
+  assert.match(html, /assets\/data\.js\?v=22/);
+  assert.match(html, /assets\/main\.js\?v=28/);
+  assert.match(html, /assets\/style\.css\?v=29/);
 }
 assert.doesNotMatch(mainSource, /TQR_CLOSE_CART|data-cart-add|cart-drawer|cart-toggle/);
 assert.doesNotMatch(cssSource, /cart-fab|cart-drawer|cart-count|cart-items|cart-clear|cart-checkout/);

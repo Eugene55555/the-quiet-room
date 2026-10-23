@@ -83,6 +83,17 @@ function esc(value) {
     .replace(/'/g, '&#39;');
 }
 
+function blockText(block) {
+  const inlineText = nodes => (Array.isArray(nodes) ? nodes : [])
+    .map(node => node && (node.t === 'br' ? ' ' : node.v))
+    .filter(Boolean)
+    .join('');
+  if (block && Array.isArray(block.items)) {
+    return block.items.map(inlineText).join(' ');
+  }
+  return block ? inlineText(block.content) : '';
+}
+
 const markup = renderCatalog();
 const cards = {};
 for (const match of markup.matchAll(/<article class="card" id="product-card-([^"]+)">([\s\S]*?)<\/article>/g)) {
@@ -93,40 +104,48 @@ assert.equal(products.length, 5, 'catalog has five source products');
 assert.equal(Object.keys(cards).length, 5, 'all five product cards render');
 
 for (const product of products) {
-  assert.ok(Array.isArray(product.description) && product.description.length > 0,
-    product.id + ' has a source description');
+  assert.equal(typeof product.summary, 'string', product.id + ' has a summary');
+  const summary = product.summary.trim();
+  assert.ok(summary.length > 0 && summary.length <= 120,
+    product.id + ' summary is a short subtitle');
+  assert.doesNotMatch(summary, /\n/, product.id + ' summary is a single paragraph');
+
+  const fullText = product.description.map(blockText).join(' ');
+  assert.notEqual(summary, fullText, product.id + ' summary is not the full description');
+  assert.ok(fullText.length > summary.length * 2,
+    product.id + ' summary is clearly shorter than the detail description');
+
+  const images = Array.isArray(product.images) && product.images.length ? product.images : [product.img];
+  assert.ok(images.length > 0, product.id + ' has source images');
   const card = cards[product.id];
   assert.ok(card, product.id + ' card is rendered');
+  const cardImages = [...card.matchAll(/<img\b[^>]*\bsrc="([^"]+)"/g)].map(match => match[1]);
+  assert.deepEqual(cardImages, [esc(images[0])], product.id + ' card shows only its first image');
+  assert.doesNotMatch(card, /card-dots|card-dot/, product.id + ' card has no gallery indicators');
+  const descriptions = [...card.matchAll(/<p class="card-desc">([\s\S]*?)<\/p>/g)];
+  assert.equal(descriptions.length, 1, product.id + ' card renders exactly one summary paragraph');
+  assert.equal(descriptions[0][1], esc(summary), product.id + ' card renders its own summary');
+  assert.doesNotMatch(card, /<div class="card-desc">/, product.id + ' card does not render a full description block');
+  assert.doesNotMatch(card, /<h[1-3]>|<ul>|<ol>|<li>|<strong>|<em>|<br>/,
+    product.id + ' card contains no rich detail markup');
 
-  const description = card.match(/<div class="card-desc">([\s\S]*?)<\/div>/);
-  assert.ok(description, product.id + ' card renders a description block');
-  assert.equal(description[1].includes('class="card-summary"'), false,
-    product.id + ' card does not repeat the summary alongside the full description');
-
-  for (const paragraph of product.description) {
-    const expected = '<p>' + esc(paragraph) + '</p>';
-    assert.ok(description[1].includes(expected),
-      product.id + ' card contains its full description paragraph: ' + paragraph.slice(0, 48) + '…');
-  }
-
-  for (const other of products) {
-    if (other.id === product.id) continue;
-    for (const paragraph of other.description) {
-      assert.equal(card.includes('<p>' + esc(paragraph) + '</p>'), false,
-        product.id + ' card must not contain text from ' + other.id);
-    }
+  for (const block of product.description) {
+    const text = blockText(block);
+    if (text.length < 30) continue;
+    assert.equal(card.includes(esc(text)), false,
+      product.id + ' card does not return the full description text');
   }
 }
 
 const descriptionRules = [...cssSource.matchAll(/\.card-desc[^{]*\{([^}]*)\}/g)];
-assert.ok(descriptionRules.length > 0, 'catalog description styling exists');
+assert.ok(descriptionRules.length > 0, 'catalog subtitle styling exists');
 for (const rule of descriptionRules) {
   const body = rule[1];
-  assert.doesNotMatch(body, /display\s*:\s*none/i, 'description is not hidden with display:none');
-  assert.doesNotMatch(body, /visibility\s*:\s*hidden/i, 'description is not hidden with visibility:hidden');
-  assert.doesNotMatch(body, /max-height\s*:/i, 'description is not clamped by max-height');
-  assert.doesNotMatch(body, /overflow\s*:\s*hidden/i, 'description is not clipped by overflow:hidden');
-  assert.doesNotMatch(body, /(?:-webkit-)?line-clamp\s*:/i, 'description is not truncated with line-clamp');
+  assert.doesNotMatch(body, /display\s*:\s*none/i, 'subtitle is not hidden with display:none');
+  assert.doesNotMatch(body, /visibility\s*:\s*hidden/i, 'subtitle is not hidden with visibility:hidden');
+  assert.doesNotMatch(body, /max-height\s*:/i, 'subtitle is not clamped by max-height');
+  assert.doesNotMatch(body, /overflow\s*:\s*hidden/i, 'subtitle is not clipped by overflow:hidden');
+  assert.doesNotMatch(body, /(?:-webkit-)?line-clamp\s*:/i, 'subtitle is not truncated with line-clamp');
 }
 
-process.stdout.write('PASS each catalog card renders its own complete product description\n');
+process.stdout.write('PASS catalog cards show only short individual summaries\n');

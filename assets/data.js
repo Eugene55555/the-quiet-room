@@ -381,7 +381,7 @@ window.TQR_PRODUCTS = [
   },
   {
     "id": "baby-tiger",
-    "name": "Wild Blossom Tiger Cub",
+    "name": "Wild Blossom Tiger Cub — Enchanted Nature Digital Art Print PDF PNG",
     "cat": "Tropical",
     "img": "assets/img/baby-tiger.png",
     "images": [
@@ -810,7 +810,7 @@ window.TQR_PRODUCTS = [
   },
   {
     "id": "golden-butterfly-cat",
-    "name": "Golden Butterfly Cat",
+    "name": "Golden Butterfly Cat — Golden Elegance PNG PDF",
     "cat": "Butterfly",
     "img": "assets/img/golden-butterfly-cat.png",
     "images": [
@@ -1208,7 +1208,7 @@ window.TQR_PRODUCTS = [
   },
   {
     "id": "enchanted-rainbow-cat",
-    "name": "Enchanted Rainbow Cat",
+    "name": "Enchanted Rainbow Cat — Whispers of Autumn PNG PDF",
     "cat": "Rainbow",
     "img": "assets/img/enchanted-rainbow-cat.png",
     "images": [
@@ -1462,7 +1462,7 @@ window.TQR_PRODUCTS = [
   },
   {
     "id": "cat-tree-dreams",
-    "name": "Enchanted Sunset Cat",
+    "name": "Enchanted Sunset Cat — Magical Fantasy Art Print PNG PDF",
     "cat": "Dreams",
     "img": "assets/img/cat-tree-dreams.jpg",
     "images": [

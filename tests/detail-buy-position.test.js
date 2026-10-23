@@ -178,26 +178,29 @@ for (const product of products) {
   assert.doesNotMatch(link[0], /target=/, product.id + ': checkout stays in the same tab');
 }
 
-const whiteWolfTitle = 'White Wolf Digital Art Print PNG PDF';
-const whiteWolf = products.find(product => product.id === 'white-wolf');
-assert.ok(whiteWolf, 'White Wolf remains in the catalog');
-assert.equal(whiteWolf.name, whiteWolfTitle, 'White Wolf display title is exact');
-assert.deepEqual(
-  JSON.parse(JSON.stringify(products.filter(product => product.id !== 'white-wolf').map(product => product.name))),
-  ['Wild Blossom Tiger Cub', 'Golden Butterfly Cat', 'Enchanted Rainbow Cat', 'Enchanted Sunset Cat'],
-  'other product display titles are unchanged'
-);
-const whiteWolfPage = render('white-wolf');
-assert.ok(whiteWolfPage.markup.includes('<h1>' + whiteWolfTitle + '</h1>'),
-  'White Wolf detail heading uses the exact display title');
-assert.equal(whiteWolfPage.title, whiteWolfTitle + ' — The Quiet Room',
-  'White Wolf document title uses the exact display title');
-assert.equal(whiteWolfPage.meta['meta[property="og:title"]'], whiteWolfTitle + ' — The Quiet Room',
-  'White Wolf Open Graph title uses the exact display title');
-assert.equal(whiteWolfPage.meta['meta[name="twitter:title"]'], whiteWolfTitle + ' — The Quiet Room',
-  'White Wolf Twitter title uses the exact display title');
-assert.ok(whiteWolfPage.markup.indexOf('src="' + whiteWolf.images[0] + '"') < whiteWolfPage.markup.indexOf('<a class="product-buy"'),
-  'White Wolf title change does not move the gallery or Buy button');
+const expectedTitles = {
+  'white-wolf': 'White Wolf Digital Art Print PNG PDF',
+  'baby-tiger': 'Wild Blossom Tiger Cub — Enchanted Nature Digital Art Print PDF PNG',
+  'golden-butterfly-cat': 'Golden Butterfly Cat — Golden Elegance PNG PDF',
+  'enchanted-rainbow-cat': 'Enchanted Rainbow Cat — Whispers of Autumn PNG PDF',
+  'cat-tree-dreams': 'Enchanted Sunset Cat — Magical Fantasy Art Print PNG PDF'
+};
+for (const product of products) {
+  const expectedTitle = expectedTitles[product.id];
+  assert.ok(expectedTitle, product.id + ' has an exact source title expectation');
+  assert.equal(product.name, expectedTitle, product.id + ' display title is exact');
+  const detail = render(product.id);
+  assert.ok(detail.markup.includes('<h1>' + expectedTitle + '</h1>'),
+    product.id + ' detail heading uses the exact display title');
+  assert.equal(detail.title, expectedTitle + ' — The Quiet Room',
+    product.id + ' document title uses the exact display title');
+  assert.equal(detail.meta['meta[property="og:title"]'], expectedTitle + ' — The Quiet Room',
+    product.id + ' Open Graph title uses the exact display title');
+  assert.equal(detail.meta['meta[name="twitter:title"]'], expectedTitle + ' — The Quiet Room',
+    product.id + ' Twitter title uses the exact display title');
+  assert.ok(detail.markup.indexOf('src="' + productImages(product)[0] + '"') < detail.markup.indexOf('<a class="product-buy"'),
+    product.id + ' title change does not move the gallery or Buy button');
+}
 
 const catalogContext = { window: { TQR_PRODUCTS: products } };
 const catalogPage = makeElement();
@@ -232,8 +235,11 @@ catalogDocument.listeners.DOMContentLoaded();
 const catalogMarkup = catalogPage.innerHTML;
 assert.equal((catalogMarkup.match(/class="card-btn"/g) || []).length, 5,
   'all five catalog cards keep their Buy buttons');
-assert.match(catalogMarkup, /class="card-title"[^>]*>White Wolf Digital Art Print PNG PDF<\/a>/,
-  'White Wolf catalog card uses the exact display title');
+for (const product of products) {
+  const expectedTitle = expectedTitles[product.id];
+  assert.ok(catalogMarkup.includes('class="card-title" href="product.html?id=' + product.id + '">' + expectedTitle + '</a>'),
+    product.id + ' catalog card uses the exact display title');
+}
 for (const match of catalogMarkup.matchAll(/<article class="card"[\s\S]*?<\/article>/g)) {
   const card = match[0];
   const actions = card.indexOf('<div class="card-actions">');
@@ -266,9 +272,9 @@ assert.match(cssSource, /@media\s*\(max-width:\s*900px\)\s*\{[\s\S]*?\.product-l
 
 for (const path of ['../index.html', '../product.html']) {
   const html = fs.readFileSync(require.resolve(path), 'utf8');
-  assert.match(html, /assets\/data\.js\?v=23/, path + ' loads the cache-busted White Wolf title');
+  assert.match(html, /assets\/data\.js\?v=24/, path + ' loads the cache-busted five source titles');
   assert.match(html, /assets\/main\.js\?v=29/, path + ' loads the cache-busted relocated-button renderer');
-  assert.match(html, /assets\/style\.css\?v=31/, path + ' loads the cache-busted image-column layout');
+  assert.match(html, /assets\/style\.css\?v=32/, path + ' loads the cache-busted card layout and red CTA CSS');
 }
 
 process.stdout.write('PASS all five detail pages place the single Buy button directly after the gallery in the image column, with checkout links and catalog card buttons unchanged\n');

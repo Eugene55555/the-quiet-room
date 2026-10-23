@@ -129,10 +129,13 @@ for (const product of products) {
   assert.doesNotMatch(card, /<h[1-3]>|<ul>|<ol>|<li>|<strong>|<em>|<br>/,
     product.id + ' card contains no rich detail markup');
 
+  const cardWithoutTitle = card
+    .replace(/<a class="card-title"[^>]*>[\s\S]*?<\/a>/, '')
+    .replace(/\salt="[^"]*"/g, '');
   for (const block of product.description) {
     const text = blockText(block);
     if (text.length < 30) continue;
-    assert.equal(card.includes(esc(text)), false,
+    assert.equal(cardWithoutTitle.includes(esc(text)), false,
       product.id + ' card does not return the full description text');
   }
 }

@@ -378,16 +378,23 @@
   function cardHTML(p, referrer) {
     var images = productImages(p);
     var summary = typeof p.summary === 'string' ? p.summary.trim() : '';
-    var cover = images[0];
-    var slides = '<img class="card-slide is-active"'
-      + ' loading="lazy" draggable="false" src="' + esc(cover) + '"'
-      + ' alt="' + esc(p.name) + ' — cover image"'
-      + ' width="500" height="625">';
+    var slides = images.map(function (src, i) {
+      return '<img class="card-slide' + (i === 0 ? ' is-active' : '') + '"'
+        + ' loading="lazy" draggable="false" src="' + esc(src) + '"'
+        + ' alt="' + esc(p.name) + ' — image ' + (i + 1) + ' of ' + images.length + '"'
+        + ' width="500" height="625">';
+    }).join('');
+    var dots = images.length > 1
+      ? '<span class="card-dots" aria-hidden="true">' + images.map(function (src, i) {
+          return '<span class="card-dot' + (i === 0 ? ' is-active' : '') + '"></span>';
+        }).join('') + '</span>'
+      : '';
     return '<article class="card" id="product-card-' + esc(p.id) + '">'
       + '<a class="card-media" href="product.html?id=' + esc(p.id) + '"'
-      + ' data-gallery-index="0" data-gallery-count="1">'
+      + ' data-gallery-index="0" data-gallery-count="' + images.length + '">'
       + '<span class="card-badge">' + esc(p.cat) + '</span>'
       + '<span class="card-slides">' + slides + '</span>'
+      + dots
       + '</a>'
       + '<div class="card-body">'
       + '<a class="card-title" href="product.html?id=' + esc(p.id) + '">' + esc(p.name) + '</a>'

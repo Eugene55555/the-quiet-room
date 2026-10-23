@@ -647,6 +647,8 @@
       + '<span class="price-sale">' + money(p.price) + '</span>'
       + '</div>'
       + '<p class="product-formats">Formats: ' + esc(p.formats) + '</p>'
+      + '</div></div>'
+      + '<section class="product-details">'
       + '<div class="product-desc">'
       + detailDescriptionHTML
       + '</div>'
@@ -658,7 +660,7 @@
       + '</ul>'
       + '<p class="product-safe"><i class="fa-solid fa-lock"></i> Secure card payment · 3-D Secure</p>'
       + '<p class="product-checkout-note">Checkout is hosted by BlackSea. You can add more prints to your BlackSea basket before paying.</p>'
-      + '</div></div>'
+      + '</section>'
       + '<section class="product-related"><h2>You may also like</h2><div class="grid">'
       + related.map(function (x) { return cardHTML(x, cardReferrer(x.id)); }).join('')
       + '</div></section>'

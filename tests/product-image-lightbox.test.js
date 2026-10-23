@@ -276,6 +276,16 @@ function swipe(media, dx, dy, pointerId) {
   media.listeners.pointerup({ pointerId: pointerId || 1, clientX: 100 + dx, clientY: 150 + dy });
 }
 
+function touchSwipe(element, dx, dy, pointerId, timeStamp) {
+  const id = pointerId || 1;
+  const start = timeStamp || 1000;
+  const x = 320;
+  const y = 280;
+  fire(element, 'pointerdown', { pointerType: 'touch', pointerId: id, isPrimary: true, clientX: x, clientY: y, timeStamp: start });
+  fire(element, 'pointermove', { pointerType: 'touch', pointerId: id, clientX: x + dx, clientY: y + dy, timeStamp: start + 16 });
+  fire(element, 'pointerup', { pointerType: 'touch', pointerId: id, clientX: x + dx, clientY: y + dy, timeStamp: start + 32 });
+}
+
 const multiProduct = products.find(product => imagesOf(product).length > 1);
 assert.ok(multiProduct, 'a multi-image detail product exists');
 const multiImages = imagesOf(multiProduct);
@@ -462,6 +472,77 @@ fire(dialog, 'keydown', { key: 'ArrowLeft' });
 assert.equal(lightboxImage.src, multiImages[1], 'the left arrow key returns to the prior frame');
 assert.equal(count.textContent, '2 / ' + multiImages.length, 'the left arrow key updates the image count');
 
+function assertViewerFrame(index, label) {
+  assert.equal(lightboxImage.src, multiImages[index], label + ' shows the expected frame');
+  assert.equal(mainImage.src, multiImages[index], label + ' synchronizes the product main image');
+  assert.equal(count.textContent, (index + 1) + ' / ' + multiImages.length, label + ' updates the image count');
+  assert.equal(dots[index].classList.contains('is-active'), true, label + ' synchronizes the product dots');
+  assert.equal(thumbs[index].classList.contains('is-active'), true, label + ' synchronizes the product thumbnails');
+}
+
+touchSwipe(stage, -60, 0, 71, 5000);
+assertViewerFrame(2, 'a left touch swipe');
+touchSwipe(stage, 60, 0, 72, 6000);
+assertViewerFrame(1, 'a right touch swipe');
+
+touchSwipe(stage, -30, 0, 73, 7000);
+assertViewerFrame(1, 'a horizontal touch move below the swipe threshold');
+touchSwipe(stage, -10, -90, 74, 8000);
+assertViewerFrame(1, 'a vertical touch gesture');
+touchSwipe(stage, -60, 60, 75, 9000);
+assertViewerFrame(1, 'a diagonal touch gesture without horizontal dominance');
+
+touchSwipe(stage, 60, 0, 76, 10000);
+assertViewerFrame(0, 'swiping right at the first frame');
+touchSwipe(stage, 60, 0, 77, 11000);
+assertViewerFrame(multiImages.length - 1, 'swiping right before the first frame');
+touchSwipe(stage, -60, 0, 78, 12000);
+assertViewerFrame(0, 'swiping left after the last frame');
+touchSwipe(stage, -60, 0, 79, 13000);
+assertViewerFrame(1, 'swiping left back to the selected frame');
+
+fire(stage, 'pointerdown', { pointerType: 'touch', pointerId: 80, clientX: 100, clientY: 100, timeStamp: 14000 });
+fire(stage, 'pointerdown', { pointerType: 'touch', pointerId: 81, clientX: 200, clientY: 100, timeStamp: 14000 });
+fire(stage, 'pointermove', { pointerType: 'touch', pointerId: 81, clientX: 300, clientY: 110, timeStamp: 14016 });
+assert.equal(dialog.getAttribute('data-zoom'), '2', 'pinch zoom still owns two-finger touch gestures');
+assertViewerFrame(1, 'pinching two touch pointers');
+fire(stage, 'pointerup', { pointerType: 'touch', pointerId: 80, clientX: 100, clientY: 100, timeStamp: 14032 });
+fire(stage, 'pointerup', { pointerType: 'touch', pointerId: 81, clientX: 300, clientY: 110, timeStamp: 14048 });
+assertViewerFrame(1, 'releasing a pinch');
+fire(dialog, 'keydown', { key: '0' });
+
+fire(stage, 'pointerdown', { pointerType: 'touch', pointerId: 82, clientX: 300, clientY: 100, timeStamp: 15000 });
+fire(stage, 'pointerdown', { pointerType: 'touch', pointerId: 83, clientX: 400, clientY: 100, timeStamp: 15000 });
+fire(stage, 'pointermove', { pointerType: 'touch', pointerId: 83, clientX: 310, clientY: 100, timeStamp: 15016 });
+assert.equal(dialog.getAttribute('data-zoom'), '1', 'a closing pinch returns to 1x');
+assertViewerFrame(1, 'a pinch that ends at 1x');
+fire(stage, 'pointerup', { pointerType: 'touch', pointerId: 82, clientX: 300, clientY: 100, timeStamp: 15032 });
+fire(stage, 'pointerup', { pointerType: 'touch', pointerId: 83, clientX: 310, clientY: 100, timeStamp: 15048 });
+assertViewerFrame(1, 'releasing a pinch that ends at 1x');
+
+fire(dialog, 'keydown', { key: '=' });
+fire(dialog, 'keydown', { key: '=' });
+assert.equal(dialog.getAttribute('data-zoom'), '2', 'the viewer is zoomed before a touch pan');
+const zoomPanX = Number(dialog.getAttribute('data-pan-x'));
+const zoomPanY = Number(dialog.getAttribute('data-pan-y'));
+fire(stage, 'pointerdown', { pointerType: 'touch', pointerId: 84, clientX: 300, clientY: 300, timeStamp: 16000 });
+fire(stage, 'pointermove', { pointerType: 'touch', pointerId: 84, clientX: 360, clientY: 310, timeStamp: 16016 });
+assert.equal(Number(dialog.getAttribute('data-pan-x')), zoomPanX + 60, 'a zoomed touch drag still pans horizontally');
+assert.equal(Number(dialog.getAttribute('data-pan-y')), zoomPanY + 10, 'a zoomed touch drag still pans vertically');
+assertViewerFrame(1, 'dragging a zoomed image');
+fire(stage, 'pointerup', { pointerType: 'touch', pointerId: 84, clientX: 360, clientY: 310, timeStamp: 16032 });
+assertViewerFrame(1, 'finishing a zoomed touch pan');
+fire(dialog, 'keydown', { key: '0' });
+
+touchSwipe(stage, -60, 0, 85, 17000);
+assertViewerFrame(2, 'a touch swipe before a synthesized click');
+const suppressedSwipeClick = fire(dialog, 'click', { target: stage, timeStamp: 17040 });
+assert.equal(suppressedSwipeClick.defaultPrevented, true, 'the click synthesized after a touch swipe is suppressed');
+assert.equal(dialog.open, true, 'the click synthesized after a touch swipe does not close the viewer');
+assertViewerFrame(2, 'a suppressed post-swipe click');
+touchSwipe(stage, 60, 0, 86, 18000);
+assertViewerFrame(1, 'restoring the selected frame');
+
 fire(closeButton, 'click');
 assert.equal(dialog.open, false, 'the close button closes the dialog');
 assert.equal(dialog.classList.contains('is-open'), false, 'the open state is removed on close');
@@ -519,6 +600,12 @@ fire(singleDialog, 'keydown', { key: '+' });
 assert.equal(singleDialog.getAttribute('data-zoom'), '1.5', 'single-image viewer supports keyboard zoom');
 fire(singleDialog, 'keydown', { key: '0' });
 assert.equal(singleDialog.getAttribute('data-zoom'), '1', 'single-image viewer keyboard reset works');
+touchSwipe(singleStage, -80, 0, 91, 20000);
+assert.equal(singleDetail.element('product-lightbox-image').src, single.images[0], 'a single-image viewer ignores a left touch swipe');
+assert.equal(singleDialog.open, true, 'a single-image viewer stays open after a left touch swipe');
+touchSwipe(singleStage, 80, 0, 92, 21000);
+assert.equal(singleDetail.element('product-lightbox-image').src, single.images[0], 'a single-image viewer ignores a right touch swipe');
+assert.equal(singleDialog.open, true, 'a single-image viewer stays open after a right touch swipe');
 fire(singleDetail.element('product-lightbox-close'), 'click');
 
 const catalog = render('catalog', siteRoot, products);
@@ -547,7 +634,7 @@ assert.equal(buyURL.searchParams.get('referrer'), siteRoot + '#product-card-' + 
 
 for (const path of ['../index.html', '../product.html']) {
   const html = fs.readFileSync(require.resolve(path), 'utf8');
-  assert.match(html, /assets\/main\.js\?v=33/, path + ' loads the cache-busted minimal viewer renderer');
+  assert.match(html, /assets\/main\.js\?v=34/, path + ' loads the cache-busted minimal viewer renderer');
   assert.match(html, /assets\/style\.css\?v=34/, path + ' loads the cache-busted minimal viewer styles');
   assert.match(html, /assets\/data\.js\?v=24/, path + ' keeps the unchanged data cache version');
 }

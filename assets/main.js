@@ -30,6 +30,7 @@
   /* ---------- Swipe galleries ---------- */
   var SWIPE_MIN = 32;
   var SWIPE_RATIO = 1.2;
+  var LIGHTBOX_SWIPE_MIN = 44;
 
   function wrapIndex(index, length) {
     if (!length) return 0;
@@ -38,6 +39,12 @@
 
   function swipeDirection(dx, dy) {
     if (Math.abs(dx) < SWIPE_MIN) return 0;
+    if (Math.abs(dx) <= Math.abs(dy) * SWIPE_RATIO) return 0;
+    return dx < 0 ? 1 : -1;
+  }
+
+  function lightboxSwipeDirection(dx, dy) {
+    if (Math.abs(dx) < LIGHTBOX_SWIPE_MIN) return 0;
     if (Math.abs(dx) <= Math.abs(dy) * SWIPE_RATIO) return 0;
     return dx < 0 ? 1 : -1;
   }
@@ -811,6 +818,7 @@
     }
 
     function beginPinch(points) {
+      for (var i = 0; i < points.length; i++) points[i].pinched = true;
       pinchStart = {
         distance: Math.max(1, touchDistance(points[0], points[1])),
         zoom: lightboxZoom,
@@ -1093,6 +1101,13 @@
           }
         } else {
           lastTap = null;
+          if (point && point.moved && !wasPanning && !point.pinched && lightboxZoom <= ZOOM_MIN && images.length > 1) {
+            var swipeDir = lightboxSwipeDirection(e.clientX - point.startX, e.clientY - point.startY);
+            if (swipeDir) {
+              suppressClickUntil = now + 400;
+              showImage(current + swipeDir);
+            }
+          }
         }
         return;
       }

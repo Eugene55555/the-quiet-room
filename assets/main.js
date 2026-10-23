@@ -30,7 +30,6 @@
   /* ---------- Swipe galleries ---------- */
   var SWIPE_MIN = 32;
   var SWIPE_RATIO = 1.2;
-  var LIGHTBOX_SWIPE_MIN = 44;
 
   function wrapIndex(index, length) {
     if (!length) return 0;
@@ -39,12 +38,6 @@
 
   function swipeDirection(dx, dy) {
     if (Math.abs(dx) < SWIPE_MIN) return 0;
-    if (Math.abs(dx) <= Math.abs(dy) * SWIPE_RATIO) return 0;
-    return dx < 0 ? 1 : -1;
-  }
-
-  function lightboxSwipeDirection(dx, dy) {
-    if (Math.abs(dx) < LIGHTBOX_SWIPE_MIN) return 0;
     if (Math.abs(dx) <= Math.abs(dy) * SWIPE_RATIO) return 0;
     return dx < 0 ? 1 : -1;
   }
@@ -605,31 +598,13 @@
             + ' aria-label="Show image ' + (i + 1) + ' of ' + images.length + '"></button>';
         }).join('') + '</div>'
       : '';
-    var lightboxNav = images.length > 1
-      ? '<button type="button" class="product-lightbox-arrow product-lightbox-prev" id="product-lightbox-prev" aria-label="Previous image"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>'
-        + '<button type="button" class="product-lightbox-arrow product-lightbox-next" id="product-lightbox-next" aria-label="Next image"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>'
-      : '';
-    var lightboxCount = images.length > 1
-      ? '<span class="product-lightbox-count" id="product-lightbox-count" aria-live="polite">1 / ' + images.length + '</span>'
-      : '';
-    var lightboxMarkup =
-      '<dialog class="product-lightbox" id="product-lightbox" aria-modal="true" aria-labelledby="product-lightbox-title" aria-describedby="product-lightbox-hint">'
-      + '<div class="product-lightbox-stage" id="product-lightbox-stage">'
-      + '<img class="product-lightbox-image" id="product-lightbox-image" draggable="false" src="' + esc(images[0]) + '" alt="' + esc(p.name) + ' — image 1 of ' + images.length + '">'
-      + '</div>'
-      + lightboxNav
-      + '<button type="button" class="product-lightbox-close" id="product-lightbox-close" aria-label="Close image viewer"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>'
-      + lightboxCount
-      + '<h2 class="product-lightbox-sr" id="product-lightbox-title">' + esc(p.name) + ' — image 1 of ' + images.length + '</h2>'
-      + '<p class="product-lightbox-sr" id="product-lightbox-hint">Click or double-click, use the mouse wheel, pinch or plus and minus to zoom. Drag to pan. Press Escape to close.</p>'
-      + '</dialog>';
     // Product fields are escaped and gallery indices are generated integers.
     page.innerHTML =
       '<div class="product-layout" id="product-card-' + esc(p.id) + '">'
       + '<div class="product-visual">'
       + '<div class="product-gallery">'
       + '<div class="product-media" data-gallery-index="0" data-gallery-count="' + images.length + '">'
-      + '<button type="button" class="product-main-trigger" id="product-main-trigger" aria-haspopup="dialog" aria-controls="product-lightbox" aria-label="Open larger view of ' + esc(p.name) + ' — image 1 of ' + images.length + '">'
+      + '<button type="button" class="product-main-trigger" id="product-main-trigger" aria-haspopup="dialog" aria-label="Open larger view of ' + esc(p.name) + ' — image 1 of ' + images.length + '">'
       + '<img id="product-main-image" draggable="false" src="' + esc(images[0]) + '" alt="' + esc(p.name) + ' — image 1 of ' + images.length + '">'
       + '<span class="product-zoom-hint" aria-hidden="true"><i class="fa-solid fa-magnifying-glass-plus"></i> Zoom</span>'
       + '</button></div>'
@@ -663,331 +638,20 @@
       + '</section>'
       + '<section class="product-related"><h2>You may also like</h2><div class="grid">'
       + related.map(function (x) { return cardHTML(x, cardReferrer(x.id)); }).join('')
-      + '</div></section>'
-      + lightboxMarkup;
+      + '</div></section>';
 
     var mainImage = document.getElementById('product-main-image');
     var media = page.querySelector('.product-media');
     var thumbButtons = page.querySelectorAll('.product-thumb');
     var dotButtons = page.querySelectorAll('.product-dot');
     var trigger = document.getElementById('product-main-trigger');
-    var lightbox = document.getElementById('product-lightbox');
-    var lightboxImage = document.getElementById('product-lightbox-image');
-    var lightboxStage = document.getElementById('product-lightbox-stage');
-    var lightboxTitle = document.getElementById('product-lightbox-title');
-    var countLabel = document.getElementById('product-lightbox-count');
-    var closeButton = document.getElementById('product-lightbox-close');
-    var prevButton = document.getElementById('product-lightbox-prev');
-    var nextButton = document.getElementById('product-lightbox-next');
     var current = 0;
-    var ZOOM_MIN = 1;
-    var ZOOM_MAX = 4;
-    var ZOOM_STEP = 0.5;
-    var lightboxZoom = ZOOM_MIN;
-    var panX = 0;
-    var panY = 0;
-    var lightboxOpen = false;
-    var lightboxLastTrigger = null;
-    var savedBodyOverflow = '';
-    var savedStageTouchAction = '';
-    var panStart = null;
-    var pinchStart = null;
-    var touchPointers = {};
-    var lastTap = null;
-    var suppressClickUntil = 0;
-    var lastStagePointerType = '';
-    var singleClickZoomStart = null;
-
-    function updateLightboxImage() {
-      if (lightboxImage && images[current]) {
-        lightboxImage.src = images[current];
-        lightboxImage.alt = p.name + ' — image ' + (current + 1) + ' of ' + images.length;
-      }
-      if (lightboxTitle) {
-        lightboxTitle.textContent = p.name + ' — image ' + (current + 1) + ' of ' + images.length;
-      }
-      if (countLabel) {
-        countLabel.textContent = (current + 1) + ' / ' + images.length;
-      }
-    }
-
-    function applyZoom() {
-      var zoomed = lightboxZoom > ZOOM_MIN;
-      if (!zoomed) {
-        panX = 0;
-        panY = 0;
-      }
-      if (lightboxImage) {
-        lightboxImage.style.transform = 'translate(' + panX + 'px, ' + panY + 'px) scale(' + lightboxZoom + ')';
-        lightboxImage.style.cursor = zoomed ? (panStart ? 'grabbing' : 'grab') : 'zoom-in';
-      }
-      if (lightboxStage) {
-        lightboxStage.classList.toggle('is-zoomed', zoomed);
-        lightboxStage.classList.toggle('is-panning', !!panStart);
-      }
-      if (lightbox) {
-        lightbox.setAttribute('data-zoom', String(lightboxZoom));
-        lightbox.setAttribute('data-pan-x', String(panX));
-        lightbox.setAttribute('data-pan-y', String(panY));
-      }
-    }
-
-    function resetZoom() {
-      lightboxZoom = ZOOM_MIN;
-      panX = 0;
-      panY = 0;
-      applyZoom();
-    }
-
-    function zoomAt(next, clientX, clientY) {
-      var previous = lightboxZoom;
-      next = Math.round(Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, next)) * 10) / 10;
-      if (next === previous) {
-        if (next === ZOOM_MIN) {
-          panX = 0;
-          panY = 0;
-          applyZoom();
-        }
-        return;
-      }
-      if (typeof clientX === 'number' && typeof clientY === 'number' && lightboxStage && typeof lightboxStage.getBoundingClientRect === 'function') {
-        var rect = lightboxStage.getBoundingClientRect();
-        var anchorX = clientX - (rect.left + rect.width / 2);
-        var anchorY = clientY - (rect.top + rect.height / 2);
-        var ratio = next / previous;
-        panX = anchorX - ratio * (anchorX - panX);
-        panY = anchorY - ratio * (anchorY - panY);
-      } else {
-        panX = panX * next / previous;
-        panY = panY * next / previous;
-      }
-      lightboxZoom = next;
-      if (next === ZOOM_MIN) {
-        panX = 0;
-        panY = 0;
-      }
-      applyZoom();
-    }
-
-    function onLightboxWheel(e) {
-      if (!lightboxOpen) return;
-      singleClickZoomStart = null;
-      if (e && e.preventDefault) e.preventDefault();
-      if (!e || !e.deltaY) return;
-      zoomAt(lightboxZoom + (e.deltaY < 0 ? ZOOM_STEP : -ZOOM_STEP), e.clientX, e.clientY);
-    }
-
-    function onLightboxDoubleClick(e) {
-      if (!lightboxOpen) return;
-      if (singleClickZoomStart) {
-        lightboxZoom = singleClickZoomStart.zoom;
-        panX = singleClickZoomStart.panX;
-        panY = singleClickZoomStart.panY;
-        singleClickZoomStart = null;
-        applyZoom();
-      }
-      if (e && e.preventDefault) e.preventDefault();
-      zoomAt(lightboxZoom > ZOOM_MIN ? ZOOM_MIN : 2, e && e.clientX, e && e.clientY);
-    }
-
-    function touchPointCount() {
-      var count = 0;
-      for (var key in touchPointers) {
-        if (Object.prototype.hasOwnProperty.call(touchPointers, key)) count++;
-      }
-      return count;
-    }
-
-    function firstTouchPoints() {
-      var points = [];
-      for (var key in touchPointers) {
-        if (!Object.prototype.hasOwnProperty.call(touchPointers, key)) continue;
-        points.push(touchPointers[key]);
-        if (points.length === 2) break;
-      }
-      return points;
-    }
-
-    function touchDistance(a, b) {
-      var dx = a.x - b.x;
-      var dy = a.y - b.y;
-      return Math.sqrt(dx * dx + dy * dy);
-    }
-
-    function eventTime(e) {
-      return e && typeof e.timeStamp === 'number' && e.timeStamp > 0 ? e.timeStamp : Date.now();
-    }
-
-    function clearPan() {
-      panStart = null;
-      if (lightboxStage) lightboxStage.classList.remove('is-panning');
-      applyZoom();
-    }
-
-    function clearPinch() {
-      pinchStart = null;
-      if (lightboxStage) lightboxStage.classList.remove('is-pinching');
-    }
-
-    function beginPinch(points) {
-      for (var i = 0; i < points.length; i++) points[i].pinched = true;
-      pinchStart = {
-        distance: Math.max(1, touchDistance(points[0], points[1])),
-        zoom: lightboxZoom,
-        panX: panX,
-        panY: panY,
-        centerX: (points[0].x + points[1].x) / 2,
-        centerY: (points[0].y + points[1].y) / 2
-      };
-      clearPan();
-      if (lightboxStage) lightboxStage.classList.add('is-pinching');
-    }
-
-    function applyPinch(points) {
-      if (!pinchStart) return;
-      var distance = Math.max(1, touchDistance(points[0], points[1]));
-      var next = Math.round(Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, pinchStart.zoom * distance / pinchStart.distance)) * 10) / 10;
-      var ratio = next / pinchStart.zoom;
-      if (lightboxStage && typeof lightboxStage.getBoundingClientRect === 'function') {
-        var rect = lightboxStage.getBoundingClientRect();
-        var anchorX = pinchStart.centerX - (rect.left + rect.width / 2);
-        var anchorY = pinchStart.centerY - (rect.top + rect.height / 2);
-        panX = anchorX - ratio * (anchorX - pinchStart.panX);
-        panY = anchorY - ratio * (anchorY - pinchStart.panY);
-      } else {
-        panX = pinchStart.panX * ratio;
-        panY = pinchStart.panY * ratio;
-      }
-      lightboxZoom = next;
-      if (next === ZOOM_MIN) {
-        panX = 0;
-        panY = 0;
-      }
-      applyZoom();
-    }
-
-    function toggleTapZoom(x, y) {
-      zoomAt(lightboxZoom > ZOOM_MIN ? ZOOM_MIN : 2, x, y);
-    }
-
-    function onLightboxClick(e) {
-      if (!lightboxOpen || !e) return;
-      var pointerType = e.pointerType || lastStagePointerType;
-      lastStagePointerType = '';
-      if (eventTime(e) <= suppressClickUntil) {
-        if (e.preventDefault) e.preventDefault();
-        if (e.stopPropagation) e.stopPropagation();
-        return;
-      }
-      if (e.target === lightboxImage) {
-        if (pointerType === 'touch' || (pointerType && pointerType !== 'mouse' && pointerType !== 'pen')) return;
-        if (!pointerType && !e.detail) return;
-        if (e.button !== undefined && e.button !== 0) return;
-        if (e.detail > 1 && singleClickZoomStart) return;
-        singleClickZoomStart = { zoom: lightboxZoom, panX: panX, panY: panY };
-        toggleTapZoom(e.clientX, e.clientY);
-        return;
-      }
-      if (e.target === lightbox || e.target === lightboxStage) closeLightbox();
-    }
-
-    function cleanupLightbox() {
-      if (document.body) {
-        document.body.style.overflow = savedBodyOverflow;
-        document.body.classList.remove('lightbox-open');
-      }
-      if (lightbox) lightbox.classList.remove('is-open', 'product-lightbox--fallback');
-      if (lightboxStage) {
-        lightboxStage.classList.remove('is-panning', 'is-pinching', 'is-zoomed');
-        if (lightboxStage.style) lightboxStage.style.touchAction = savedStageTouchAction;
-      }
-      panStart = null;
-      pinchStart = null;
-      touchPointers = {};
-      lastTap = null;
-      suppressClickUntil = 0;
-      lastStagePointerType = '';
-      singleClickZoomStart = null;
-    }
-
-    function returnLightboxFocus() {
-      var target = lightboxLastTrigger || trigger;
-      lightboxLastTrigger = null;
-      if (target && typeof target.focus === 'function') target.focus();
-    }
-
-    function closeLightbox() {
-      if (!lightboxOpen) return;
-      lightboxOpen = false;
-      cleanupLightbox();
-      if (lightbox) {
-        if (typeof lightbox.close === 'function' && lightbox.open) {
-          try { lightbox.close(); } catch (err) { lightbox.removeAttribute('open'); }
-        } else if (typeof lightbox.removeAttribute === 'function') {
-          lightbox.removeAttribute('open');
-        }
-      }
-      returnLightboxFocus();
-    }
-
-    function openLightbox() {
-      if (!lightbox || !lightboxImage || lightboxOpen) return;
-      lightboxOpen = true;
-      lastTap = null;
-      suppressClickUntil = 0;
-      lastStagePointerType = '';
-      singleClickZoomStart = null;
-      if (lightboxStage && lightboxStage.style) {
-        savedStageTouchAction = lightboxStage.style.touchAction || '';
-        lightboxStage.style.touchAction = 'none';
-      }
-      lightboxLastTrigger = trigger || document.activeElement;
-      savedBodyOverflow = document.body && document.body.style ? document.body.style.overflow : '';
-      if (document.body) {
-        document.body.style.overflow = 'hidden';
-        document.body.classList.add('lightbox-open');
-      }
-      updateLightboxImage();
-      resetZoom();
-      lightbox.classList.add('is-open');
-      var modalShown = false;
-      if (typeof lightbox.showModal === 'function') {
-        try {
-          if (!lightbox.open) lightbox.showModal();
-          modalShown = true;
-        } catch (err) {
-          modalShown = false;
-        }
-      }
-      if (!modalShown) {
-        lightbox.classList.add('product-lightbox--fallback');
-        if (typeof lightbox.setAttribute === 'function') lightbox.setAttribute('open', '');
-      }
-      var focusTarget = closeButton || lightboxImage;
-      if (focusTarget && typeof focusTarget.focus === 'function') focusTarget.focus();
-    }
-
-    function trapLightboxFocus(e) {
-      var focusable = [prevButton, nextButton, closeButton].filter(function (el) {
-        return el && !el.disabled && !el.hidden;
-      });
-      if (!focusable.length) return;
-      var first = focusable[0];
-      var last = focusable[focusable.length - 1];
-      var index = focusable.indexOf(document.activeElement);
-      if (e.shiftKey && index <= 0) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && (index === -1 || index === focusable.length - 1)) {
-        e.preventDefault();
-        first.focus();
-      }
-    }
+    var photoSwipeLightbox = null;
+    var photoSwipeOpening = false;
 
     function showImage(index) {
       index = wrapIndex(index, images.length);
       current = index;
-      singleClickZoomStart = null;
       if (mainImage && images[index]) {
         mainImage.src = images[index];
         mainImage.alt = p.name + ' — image ' + (index + 1) + ' of ' + images.length;
@@ -995,234 +659,141 @@
       if (trigger && typeof trigger.setAttribute === 'function') {
         trigger.setAttribute('aria-label', 'Open larger view of ' + p.name + ' — image ' + (index + 1) + ' of ' + images.length);
       }
-      if (media) media.setAttribute('data-gallery-index', String(index));
-      thumbButtons.forEach(function (b) {
-        var active = parseInt(b.getAttribute('data-index'), 10) === index;
-        b.classList.toggle('is-active', active);
-        b.setAttribute('aria-pressed', active ? 'true' : 'false');
+      if (media && typeof media.setAttribute === 'function') media.setAttribute('data-gallery-index', String(index));
+      thumbButtons.forEach(function (button) {
+        var active = parseInt(button.getAttribute('data-index'), 10) === index;
+        button.classList.toggle('is-active', active);
+        button.setAttribute('aria-pressed', active ? 'true' : 'false');
       });
-      dotButtons.forEach(function (b) {
-        var active = parseInt(b.getAttribute('data-index'), 10) === index;
-        b.classList.toggle('is-active', active);
-        b.setAttribute('aria-pressed', active ? 'true' : 'false');
+      dotButtons.forEach(function (button) {
+        var active = parseInt(button.getAttribute('data-index'), 10) === index;
+        button.classList.toggle('is-active', active);
+        button.setAttribute('aria-pressed', active ? 'true' : 'false');
       });
-      if (lightboxOpen) {
-        updateLightboxImage();
-        resetZoom();
-      }
     }
 
-    thumbButtons.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        showImage(parseInt(btn.getAttribute('data-index'), 10));
+    function getImageDimensions(src, thumbImage) {
+      if (thumbImage && thumbImage.naturalWidth > 0 && thumbImage.naturalHeight > 0) {
+        return Promise.resolve({ width: thumbImage.naturalWidth, height: thumbImage.naturalHeight });
+      }
+      return new Promise(function (resolve, reject) {
+        if (typeof window.Image !== 'function') {
+          reject(new Error('Image dimensions are unavailable'));
+          return;
+        }
+        var probe = new window.Image();
+        probe.onload = function () {
+          if (probe.naturalWidth > 0 && probe.naturalHeight > 0) {
+            resolve({ width: probe.naturalWidth, height: probe.naturalHeight });
+          } else {
+            reject(new Error('Image dimensions are unavailable'));
+          }
+        };
+        probe.onerror = function () { reject(new Error('Image could not be loaded')); };
+        probe.src = src;
+      });
+    }
+
+    function buildPhotoSwipeDataSource() {
+      return Promise.all(images.map(function (src, index) {
+        var thumbImage = thumbButtons[index] && typeof thumbButtons[index].querySelector === 'function'
+          ? thumbButtons[index].querySelector('img')
+          : null;
+        return getImageDimensions(src, thumbImage).then(function (dimensions) {
+          var slide = {
+            src: src,
+            width: dimensions.width,
+            height: dimensions.height,
+            alt: p.name + ' — image ' + (index + 1) + ' of ' + images.length
+          };
+          if (thumbImage) {
+            slide.msrc = thumbImage.currentSrc || thumbImage.src || src;
+            slide.element = thumbImage;
+            slide.thumbCropped = true;
+          }
+          return slide;
+        });
+      }));
+    }
+
+    function getPhotoSwipeLightbox() {
+      if (photoSwipeLightbox) return photoSwipeLightbox;
+      if (typeof window.PhotoSwipe !== 'function' || typeof window.PhotoSwipeLightbox !== 'function') return null;
+      try {
+        photoSwipeLightbox = new window.PhotoSwipeLightbox({
+          pswpModule: window.PhotoSwipe,
+          imageClickAction: 'zoom',
+          doubleTapAction: 'zoom',
+          tapAction: 'toggle-controls',
+          bgClickAction: 'close',
+          wheelToZoom: true,
+          initialZoomLevel: 'fit',
+          secondaryZoomLevel: function (zoomLevel) { return zoomLevel.fit * 2; },
+          showHideAnimationType: window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'none' : 'fade',
+          bgOpacity: 0.94,
+          trapFocus: true,
+          returnFocus: true,
+          closeTitle: 'Close image viewer',
+          zoomTitle: 'Zoom image',
+          zoom: false,
+          arrowPrevTitle: 'Previous image',
+          arrowNextTitle: 'Next image',
+          arrowPrev: images.length > 1,
+          arrowNext: images.length > 1,
+          counter: images.length > 1
+        });
+        photoSwipeLightbox.on('afterInit', function () {
+          var pswp = photoSwipeLightbox && photoSwipeLightbox.pswp;
+          if (pswp && pswp.element && typeof pswp.element.setAttribute === 'function') {
+            pswp.element.setAttribute('aria-label', 'Image viewer for ' + p.name);
+            pswp.element.setAttribute('aria-modal', 'true');
+          }
+        });
+        photoSwipeLightbox.on('change', function () {
+          if (photoSwipeLightbox && photoSwipeLightbox.pswp) {
+            showImage(photoSwipeLightbox.pswp.currIndex);
+          }
+        });
+        photoSwipeLightbox.init();
+      } catch (error) {
+        photoSwipeLightbox = null;
+      }
+      return photoSwipeLightbox;
+    }
+
+    function openLightbox() {
+      if (photoSwipeOpening) return;
+      var lightbox = getPhotoSwipeLightbox();
+      if (!lightbox) {
+        if (typeof window.open === 'function') window.open(images[current], '_blank', 'noopener');
+        return;
+      }
+      photoSwipeOpening = true;
+      buildPhotoSwipeDataSource().then(function (dataSource) {
+        lightbox.loadAndOpen(current, dataSource);
+      }).catch(function () {
+        // Keep the product page usable if an image is unavailable.
+      }).then(function () {
+        photoSwipeOpening = false;
+      }, function () {
+        photoSwipeOpening = false;
+      });
+    }
+
+    thumbButtons.forEach(function (button) {
+      button.addEventListener('click', function () {
+        showImage(parseInt(button.getAttribute('data-index'), 10));
       });
     });
-    dotButtons.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        showImage(parseInt(btn.getAttribute('data-index'), 10));
+    dotButtons.forEach(function (button) {
+      button.addEventListener('click', function () {
+        showImage(parseInt(button.getAttribute('data-index'), 10));
       });
     });
     if (media && images.length > 1) {
-      bindSwipe(media, function (dir) { showImage(current + dir); });
+      bindSwipe(media, function (direction) { showImage(current + direction); });
     }
-    function listen(el, type, fn, options) {
-      if (el && typeof el.addEventListener === 'function') el.addEventListener(type, fn, options);
-    }
-
-    function startPan(e) {
-      panStart = {
-        id: e.pointerId,
-        x: e.clientX,
-        y: e.clientY,
-        panX: panX,
-        panY: panY,
-        moved: false
-      };
-      if (lightboxStage && lightboxStage.setPointerCapture) {
-        try { lightboxStage.setPointerCapture(e.pointerId); } catch (err) {}
-      }
-      applyZoom();
-    }
-
-    function onStagePointerDown(e) {
-      if (!lightboxOpen || !e) return;
-      lastStagePointerType = e.pointerType || '';
-      if (e.pointerType === 'touch') {
-        singleClickZoomStart = null;
-        touchPointers[e.pointerId] = {
-          id: e.pointerId,
-          x: e.clientX,
-          y: e.clientY,
-          startX: e.clientX,
-          startY: e.clientY,
-          startTime: eventTime(e),
-          moved: false
-        };
-        if (lightboxStage && lightboxStage.setPointerCapture) {
-          try { lightboxStage.setPointerCapture(e.pointerId); } catch (err) {}
-        }
-        var points = firstTouchPoints();
-        if (points.length === 2) {
-          beginPinch(points);
-          lastTap = null;
-          if (e.preventDefault) e.preventDefault();
-          return;
-        }
-        if (lightboxZoom > ZOOM_MIN) startPan(e);
-        return;
-      }
-      if (e.pointerType !== 'mouse' && e.pointerType !== 'pen') return;
-      if (e.button !== undefined && e.button !== 0) return;
-      if (lightboxZoom <= ZOOM_MIN) return;
-      startPan(e);
-    }
-
-    function onStagePointerMove(e) {
-      if (!lightboxOpen || !e) return;
-      if (e.pointerType === 'touch') {
-        var point = touchPointers[e.pointerId];
-        if (!point) return;
-        if (Math.abs(e.clientX - point.startX) > 8 || Math.abs(e.clientY - point.startY) > 8) point.moved = true;
-        point.x = e.clientX;
-        point.y = e.clientY;
-        if (pinchStart) {
-          var points = firstTouchPoints();
-          if (points.length === 2) applyPinch(points);
-          if (e.preventDefault) e.preventDefault();
-          return;
-        }
-        if (panStart && panStart.id === e.pointerId) {
-          if (Math.abs(e.clientX - panStart.x) > 2 || Math.abs(e.clientY - panStart.y) > 2) panStart.moved = true;
-          panX = panStart.panX + (e.clientX - panStart.x);
-          panY = panStart.panY + (e.clientY - panStart.y);
-          if (e.preventDefault) e.preventDefault();
-          applyZoom();
-        }
-        return;
-      }
-      if (!panStart || e.pointerId !== panStart.id) return;
-      if (Math.abs(e.clientX - panStart.x) > 2 || Math.abs(e.clientY - panStart.y) > 2) panStart.moved = true;
-      panX = panStart.panX + (e.clientX - panStart.x);
-      panY = panStart.panY + (e.clientY - panStart.y);
-      if (e.preventDefault) e.preventDefault();
-      applyZoom();
-    }
-
-    function onStagePointerUp(e, cancelled) {
-      if (!e) return;
-      var now = eventTime(e);
-      if (e.pointerType === 'touch') {
-        var point = touchPointers[e.pointerId];
-        delete touchPointers[e.pointerId];
-        if (lightboxStage && lightboxStage.releasePointerCapture) {
-          try { lightboxStage.releasePointerCapture(e.pointerId); } catch (err) {}
-        }
-        if (pinchStart && touchPointCount() < 2) {
-          clearPinch();
-          lastTap = null;
-          return;
-        }
-        var wasPanning = panStart && panStart.id === e.pointerId;
-        if (wasPanning) {
-          if (panStart.moved) suppressClickUntil = now + 400;
-          clearPan();
-        }
-        if (cancelled) {
-          lastTap = null;
-          return;
-        }
-        if (point && !point.moved && now - point.startTime <= 500) {
-          if (lastTap && now - lastTap.time <= 320 && touchDistance(point, lastTap) <= 30) {
-            singleClickZoomStart = null;
-            toggleTapZoom(point.x, point.y);
-            suppressClickUntil = now + 400;
-            lastTap = null;
-          } else {
-            lastTap = { time: now, x: point.x, y: point.y };
-          }
-        } else {
-          lastTap = null;
-          if (point && point.moved && !wasPanning && !point.pinched && lightboxZoom <= ZOOM_MIN && images.length > 1) {
-            var swipeDir = lightboxSwipeDirection(e.clientX - point.startX, e.clientY - point.startY);
-            if (swipeDir) {
-              suppressClickUntil = now + 400;
-              showImage(current + swipeDir);
-            }
-          }
-        }
-        return;
-      }
-      if (!panStart || e.pointerId !== panStart.id) return;
-      if (panStart.moved) suppressClickUntil = now + 400;
-      clearPan();
-    }
-
-    if (trigger && lightbox) {
-      listen(trigger, 'click', openLightbox);
-    }
-    if (lightbox) {
-      listen(lightbox, 'click', onLightboxClick);
-      listen(lightbox, 'cancel', function (e) {
-        if (e && e.preventDefault) e.preventDefault();
-        closeLightbox();
-      });
-      listen(lightbox, 'close', function () {
-        if (!lightboxOpen) return;
-        lightboxOpen = false;
-        cleanupLightbox();
-        returnLightboxFocus();
-      });
-      listen(lightbox, 'keydown', function (e) {
-        if (e.key === 'Escape') {
-          e.preventDefault();
-          closeLightbox();
-          return;
-        }
-        if (e.key !== 'Tab') singleClickZoomStart = null;
-        if (e.key === '+' || e.key === '=') {
-          e.preventDefault();
-          zoomAt(lightboxZoom + ZOOM_STEP);
-          return;
-        }
-        if (e.key === '-' || e.key === '_') {
-          e.preventDefault();
-          zoomAt(lightboxZoom - ZOOM_STEP);
-          return;
-        }
-        if (e.key === '0') {
-          e.preventDefault();
-          resetZoom();
-          return;
-        }
-        if (e.key === 'ArrowLeft' && images.length > 1) {
-          e.preventDefault();
-          showImage(current - 1);
-          return;
-        }
-        if (e.key === 'ArrowRight' && images.length > 1) {
-          e.preventDefault();
-          showImage(current + 1);
-          return;
-        }
-        if (e.key === 'Tab') trapLightboxFocus(e);
-      });
-    }
-    if (closeButton) {
-      listen(closeButton, 'click', function (e) {
-        if (e && e.preventDefault) e.preventDefault();
-        closeLightbox();
-      });
-    }
-    listen(prevButton, 'click', function () { showImage(current - 1); });
-    listen(nextButton, 'click', function () { showImage(current + 1); });
-    if (lightboxStage) {
-      listen(lightboxStage, 'wheel', onLightboxWheel, { passive: false });
-      listen(lightboxStage, 'dblclick', onLightboxDoubleClick);
-      listen(lightboxStage, 'pointerdown', onStagePointerDown);
-      listen(lightboxStage, 'pointermove', onStagePointerMove);
-      listen(lightboxStage, 'pointerup', function (e) { onStagePointerUp(e, false); });
-      listen(lightboxStage, 'pointercancel', function (e) { onStagePointerUp(e, true); });
-    }
+    if (trigger && typeof trigger.addEventListener === 'function') trigger.addEventListener('click', openLightbox);
     bindCardGalleries(page);
 
     scrollToProductCard();

@@ -2,12 +2,16 @@
 
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
+const path = require('node:path');
 const vm = require('node:vm');
 
 const siteRoot = 'https://eugene55555.github.io/the-quiet-room/';
-const checkoutRoot = 'https://5307397047125.blacksea.in.ua/checkout';
 const mainSource = fs.readFileSync(require.resolve('../assets/main.js'), 'utf8');
 const cssSource = fs.readFileSync(require.resolve('../assets/style.css'), 'utf8');
+const photoswipeCssPath = path.resolve(__dirname, '../assets/vendor/photoswipe/photoswipe.css');
+const photoswipeCssSource = fs.existsSync(photoswipeCssPath) ? fs.readFileSync(photoswipeCssPath, 'utf8') : '';
+const photoswipeLicensePath = path.resolve(__dirname, '../assets/vendor/photoswipe/LICENSE');
+const photoswipeLicense = fs.existsSync(photoswipeLicensePath) ? fs.readFileSync(photoswipeLicensePath, 'utf8') : '';
 
 const dataContext = { window: {} };
 vm.runInNewContext(fs.readFileSync(require.resolve('../assets/data.js'), 'utf8'), dataContext);
@@ -30,233 +34,15 @@ function classesOf(tag) {
   return (attr(tag, 'class') || '').split(/\s+/).filter(Boolean);
 }
 
-function tagsByClass(html, className, tagName) {
-  return [...html.matchAll(new RegExp('<' + (tagName || 'button') + '\\b[^>]*>', 'g'))]
-    .map(match => match[0])
-    .filter(tag => classesOf(tag).includes(className));
-}
-
 function idTag(html, id) {
   const match = html.match(new RegExp('<[^>]+\\bid="' + id + '"[^>]*>'));
   return match ? match[0] : '';
 }
 
-function makeElement(id) {
-  const classes = new Set();
-  const listeners = {};
-  const attributes = {};
-  let html = '';
-  const controlCacheForElement = new Map();
-
-  const element = {
-    id: id || '',
-    textContent: '',
-    value: '',
-    src: '',
-    alt: '',
-    open: false,
-    hidden: false,
-    disabled: false,
-    style: {},
-    listeners,
-    attributes,
-    scrollLeft: 0,
-    scrollTop: 0,
-    rect: { left: 0, top: 0, width: 1000, height: 800 },
-    classList: {
-      add() { [...arguments].forEach(name => classes.add(name)); },
-      remove() { [...arguments].forEach(name => classes.delete(name)); },
-      contains(name) { return classes.has(name); },
-      toggle(name, force) {
-        const enabled = force === undefined ? !classes.has(name) : Boolean(force);
-        if (enabled) classes.add(name); else classes.delete(name);
-        return enabled;
-      }
-    },
-    addEventListener(type, fn) { (listeners[type] = listeners[type] || []).push(fn); },
-    setAttribute(name, value) {
-      attributes[name] = String(value);
-      if (name === 'open') element.open = true;
-    },
-    getAttribute(name) {
-      return Object.prototype.hasOwnProperty.call(attributes, name) ? attributes[name] : null;
-    },
-    hasAttribute(name) { return Object.prototype.hasOwnProperty.call(attributes, name); },
-    removeAttribute(name) {
-      delete attributes[name];
-      if (name === 'open') element.open = false;
-    },
-    focus() { detailFocus.activeElement = element; },
-    setPointerCapture() {},
-    releasePointerCapture() {},
-    getBoundingClientRect() { return element.rect; },
-    querySelector() { return null; },
-    querySelectorAll(selector) {
-      if (selector !== '.product-thumb' && selector !== '.product-dot') return [];
-      if (!controlCacheForElement.has(selector)) {
-        const className = selector.slice(1);
-        controlCacheForElement.set(selector, tagsByClass(html, className).map(tag => {
-          const control = makeElement();
-          for (const match of tag.matchAll(/([a-zA-Z][\w-]*)="([^"]*)"/g)) control.setAttribute(match[1], match[2]);
-          classesOf(tag).forEach(name => control.classList.add(name));
-          return control;
-        }));
-      }
-      return controlCacheForElement.get(selector);
-    },
-    contains(node) { return node === element; }
-  };
-
-  Object.defineProperty(element, 'innerHTML', {
-    get() { return html; },
-    set(value) {
-      html = String(value);
-      controlCacheForElement.clear();
-    }
-  });
-
-  if (id === 'product-lightbox') {
-    element.showModal = function () {
-      element.open = true;
-      element.setAttribute('open', '');
-    };
-    element.close = function () {
-      if (!element.open) return;
-      element.open = false;
-      element.removeAttribute('open');
-      (element.listeners.close || []).forEach(fn => fn({ type: 'close' }));
-    };
-  }
-
-  return element;
-}
-
-const detailFocus = { activeElement: null };
-
-function render(type, href, list) {
-  const location = new URL(href);
-  const elements = {};
-  const meta = {};
-
-  function ensureId(id) {
-    if (elements[id]) return elements[id];
-    const html = type === 'catalog' ? elements.catalog.innerHTML : elements['product-page'].innerHTML;
-    const tag = idTag(html, id);
-    if (!tag) return null;
-    const element = makeElement(id);
-    for (const match of tag.matchAll(/([a-zA-Z][\w-]*)="([^"]*)"/g)) element.setAttribute(match[1], match[2]);
-    classesOf(tag).forEach(name => element.classList.add(name));
-    if (id === 'product-main-image' || id === 'product-lightbox-image') {
-      element.src = attr(tag, 'src');
-      element.alt = attr(tag, 'alt');
-    }
-    elements[id] = element;
-    return element;
-  }
-
-  if (type === 'catalog') {
-    elements.catalog = makeElement('catalog');
-    elements.pagination = makeElement('pagination');
-    elements.count = makeElement('count');
-    const galleries = list.filter(product => imagesOf(product).length > 1).map(product => makeCardGallery(product));
-    elements.catalog.querySelectorAll = selector => selector === '.card-media' ? galleries.map(gallery => gallery.media) : [];
-    elements.catalog.galleries = galleries;
-  } else {
-    elements['product-page'] = makeElement('product-page');
-    elements['product-media'] = makeElement('product-media');
-    elements['product-page'].querySelector = selector => selector === '.product-media' ? elements['product-media'] : null;
-    const page = elements['product-page'];
-    const baseQuery = page.querySelectorAll.bind(page);
-    page.querySelectorAll = selector => selector === '.card-media' ? [] : baseQuery(selector);
-  }
-
-  const document = {
-    body: makeElement('body'),
-    title: '',
-    listeners: {},
-    get activeElement() { return detailFocus.activeElement; },
-    getElementById(id) {
-      if (elements[id]) return elements[id];
-      if (id === 'product-main-image' || (type === 'product' && id.indexOf('product-lightbox') === 0) || (type === 'product' && id === 'product-main-trigger')) {
-        return ensureId(id);
-      }
-      return null;
-    },
-    querySelector(selector) {
-      if (selector.indexOf('meta[') === 0) {
-        return { setAttribute(name, value) { meta[selector] = String(value); } };
-      }
-      return null;
-    },
-    querySelectorAll() { return []; },
-    addEventListener(type, fn) { (this.listeners[type] = this.listeners[type] || []).push(fn); }
-  };
-  detailFocus.activeElement = document.body;
-
-  const window = {
-    TQR_PRODUCTS: list,
-    location,
-    history: { state: null, replaceState() {} },
-    pageYOffset: 0,
-    localStorage: { removeItem() {} },
-    addEventListener() {},
-    requestAnimationFrame(fn) { fn(); }
-  };
-
-  vm.runInNewContext(mainSource, {
-    window, document, URL, URLSearchParams, Date, Number, Math, Object, Array, String
-  });
-  (document.listeners.DOMContentLoaded || []).forEach(fn => fn());
-
-  return {
-    type,
-    markup: type === 'catalog' ? elements.catalog.innerHTML : elements['product-page'].innerHTML,
-    document,
-    body: document.body,
-    element: id => elements[id] || ensureId(id),
-    controls: selector => elements['product-page'].querySelectorAll(selector),
-    catalog: elements.catalog
-  };
-}
-
-function makeCardGallery(product) {
-  const images = imagesOf(product);
-  const slides = images.map((src, i) => {
-    const classes = new Set(['card-slide']);
-    if (i === 0) classes.add('is-active');
-    return { classList: { contains(name) { return classes.has(name); }, toggle(name, force) { if (force) classes.add(name); else classes.delete(name); } } };
-  });
-  const dots = images.map((src, i) => {
-    const classes = new Set(['card-dot']);
-    if (i === 0) classes.add('is-active');
-    return { classList: { contains(name) { return classes.has(name); }, toggle(name, force) { if (force) classes.add(name); else classes.delete(name); } } };
-  });
-  const media = {
-    classes: new Set(['card-media']),
-    attributes: {},
-    listeners: {},
-    classList: {
-      add(name) { media.classes.add(name); },
-      remove(name) { media.classes.delete(name); },
-      contains(name) { return media.classes.has(name); },
-      toggle(name, force) {
-        const enabled = force === undefined ? !media.classes.has(name) : Boolean(force);
-        if (enabled) media.classes.add(name); else media.classes.delete(name);
-        return enabled;
-      }
-    },
-    addEventListener(type, fn) { media.listeners[type] = fn; },
-    setAttribute(name, value) { media.attributes[name] = String(value); },
-    getAttribute(name) { return media.attributes[name] || null; },
-    querySelectorAll(selector) {
-      if (selector === '.card-slide') return slides;
-      if (selector === '.card-dot') return dots;
-      return [];
-    }
-  };
-  media.setAttribute('data-gallery-index', '0');
-  media.setAttribute('data-gallery-count', String(images.length));
-  return { product, media, slides, dots };
+function buttonBlocksByClass(html, className) {
+  return [...html.matchAll(/<button\b[^>]*>[\s\S]*?<\/button>/g)]
+    .map(match => match[0])
+    .filter(block => classesOf(block.match(/^<button\b[^>]*>/)[0]).includes(className));
 }
 
 function fire(element, type, event) {
@@ -270,417 +56,342 @@ function fire(element, type, event) {
   return payload;
 }
 
-function swipe(media, dx, dy, pointerId) {
-  media.listeners.pointerdown({ isPrimary: true, pointerType: 'touch', pointerId: pointerId || 1, clientX: 100, clientY: 150 });
-  media.listeners.pointermove({ pointerId: pointerId || 1, clientX: 100 + dx, clientY: 150 + dy });
-  media.listeners.pointerup({ pointerId: pointerId || 1, clientX: 100 + dx, clientY: 150 + dy });
+function renderProduct(href, list, reduceMotion) {
+  const location = new URL(href);
+  const focusState = { activeElement: null };
+  const elements = {};
+  const meta = {};
+  const photoSwipeLightboxes = [];
+
+  function makeElement(id) {
+    const classes = new Set();
+    const listeners = {};
+    const attributes = {};
+    let html = '';
+    const controlCache = new Map();
+    const element = {
+      id: id || '',
+      textContent: '',
+      value: '',
+      src: '',
+      alt: '',
+      currentSrc: '',
+      naturalWidth: 0,
+      naturalHeight: 0,
+      complete: false,
+      childImage: null,
+      style: {},
+      listeners,
+      attributes,
+      classList: {
+        add() { [...arguments].forEach(name => classes.add(name)); },
+        remove() { [...arguments].forEach(name => classes.delete(name)); },
+        contains(name) { return classes.has(name); },
+        toggle(name, force) {
+          const enabled = force === undefined ? !classes.has(name) : Boolean(force);
+          if (enabled) classes.add(name); else classes.delete(name);
+          return enabled;
+        }
+      },
+      addEventListener(type, fn) { (listeners[type] = listeners[type] || []).push(fn); },
+      setAttribute(name, value) { attributes[name] = String(value); },
+      getAttribute(name) { return Object.prototype.hasOwnProperty.call(attributes, name) ? attributes[name] : null; },
+      hasAttribute(name) { return Object.prototype.hasOwnProperty.call(attributes, name); },
+      removeAttribute(name) { delete attributes[name]; },
+      focus() { focusState.activeElement = element; },
+      getBoundingClientRect() { return { left: 0, top: 0, width: 1000, height: 800 }; },
+      querySelector(selector) { return selector === 'img' ? element.childImage : null; },
+      querySelectorAll(selector) {
+        if (selector !== '.product-thumb' && selector !== '.product-dot') return [];
+        if (!controlCache.has(selector)) {
+          const className = selector.slice(1);
+          const controls = buttonBlocksByClass(html, className).map((block, index) => {
+            const openingTag = block.match(/^<button\b[^>]*>/)[0];
+            const control = makeElement();
+            for (const match of openingTag.matchAll(/([a-zA-Z][\w-]*)="([^"]*)"/g)) {
+              control.setAttribute(match[1], match[2]);
+            }
+            classesOf(openingTag).forEach(name => control.classList.add(name));
+            const imageTag = block.match(/<img\b[^>]*>/);
+            if (className === 'product-thumb' && imageTag) {
+              const image = makeElement('product-thumb-image-' + index);
+              for (const match of imageTag[0].matchAll(/([a-zA-Z][\w-]*)="([^"]*)"/g)) {
+                image.setAttribute(match[1], match[2]);
+              }
+              image.src = decode(attr(imageTag[0], 'src'));
+              image.currentSrc = image.src;
+              image.alt = decode(attr(imageTag[0], 'alt'));
+              image.naturalWidth = 1200 + index;
+              image.naturalHeight = 900 + index;
+              image.complete = true;
+              control.childImage = image;
+            }
+            return control;
+          });
+          controlCache.set(selector, controls);
+        }
+        return controlCache.get(selector);
+      }
+    };
+    Object.defineProperty(element, 'innerHTML', {
+      get() { return html; },
+      set(value) { html = String(value); controlCache.clear(); }
+    });
+    return element;
+  }
+
+  const page = makeElement('product-page');
+  const media = makeElement('product-media');
+  page.querySelector = selector => selector === '.product-media' ? media : null;
+  const baseQuerySelectorAll = page.querySelectorAll.bind(page);
+  page.querySelectorAll = selector => selector === '.card-media' ? [] : baseQuerySelectorAll(selector);
+  elements['product-page'] = page;
+  elements['product-media'] = media;
+
+  function ensureId(id) {
+    if (elements[id]) return elements[id];
+    const tag = idTag(page.innerHTML, id);
+    if (!tag) return null;
+    const element = makeElement(id);
+    for (const match of tag.matchAll(/([a-zA-Z][\w-]*)="([^"]*)"/g)) {
+      element.setAttribute(match[1], match[2]);
+    }
+    classesOf(tag).forEach(name => element.classList.add(name));
+    if (id === 'product-main-image') {
+      element.src = decode(attr(tag, 'src'));
+      element.currentSrc = element.src;
+      element.alt = decode(attr(tag, 'alt'));
+      element.naturalWidth = 1200;
+      element.naturalHeight = 1200;
+      element.complete = true;
+    }
+    elements[id] = element;
+    return element;
+  }
+
+  const body = makeElement('body');
+  const document = {
+    body,
+    title: '',
+    listeners: {},
+    get activeElement() { return focusState.activeElement; },
+    getElementById(id) {
+      if (elements[id]) return elements[id];
+      if (id === 'product-main-image' || id === 'product-main-trigger' || id === 'year') return ensureId(id);
+      return null;
+    },
+    querySelector(selector) {
+      if (selector.startsWith('meta[')) return { setAttribute(name, value) { meta[selector] = String(value); } };
+      return null;
+    },
+    querySelectorAll() { return []; },
+    addEventListener(type, fn) { (this.listeners[type] = this.listeners[type] || []).push(fn); }
+  };
+  focusState.activeElement = body;
+
+  function FakePhotoSwipe() {}
+  class FakePhotoSwipeLightbox {
+    constructor(options) {
+      this.options = options;
+      this.listeners = {};
+      this.calls = [];
+      this.initialized = false;
+      this.pswp = undefined;
+      photoSwipeLightboxes.push(this);
+    }
+    on(name, fn) { (this.listeners[name] = this.listeners[name] || []).push(fn); }
+    init() { this.initialized = true; }
+    loadAndOpen(index, dataSource) {
+      this.calls.push({ index, dataSource });
+      this.pswp = { currIndex: index, element: makeElement('pswp-root') };
+      (this.listeners.afterInit || []).forEach(fn => fn({ type: 'afterInit' }));
+      (this.listeners.change || []).forEach(fn => fn({ type: 'change' }));
+      return true;
+    }
+    emit(name) { (this.listeners[name] || []).forEach(fn => fn({ type: name })); }
+  }
+  function FakeImage() {
+    this.naturalWidth = 1600;
+    this.naturalHeight = 1400;
+    this.complete = true;
+    this.onload = null;
+    this.onerror = null;
+    Object.defineProperty(this, 'src', {
+      get: () => this._src || '',
+      set: value => {
+        this._src = value;
+        this.currentSrc = value;
+        if (this.onload) this.onload();
+      }
+    });
+  }
+
+  const window = {
+    TQR_PRODUCTS: list,
+    location,
+    history: { state: null, replaceState() {} },
+    pageYOffset: 0,
+    localStorage: { removeItem() {} },
+    PhotoSwipe: FakePhotoSwipe,
+    PhotoSwipeLightbox: FakePhotoSwipeLightbox,
+    Image: FakeImage,
+    addEventListener() {},
+    requestAnimationFrame(fn) { fn(); },
+    matchMedia() { return { matches: Boolean(reduceMotion) }; },
+    scrollTo() {}
+  };
+
+  vm.runInNewContext(mainSource, { window, document, URL, URLSearchParams, Date, Number, Math, Object, Array, String, Promise });
+  (document.listeners.DOMContentLoaded || []).forEach(fn => fn());
+
+  return {
+    markup: page.innerHTML,
+    document,
+    body,
+    element: ensureId,
+    controls: selector => page.querySelectorAll(selector),
+    photoSwipeLightboxes,
+    PhotoSwipe: FakePhotoSwipe
+  };
 }
 
-function touchSwipe(element, dx, dy, pointerId, timeStamp) {
-  const id = pointerId || 1;
-  const start = timeStamp || 1000;
-  const x = 320;
-  const y = 280;
-  fire(element, 'pointerdown', { pointerType: 'touch', pointerId: id, isPrimary: true, clientX: x, clientY: y, timeStamp: start });
-  fire(element, 'pointermove', { pointerType: 'touch', pointerId: id, clientX: x + dx, clientY: y + dy, timeStamp: start + 16 });
-  fire(element, 'pointerup', { pointerType: 'touch', pointerId: id, clientX: x + dx, clientY: y + dy, timeStamp: start + 32 });
+async function flushOpen() {
+  await new Promise(resolve => setImmediate(resolve));
 }
 
-function mouseClick(stage, dialog, image, detail, x, y, timeStamp, pointerId) {
-  const id = pointerId || 1;
-  fire(stage, 'pointerdown', { pointerType: 'mouse', pointerId: id, button: 0, clientX: x, clientY: y, timeStamp });
-  fire(stage, 'pointerup', { pointerType: 'mouse', pointerId: id, button: 0, clientX: x, clientY: y, timeStamp: timeStamp + 1 });
-  return fire(dialog, 'click', {
-    target: image, pointerType: 'mouse', button: 0, detail, clientX: x, clientY: y, timeStamp: timeStamp + 2
-  });
+async function run() {
+  const multiProduct = products.find(product => imagesOf(product).length > 1);
+  assert.ok(multiProduct, 'a product with multiple images exists');
+  const images = imagesOf(multiProduct);
+  const detail = renderProduct(siteRoot + 'product.html?id=' + multiProduct.id, products);
+  const triggerTag = detail.markup.match(/<button\b[^>]*class="product-main-trigger"[^>]*>/);
+  assert.ok(triggerTag, 'the main image retains a button trigger');
+  assert.equal(attr(triggerTag[0], 'aria-haspopup'), 'dialog', 'the trigger announces the accessible gallery dialog');
+  assert.match(decode(attr(triggerTag[0], 'aria-label')), /Open larger view/, 'the trigger has an accessible name');
+  assert.doesNotMatch(detail.markup, /<dialog\b|product-lightbox-stage|product-lightbox-image/, 'the bespoke viewer markup is removed');
+
+  const mainImage = detail.element('product-main-image');
+  const trigger = detail.element('product-main-trigger');
+  const media = detail.element('product-media');
+  const thumbs = detail.controls('.product-thumb');
+  const dots = detail.controls('.product-dot');
+  assert.equal(thumbs.length, images.length, 'all product thumbnails remain available');
+  assert.equal(dots.length, images.length, 'all product image dots remain available');
+
+  const swipeStartIndex = Math.min(2, images.length - 1);
+  fire(dots[swipeStartIndex], 'click');
+  assert.equal(mainImage.src, images[swipeStartIndex], 'dot selection still changes the main image');
+  assert.equal(dots[swipeStartIndex].getAttribute('aria-pressed'), 'true', 'dot selection synchronizes its active state');
+  fire(media, 'pointerdown', { pointerId: 7, pointerType: 'touch', isPrimary: true, clientX: 120, clientY: 90 });
+  fire(media, 'pointermove', { pointerId: 7, pointerType: 'touch', clientX: 50, clientY: 92 });
+  fire(media, 'pointerup', { pointerId: 7, pointerType: 'touch', clientX: 50, clientY: 92 });
+  const swipedIndex = (swipeStartIndex + 1) % images.length;
+  assert.equal(mainImage.src, images[swipedIndex], 'swiping the main image advances the gallery');
+  assert.equal(media.getAttribute('data-gallery-index'), String(swipedIndex), 'swiping updates the gallery index');
+  assert.equal(thumbs[swipedIndex].getAttribute('aria-pressed'), 'true', 'swiping synchronizes the thumbnail state');
+  assert.equal(dots[swipedIndex].getAttribute('aria-pressed'), 'true', 'swiping synchronizes the dot state');
+  fire(thumbs[1], 'click');
+  assert.equal(mainImage.src, images[1], 'thumbnail selection still changes the main image');
+  fire(trigger, 'click');
+  await flushOpen();
+
+  assert.equal(detail.photoSwipeLightboxes.length, 1, 'opening the image creates one PhotoSwipe lightbox');
+  const lightbox = detail.photoSwipeLightboxes[0];
+  assert.equal(lightbox.initialized, true, 'PhotoSwipe lightbox is initialized once');
+  assert.equal(lightbox.calls.length, 1, 'the library opens from the main image trigger');
+  assert.equal(lightbox.calls[0].index, 1, 'the viewer opens on the currently selected image');
+  assert.equal(lightbox.pswp.element.getAttribute('aria-label'), 'Image viewer for ' + multiProduct.name,
+    'the PhotoSwipe dialog receives an accessible product-specific name');
+  assert.equal(lightbox.pswp.element.getAttribute('aria-modal'), 'true', 'the PhotoSwipe dialog is marked modal');
+  assert.equal(lightbox.options.pswpModule, detail.PhotoSwipe, 'the PhotoSwipe core UMD module is passed to the lightbox');
+  assert.equal(lightbox.options.imageClickAction, 'zoom', 'single click zooms instead of closing');
+  assert.equal(lightbox.options.doubleTapAction, 'zoom', 'double tap zoom is delegated to PhotoSwipe');
+  assert.equal(lightbox.options.tapAction, 'toggle-controls', 'single tap toggles PhotoSwipe controls');
+  assert.equal(lightbox.options.bgClickAction, 'close', 'clicking the backdrop closes the viewer');
+  assert.equal(lightbox.options.wheelToZoom, true, 'mouse-wheel zoom is enabled');
+  assert.equal(lightbox.options.initialZoomLevel, 'fit', 'the image initially fits the viewport');
+  assert.equal(lightbox.options.secondaryZoomLevel({ fit: 0.35 }), 0.7, 'one click zooms to twice the fitted size');
+  assert.equal(lightbox.options.showHideAnimationType, 'fade', 'opening does not depend on custom thumbnail animation bounds');
+  assert.equal(lightbox.options.bgOpacity, 0.94, 'the modal backdrop is deliberately opaque');
+  assert.equal(lightbox.options.trapFocus, true, 'keyboard focus remains inside the viewer');
+  assert.equal(lightbox.options.returnFocus, true, 'focus returns to the image trigger after close');
+  assert.equal(lightbox.options.zoom, false, 'the default zoom toolbar button is hidden in favor of image gestures');
+  assert.equal(lightbox.options.arrowPrev, true, 'multi-image galleries show a previous control');
+  assert.equal(lightbox.options.arrowNext, true, 'multi-image galleries show a next control');
+  assert.equal(lightbox.options.counter, true, 'multi-image galleries show a compact image counter');
+
+  const slides = lightbox.calls[0].dataSource;
+  assert.equal(slides.length, images.length, 'the library receives every product image');
+  for (let index = 0; index < slides.length; index++) {
+    const thumbImage = thumbs[index].querySelector('img');
+    assert.equal(slides[index].src, images[index], 'slide ' + index + ' keeps the original product image source');
+    assert.equal(slides[index].width, thumbImage.naturalWidth, 'slide ' + index + ' uses its actual source width');
+    assert.equal(slides[index].height, thumbImage.naturalHeight, 'slide ' + index + ' uses its actual source height');
+    assert.equal(slides[index].element, thumbImage, 'slide ' + index + ' uses its real thumbnail element');
+    assert.equal(slides[index].alt, multiProduct.name + ' — image ' + (index + 1) + ' of ' + images.length,
+      'slide ' + index + ' keeps descriptive alternative text');
+  }
+
+  lightbox.pswp.currIndex = 2;
+  lightbox.emit('change');
+  assert.equal(mainImage.src, images[2], 'navigating in PhotoSwipe synchronizes the product image');
+  assert.equal(thumbs[2].getAttribute('aria-pressed'), 'true', 'PhotoSwipe navigation synchronizes thumbnail state');
+  assert.equal(dots[2].getAttribute('aria-pressed'), 'true', 'PhotoSwipe navigation synchronizes dot state');
+
+  fire(trigger, 'click');
+  await flushOpen();
+  assert.equal(detail.photoSwipeLightboxes.length, 1, 'reopening reuses the same PhotoSwipe lightbox instance');
+  assert.equal(lightbox.calls[1].index, 2, 'reopening uses the latest selected gallery frame');
+
+  const missingDimensions = thumbs[0].querySelector('img');
+  missingDimensions.naturalWidth = 0;
+  missingDimensions.naturalHeight = 0;
+  fire(trigger, 'click');
+  await flushOpen();
+  assert.equal(lightbox.calls[2].dataSource[0].width, 1600, 'an unloaded thumbnail is sized from a real image probe');
+  assert.equal(lightbox.calls[2].dataSource[0].height, 1400, 'an unloaded thumbnail preserves its source aspect ratio');
+
+  const reducedMotionDetail = renderProduct(siteRoot + 'product.html?id=' + multiProduct.id, products, true);
+  fire(reducedMotionDetail.element('product-main-trigger'), 'click');
+  await flushOpen();
+  assert.equal(reducedMotionDetail.photoSwipeLightboxes[0].options.showHideAnimationType, 'none',
+    'PhotoSwipe disables transition animation when reduced motion is requested');
+
+  const single = {
+    id: 'single-lightbox', name: 'Single Lightbox Test', cat: 'Test', img: 'assets/img/single.png',
+    images: ['assets/img/single.png'], slug: 'single-lightbox', formats: 'PNG', price: 1, order: 99,
+    summary: 'A single-frame lightbox product.'
+  };
+  const singleDetail = renderProduct(siteRoot + 'product.html?id=single-lightbox', products.concat([single]));
+  fire(singleDetail.element('product-main-trigger'), 'click');
+  await flushOpen();
+  assert.equal(singleDetail.photoSwipeLightboxes[0].calls[0].index, 0, 'a single-image product opens at its only frame');
+  assert.equal(singleDetail.photoSwipeLightboxes[0].calls[0].dataSource.length, 1, 'a single-image product has one slide');
+  assert.equal(singleDetail.photoSwipeLightboxes[0].options.arrowPrev, false, 'a single-image viewer hides the previous control');
+  assert.equal(singleDetail.photoSwipeLightboxes[0].options.arrowNext, false, 'a single-image viewer hides the next control');
+  assert.equal(singleDetail.photoSwipeLightboxes[0].options.counter, false, 'a single-image viewer hides the counter');
+
+  assert.match(cssSource, /\.pswp\s*\{[^}]*--pswp-bg:/, 'the site styles PhotoSwipe without custom viewer mechanics');
+  assert.doesNotMatch(cssSource, /product-lightbox/, 'obsolete custom viewer styles are removed');
+  assert.match(photoswipeCssSource, /\.pswp__img/, 'the official PhotoSwipe stylesheet is present');
+  assert.match(photoswipeLicense, /MIT License[\s\S]*including without limitation[\s\S]*sell[\s\S]*copies/, 'the vendored library includes its MIT license');
+  assert.doesNotMatch(mainSource, /function onStagePointerDown|function onLightboxWheel|function zoomAt|function lightboxSwipeDirection|LIGHTBOX_SWIPE_MIN/,
+    'custom zoom, gesture handlers, and helpers are removed');
+
+  const productHtml = fs.readFileSync(require.resolve('../product.html'), 'utf8');
+  assert.match(productHtml, /assets\/vendor\/photoswipe\/photoswipe\.css\?v=1/, 'product page loads the local PhotoSwipe stylesheet');
+  assert.match(productHtml, /photoswipe\.umd\.min\.js\?v=1[\s\S]*photoswipe-lightbox\.umd\.min\.js\?v=1[\s\S]*assets\/main\.js\?v=37/,
+    'product page loads the pinned PhotoSwipe UMD files before the site logic');
+  assert.match(productHtml, /assets\/style\.css\?v=36/, 'product page loads the updated site styling');
+  const indexHtml = fs.readFileSync(require.resolve('../index.html'), 'utf8');
+  assert.match(indexHtml, /assets\/main\.js\?v=37/, 'home page uses the cache-busted renderer');
+  assert.match(indexHtml, /assets\/style\.css\?v=36/, 'home page uses the updated stylesheet version');
+  assert.doesNotMatch(indexHtml, /photoswipe/, 'the gallery library is only loaded on product pages');
+
+  process.stdout.write('PASS product image gallery uses PhotoSwipe for zoom, navigation, and touch gestures\n');
 }
 
-const multiProduct = products.find(product => imagesOf(product).length > 1);
-assert.ok(multiProduct, 'a multi-image detail product exists');
-const multiImages = imagesOf(multiProduct);
-
-const detail = render('product', siteRoot + 'product.html?id=' + multiProduct.id, products);
-const markup = detail.markup;
-
-const triggerTag = markup.match(/<button\b[^>]*class="product-main-trigger"[^>]*>/);
-assert.ok(triggerTag, 'the large detail image has an explicit viewer trigger');
-assert.equal(attr(triggerTag[0], 'aria-haspopup'), 'dialog', 'the image trigger advertises a dialog');
-assert.equal(attr(triggerTag[0], 'aria-controls'), 'product-lightbox', 'the image trigger points at the viewer');
-assert.match(decode(attr(triggerTag[0], 'aria-label')), /Open larger view/, 'the image trigger has an accessible name');
-
-const dialogTag = markup.match(/<dialog\b[^>]*class="product-lightbox"[^>]*>/);
-assert.ok(dialogTag, 'the detail page contains a native dialog viewer');
-assert.equal(attr(dialogTag[0], 'aria-labelledby'), 'product-lightbox-title', 'the dialog is named by its title');
-assert.equal(attr(dialogTag[0], 'aria-describedby'), 'product-lightbox-hint', 'the dialog is described by its hint');
-assert.equal(attr(dialogTag[0], 'aria-modal'), 'true', 'the viewer is announced as modal');
-assert.match(markup, /<h2[^>]*id="product-lightbox-title"[^>]*>/, 'the dialog has an accessible title');
-assert.match(markup, /<p[^>]*id="product-lightbox-hint"[^>]*>/, 'the dialog has an accessible usage hint');
-assert.match(markup, /id="product-lightbox-close"[^>]*aria-label="Close image viewer"/, 'the viewer has a labelled compact close control');
-assert.match(markup, /id="product-lightbox-prev"[^>]*aria-label="Previous image"/, 'multi-image detail has a previous arrow');
-assert.match(markup, /id="product-lightbox-next"[^>]*aria-label="Next image"/, 'multi-image detail has a next arrow');
-assert.match(markup, /id="product-lightbox-count"[^>]*aria-live="polite"[^>]*>1 \/ \d+</, 'multi-image detail shows a small image count');
-assert.doesNotMatch(markup, /product-lightbox-controls|product-lightbox-panel|product-lightbox-head|product-lightbox-zoom-value/, 'the viewer has no toolbar, header or panel');
-assert.doesNotMatch(markup, /id="product-lightbox-(?:zoom-in|zoom-out|reset)"/, 'the viewer has no zoom buttons or reset control');
-for (const tag of tagsByClass(markup, 'product-lightbox-arrow')) {
-  assert.equal(attr(tag, 'type'), 'button', 'viewer arrows never submit a form');
-}
-assert.match(cssSource, /\.product-lightbox::backdrop/, 'the viewer provides a modal backdrop');
-assert.match(cssSource, /\.product-lightbox-stage\s*\{[^}]*touch-action\s*:\s*none/, 'the viewer stage owns touch gestures');
-assert.match(cssSource, /prefers-reduced-motion[\s\S]*product-lightbox/, 'the viewer respects reduced-motion preferences');
-assert.doesNotMatch(cssSource, /\.product-lightbox-controls|\.product-lightbox-panel|\.product-lightbox-zoom-value/, 'the old toolbar styles are gone');
-
-const mainImage = detail.element('product-main-image');
-const thumbs = detail.controls('.product-thumb');
-const dots = detail.controls('.product-dot');
-assert.equal(thumbs.length, multiImages.length, 'detail thumbnails are unchanged');
-assert.equal(dots.length, multiImages.length, 'detail dots are unchanged');
-
-fire(thumbs[1], 'click');
-assert.equal(mainImage.src, multiImages[1], 'the page can select a non-first frame before opening');
-
-const trigger = detail.element('product-main-trigger');
-const dialog = detail.element('product-lightbox');
-const lightboxImage = detail.element('product-lightbox-image');
-const closeButton = detail.element('product-lightbox-close');
-const prev = detail.element('product-lightbox-prev');
-const next = detail.element('product-lightbox-next');
-const count = detail.element('product-lightbox-count');
-const stage = detail.element('product-lightbox-stage');
-const title = detail.element('product-lightbox-title');
-
-detail.body.style.overflow = 'auto';
-trigger.focus();
-fire(trigger, 'click');
-assert.equal(dialog.open, true, 'activating the image opens the modal dialog');
-assert.equal(dialog.classList.contains('is-open'), true, 'the open state is reflected on the dialog');
-assert.equal(dialog.getAttribute('data-zoom'), '1', 'opening starts at 1x');
-assert.equal(lightboxImage.src, multiImages[1], 'the viewer opens on the currently selected frame');
-assert.equal(lightboxImage.alt, multiProduct.name + ' — image 2 of ' + multiImages.length, 'the viewer uses the correct frame alt text');
-assert.match(title.textContent, /image 2 of /, 'the dialog title follows the selected frame');
-assert.equal(detail.document.activeElement, closeButton, 'focus moves to the compact close control');
-assert.equal(detail.body.style.overflow, 'hidden', 'the background is scroll-locked while open');
-assert.equal(stage.style.touchAction, 'none', 'the open viewer owns touch gestures');
-
-mouseClick(stage, dialog, lightboxImage, 1, 600, 400, 1000, 101);
-assert.match(markup, /Click or double-click/, 'the viewer hint explains single-click zoom');
-assert.equal(dialog.getAttribute('data-zoom'), '2', 'a single click on the open image zooms to 2x');
-assert.equal(dialog.getAttribute('data-pan-x'), '-100', 'single-click zoom is anchored at the pointer');
-assert.equal(dialog.getAttribute('data-pan-y'), '0', 'single-click zoom keeps the clicked vertical point anchored');
-assert.equal(dialog.open, true, 'single-click zoom keeps the viewer open');
-mouseClick(stage, dialog, lightboxImage, 1, 600, 400, 2000, 102);
-assert.equal(dialog.getAttribute('data-zoom'), '1', 'a second single click returns to 1x');
-assert.equal(dialog.getAttribute('data-pan-x'), '0', 'single-click reset clears the horizontal pan');
-assert.equal(dialog.open, true, 'single-click reset keeps the viewer open');
-
-const wheelIn = fire(stage, 'wheel', { deltaY: -100, clientX: 700, clientY: 400 });
-assert.equal(wheelIn.defaultPrevented, true, 'wheel zoom keeps the page from scrolling behind the viewer');
-assert.equal(dialog.getAttribute('data-zoom'), '1.5', 'wheel up zooms in inside the viewer');
-assert.equal(dialog.getAttribute('data-pan-x'), '-100', 'wheel zoom keeps the pointer position anchored horizontally');
-assert.equal(dialog.getAttribute('data-pan-y'), '0', 'wheel zoom keeps the pointer position anchored vertically');
-fire(stage, 'wheel', { deltaY: -100, clientX: 700, clientY: 400 });
-assert.equal(dialog.getAttribute('data-zoom'), '2', 'repeated wheel zoom scales further around the same point');
-assert.equal(dialog.getAttribute('data-pan-x'), '-200', 'the anchored point stays under the pointer across wheel steps');
-fire(stage, 'wheel', { deltaY: 100, clientX: 700, clientY: 400 });
-fire(stage, 'wheel', { deltaY: 100, clientX: 700, clientY: 400 });
-assert.equal(dialog.getAttribute('data-zoom'), '1', 'wheel down zooms back to the 1x minimum');
-assert.equal(dialog.getAttribute('data-pan-x'), '0', 'returning to 1x clears the anchored offset');
-for (let i = 0; i < 20; i++) fire(stage, 'wheel', { deltaY: -100, clientX: 700, clientY: 400 });
-assert.equal(dialog.getAttribute('data-zoom'), '4', 'wheel zoom clamps at the 4x maximum');
-for (let i = 0; i < 20; i++) fire(stage, 'wheel', { deltaY: 100, clientX: 700, clientY: 400 });
-assert.equal(dialog.getAttribute('data-zoom'), '1', 'wheel zoom clamps at the 1x minimum');
-
-const doubleClickIn = fire(stage, 'dblclick', { target: lightboxImage, clientX: 600, clientY: 400 });
-assert.equal(doubleClickIn.defaultPrevented, true, 'double-click zoom owns the gesture');
-assert.equal(dialog.getAttribute('data-zoom'), '2', 'desktop double-click toggles 1x to 2x');
-assert.equal(dialog.getAttribute('data-pan-x'), '-100', 'double-click zoom is anchored at the clicked point');
-fire(stage, 'dblclick', { target: lightboxImage, clientX: 600, clientY: 400 });
-assert.equal(dialog.getAttribute('data-zoom'), '1', 'desktop double-click toggles 2x back to 1x');
-assert.equal(dialog.getAttribute('data-pan-x'), '0', 'double-click reset clears the pan offset');
-mouseClick(stage, dialog, lightboxImage, 1, 600, 400, 5000, 103);
-mouseClick(stage, dialog, lightboxImage, 2, 600, 400, 5050, 104);
-fire(stage, 'dblclick', { target: lightboxImage, clientX: 600, clientY: 400, timeStamp: 5054 });
-assert.equal(dialog.getAttribute('data-zoom'), '2', 'the click-click-dblclick event sequence still toggles to 2x once');
-assert.equal(dialog.open, true, 'the double-click sequence keeps the viewer open');
-fire(dialog, 'keydown', { key: '0' });
-fire(dialog, 'keydown', { key: '+' });
-fire(dialog, 'keydown', { key: '=' });
-assert.equal(dialog.getAttribute('data-zoom'), '2', 'the viewer can enter the double-click sequence already zoomed');
-mouseClick(stage, dialog, lightboxImage, 1, 600, 400, 6000, 105);
-mouseClick(stage, dialog, lightboxImage, 2, 600, 400, 6050, 106);
-fire(stage, 'dblclick', { target: lightboxImage, clientX: 600, clientY: 400, timeStamp: 6054 });
-assert.equal(dialog.getAttribute('data-zoom'), '1', 'click-click-dblclick from 2x preserves the original double-click reset');
-assert.equal(dialog.getAttribute('data-pan-x'), '0', 'double-click reset from 2x clears pan');
-
-const plus = fire(dialog, 'keydown', { key: '+' });
-assert.equal(plus.defaultPrevented, true, 'keyboard zoom owns the key');
-assert.equal(dialog.getAttribute('data-zoom'), '1.5', 'the plus key zooms in');
-fire(dialog, 'keydown', { key: '=' });
-assert.equal(dialog.getAttribute('data-zoom'), '2', 'the equals key also zooms in');
-fire(dialog, 'keydown', { key: '-' });
-assert.equal(dialog.getAttribute('data-zoom'), '1.5', 'the minus key zooms out');
-fire(dialog, 'keydown', { key: '0' });
-assert.equal(dialog.getAttribute('data-zoom'), '1', 'the zero key resets zoom');
-for (let i = 0; i < 20; i++) fire(dialog, 'keydown', { key: '+' });
-assert.equal(dialog.getAttribute('data-zoom'), '4', 'keyboard zoom clamps at the 4x maximum');
-for (let i = 0; i < 20; i++) fire(dialog, 'keydown', { key: '-' });
-assert.equal(dialog.getAttribute('data-zoom'), '1', 'keyboard zoom clamps at the 1x minimum');
-
-fire(stage, 'pointerdown', { pointerId: 31, pointerType: 'touch', clientX: 50, clientY: 50, timeStamp: 1000 });
-fire(stage, 'pointerdown', { pointerId: 32, pointerType: 'touch', clientX: 150, clientY: 50, timeStamp: 1000 });
-const pinchOut = fire(stage, 'pointermove', { pointerId: 32, pointerType: 'touch', clientX: 250, clientY: 50, timeStamp: 1000 });
-assert.equal(pinchOut.defaultPrevented, true, 'pinch zoom owns the touch gesture');
-assert.equal(dialog.getAttribute('data-zoom'), '2', 'pinching two touch pointers apart zooms from 1x to 2x');
-fire(stage, 'pointerup', { pointerId: 31, pointerType: 'touch', timeStamp: 1000 });
-fire(stage, 'pointerup', { pointerId: 32, pointerType: 'touch', timeStamp: 1000 });
-
-fire(stage, 'pointerdown', { pointerId: 35, pointerType: 'touch', clientX: 0, clientY: 50, timeStamp: 1000 });
-fire(stage, 'pointerdown', { pointerId: 36, pointerType: 'touch', clientX: 100, clientY: 50, timeStamp: 1000 });
-fire(stage, 'pointermove', { pointerId: 36, pointerType: 'touch', clientX: 1000, clientY: 50, timeStamp: 1000 });
-assert.equal(dialog.getAttribute('data-zoom'), '4', 'pinch zoom clamps at the 4x maximum');
-fire(stage, 'pointerup', { pointerId: 35, pointerType: 'touch', timeStamp: 1000 });
-fire(stage, 'pointerup', { pointerId: 36, pointerType: 'touch', timeStamp: 1000 });
-
-fire(stage, 'pointerdown', { pointerId: 37, pointerType: 'touch', clientX: 0, clientY: 50, timeStamp: 1000 });
-fire(stage, 'pointerdown', { pointerId: 38, pointerType: 'touch', clientX: 1000, clientY: 50, timeStamp: 1000 });
-fire(stage, 'pointermove', { pointerId: 38, pointerType: 'touch', clientX: 10, clientY: 50, timeStamp: 1000 });
-assert.equal(dialog.getAttribute('data-zoom'), '1', 'pinch zoom clamps at the 1x minimum');
-fire(stage, 'pointerup', { pointerId: 37, pointerType: 'touch', timeStamp: 1000 });
-fire(stage, 'pointerup', { pointerId: 38, pointerType: 'touch', timeStamp: 1000 });
-
-fire(stage, 'pointerdown', { pointerId: 41, pointerType: 'touch', clientX: 300, clientY: 300, timeStamp: 1000 });
-fire(stage, 'pointerup', { pointerId: 41, pointerType: 'touch', clientX: 300, clientY: 300, timeStamp: 1050 });
-fire(stage, 'pointerdown', { pointerId: 42, pointerType: 'touch', clientX: 302, clientY: 302, timeStamp: 1200 });
-fire(stage, 'pointerup', { pointerId: 42, pointerType: 'touch', clientX: 302, clientY: 302, timeStamp: 1250 });
-assert.equal(dialog.getAttribute('data-zoom'), '2', 'touch double-tap toggles 1x to 2x');
-fire(dialog, 'click', { target: stage, timeStamp: 1300 });
-assert.equal(dialog.open, true, 'the click synthesized by a double-tap does not close the viewer');
-fire(stage, 'pointerdown', { pointerId: 43, pointerType: 'touch', clientX: 302, clientY: 302, timeStamp: 2000 });
-fire(stage, 'pointerup', { pointerId: 43, pointerType: 'touch', clientX: 302, clientY: 302, timeStamp: 2050 });
-fire(stage, 'pointerdown', { pointerId: 44, pointerType: 'touch', clientX: 300, clientY: 300, timeStamp: 2200 });
-fire(stage, 'pointerup', { pointerId: 44, pointerType: 'touch', clientX: 300, clientY: 300, timeStamp: 2250 });
-assert.equal(dialog.getAttribute('data-zoom'), '1', 'touch double-tap toggles 2x back to 1x');
-fire(dialog, 'click', { target: stage, timeStamp: 2300 });
-assert.equal(dialog.open, true, 'the click synthesized by the reset double-tap does not close the viewer');
-
-fire(dialog, 'keydown', { key: '=' });
-fire(dialog, 'keydown', { key: '=' });
-const panBeforeX = Number(dialog.getAttribute('data-pan-x'));
-const panBeforeY = Number(dialog.getAttribute('data-pan-y'));
-fire(stage, 'pointerdown', { pointerId: 51, pointerType: 'touch', clientX: 100, clientY: 100, timeStamp: 3000 });
-fire(stage, 'pointermove', { pointerId: 51, pointerType: 'touch', clientX: 130, clientY: 120, timeStamp: 3010 });
-assert.equal(Number(dialog.getAttribute('data-pan-x')), panBeforeX + 30, 'a zoomed image pans horizontally by touch');
-assert.equal(Number(dialog.getAttribute('data-pan-y')), panBeforeY + 20, 'a zoomed image pans vertically by touch');
-fire(stage, 'pointerup', { pointerId: 51, pointerType: 'touch', clientX: 130, clientY: 120, timeStamp: 3020 });
-fire(dialog, 'click', { target: stage, timeStamp: 3050 });
-assert.equal(dialog.open, true, 'the click synthesized after a touch pan does not close the viewer');
-
-fire(dialog, 'keydown', { key: '0' });
-fire(dialog, 'keydown', { key: '=' });
-fire(dialog, 'keydown', { key: '=' });
-fire(stage, 'pointerdown', { pointerId: 60, pointerType: 'mouse', button: 0, clientX: 200, clientY: 200, timeStamp: 4000 });
-fire(stage, 'pointermove', { pointerId: 60, pointerType: 'mouse', clientX: 240, clientY: 230, timeStamp: 4010 });
-assert.equal(dialog.getAttribute('data-pan-x'), '40', 'a zoomed image pans horizontally by mouse drag');
-assert.equal(dialog.getAttribute('data-pan-y'), '30', 'a zoomed image pans vertically by mouse drag');
-fire(stage, 'pointerup', { pointerId: 60, pointerType: 'mouse', timeStamp: 4020 });
-fire(dialog, 'click', { target: stage, timeStamp: 4050 });
-assert.equal(dialog.open, true, 'the click synthesized after a mouse pan does not close the viewer');
-fire(dialog, 'keydown', { key: '0' });
-
-fire(next, 'click');
-assert.equal(lightboxImage.src, multiImages[2], 'next advances the viewer frame');
-assert.equal(count.textContent, '3 / ' + multiImages.length, 'the image count follows the viewer frame');
-assert.equal(mainImage.src, multiImages[2], 'next synchronizes the product main image');
-assert.equal(dots[2].getAttribute('aria-pressed'), 'true', 'next synchronizes the product dots');
-assert.equal(thumbs[2].classList.contains('is-active'), true, 'next synchronizes the product thumbnails');
-fire(prev, 'click');
-assert.equal(lightboxImage.src, multiImages[1], 'previous returns the viewer to the prior frame');
-assert.equal(mainImage.src, multiImages[1], 'previous synchronizes the product main image');
-assert.equal(dots[1].classList.contains('is-active'), true, 'previous synchronizes the product dots');
-
-const right = fire(dialog, 'keydown', { key: 'ArrowRight' });
-assert.equal(right.defaultPrevented, true, 'the right arrow key owns frame navigation');
-assert.equal(lightboxImage.src, multiImages[2], 'the right arrow key advances the viewer frame');
-assert.equal(count.textContent, '3 / ' + multiImages.length, 'the right arrow key updates the image count');
-assert.equal(mainImage.src, multiImages[2], 'the right arrow key synchronizes the product main image');
-fire(dialog, 'keydown', { key: 'ArrowLeft' });
-assert.equal(lightboxImage.src, multiImages[1], 'the left arrow key returns to the prior frame');
-assert.equal(count.textContent, '2 / ' + multiImages.length, 'the left arrow key updates the image count');
-
-function assertViewerFrame(index, label) {
-  assert.equal(lightboxImage.src, multiImages[index], label + ' shows the expected frame');
-  assert.equal(mainImage.src, multiImages[index], label + ' synchronizes the product main image');
-  assert.equal(count.textContent, (index + 1) + ' / ' + multiImages.length, label + ' updates the image count');
-  assert.equal(dots[index].classList.contains('is-active'), true, label + ' synchronizes the product dots');
-  assert.equal(thumbs[index].classList.contains('is-active'), true, label + ' synchronizes the product thumbnails');
-}
-
-touchSwipe(stage, -60, 0, 71, 5000);
-assertViewerFrame(2, 'a left touch swipe');
-touchSwipe(stage, 60, 0, 72, 6000);
-assertViewerFrame(1, 'a right touch swipe');
-
-touchSwipe(stage, -30, 0, 73, 7000);
-assertViewerFrame(1, 'a horizontal touch move below the swipe threshold');
-touchSwipe(stage, -10, -90, 74, 8000);
-assertViewerFrame(1, 'a vertical touch gesture');
-touchSwipe(stage, -60, 60, 75, 9000);
-assertViewerFrame(1, 'a diagonal touch gesture without horizontal dominance');
-
-touchSwipe(stage, 60, 0, 76, 10000);
-assertViewerFrame(0, 'swiping right at the first frame');
-touchSwipe(stage, 60, 0, 77, 11000);
-assertViewerFrame(multiImages.length - 1, 'swiping right before the first frame');
-touchSwipe(stage, -60, 0, 78, 12000);
-assertViewerFrame(0, 'swiping left after the last frame');
-touchSwipe(stage, -60, 0, 79, 13000);
-assertViewerFrame(1, 'swiping left back to the selected frame');
-
-fire(stage, 'pointerdown', { pointerType: 'touch', pointerId: 80, clientX: 100, clientY: 100, timeStamp: 14000 });
-fire(stage, 'pointerdown', { pointerType: 'touch', pointerId: 81, clientX: 200, clientY: 100, timeStamp: 14000 });
-fire(stage, 'pointermove', { pointerType: 'touch', pointerId: 81, clientX: 300, clientY: 110, timeStamp: 14016 });
-assert.equal(dialog.getAttribute('data-zoom'), '2', 'pinch zoom still owns two-finger touch gestures');
-assertViewerFrame(1, 'pinching two touch pointers');
-fire(stage, 'pointerup', { pointerType: 'touch', pointerId: 80, clientX: 100, clientY: 100, timeStamp: 14032 });
-fire(stage, 'pointerup', { pointerType: 'touch', pointerId: 81, clientX: 300, clientY: 110, timeStamp: 14048 });
-assertViewerFrame(1, 'releasing a pinch');
-fire(dialog, 'keydown', { key: '0' });
-
-fire(stage, 'pointerdown', { pointerType: 'touch', pointerId: 82, clientX: 300, clientY: 100, timeStamp: 15000 });
-fire(stage, 'pointerdown', { pointerType: 'touch', pointerId: 83, clientX: 400, clientY: 100, timeStamp: 15000 });
-fire(stage, 'pointermove', { pointerType: 'touch', pointerId: 83, clientX: 310, clientY: 100, timeStamp: 15016 });
-assert.equal(dialog.getAttribute('data-zoom'), '1', 'a closing pinch returns to 1x');
-assertViewerFrame(1, 'a pinch that ends at 1x');
-fire(stage, 'pointerup', { pointerType: 'touch', pointerId: 82, clientX: 300, clientY: 100, timeStamp: 15032 });
-fire(stage, 'pointerup', { pointerType: 'touch', pointerId: 83, clientX: 310, clientY: 100, timeStamp: 15048 });
-assertViewerFrame(1, 'releasing a pinch that ends at 1x');
-
-fire(dialog, 'keydown', { key: '=' });
-fire(dialog, 'keydown', { key: '=' });
-assert.equal(dialog.getAttribute('data-zoom'), '2', 'the viewer is zoomed before a touch pan');
-const zoomPanX = Number(dialog.getAttribute('data-pan-x'));
-const zoomPanY = Number(dialog.getAttribute('data-pan-y'));
-fire(stage, 'pointerdown', { pointerType: 'touch', pointerId: 84, clientX: 300, clientY: 300, timeStamp: 16000 });
-fire(stage, 'pointermove', { pointerType: 'touch', pointerId: 84, clientX: 360, clientY: 310, timeStamp: 16016 });
-assert.equal(Number(dialog.getAttribute('data-pan-x')), zoomPanX + 60, 'a zoomed touch drag still pans horizontally');
-assert.equal(Number(dialog.getAttribute('data-pan-y')), zoomPanY + 10, 'a zoomed touch drag still pans vertically');
-assertViewerFrame(1, 'dragging a zoomed image');
-fire(stage, 'pointerup', { pointerType: 'touch', pointerId: 84, clientX: 360, clientY: 310, timeStamp: 16032 });
-assertViewerFrame(1, 'finishing a zoomed touch pan');
-fire(dialog, 'keydown', { key: '0' });
-
-touchSwipe(stage, -60, 0, 85, 17000);
-assertViewerFrame(2, 'a touch swipe before a synthesized click');
-const suppressedSwipeClick = fire(dialog, 'click', { target: stage, timeStamp: 17040 });
-assert.equal(suppressedSwipeClick.defaultPrevented, true, 'the click synthesized after a touch swipe is suppressed');
-assert.equal(dialog.open, true, 'the click synthesized after a touch swipe does not close the viewer');
-assertViewerFrame(2, 'a suppressed post-swipe click');
-touchSwipe(stage, 60, 0, 86, 18000);
-assertViewerFrame(1, 'restoring the selected frame');
-fire(stage, 'pointerdown', { pointerType: 'touch', pointerId: 87, clientX: 300, clientY: 300, timeStamp: 19000 });
-fire(stage, 'pointerup', { pointerType: 'touch', pointerId: 87, clientX: 300, clientY: 300, timeStamp: 19050 });
-fire(dialog, 'click', { target: lightboxImage, pointerType: 'touch', detail: 1, clientX: 300, clientY: 300, timeStamp: 19060 });
-assert.equal(dialog.getAttribute('data-zoom'), '1', 'a single touch tap still waits for the existing double-tap gesture');
-assert.equal(dialog.open, true, 'a single touch tap does not close the viewer');
-
-fire(closeButton, 'click');
-assert.equal(dialog.open, false, 'the close button closes the dialog');
-assert.equal(dialog.classList.contains('is-open'), false, 'the open state is removed on close');
-assert.equal(detail.body.style.overflow, 'auto', 'closing restores the previous page scroll style');
-assert.equal(detail.document.activeElement, trigger, 'focus returns to the image trigger');
-assert.equal(mainImage.src, multiImages[1], 'closing keeps the frame selected in the viewer');
-assert.equal(stage.style.touchAction, '', 'closing restores the stage touch-action');
-
-trigger.focus();
-fire(trigger, 'click');
-const cancel = fire(dialog, 'cancel');
-assert.equal(cancel.defaultPrevented, true, 'the dialog handles Escape/cancel itself');
-assert.equal(dialog.open, false, 'Escape closes the dialog');
-assert.equal(detail.document.activeElement, trigger, 'Escape returns focus to the trigger');
-
-trigger.focus();
-fire(trigger, 'click');
-fire(dialog, 'click', { target: lightboxImage });
-assert.equal(dialog.open, true, 'clicking the image never closes the viewer');
-fire(dialog, 'click', { target: stage });
-assert.equal(dialog.open, false, 'clicking the empty overlay closes the viewer');
-assert.equal(detail.document.activeElement, trigger, 'overlay close returns focus to the trigger');
-
-trigger.focus();
-fire(trigger, 'click');
-assert.equal(detail.document.activeElement, closeButton, 'focus is trapped inside the viewer');
-fire(dialog, 'keydown', { key: 'Tab' });
-assert.equal(detail.document.activeElement, prev, 'Tab from the last control wraps to the first arrow');
-fire(dialog, 'keydown', { key: 'Tab', shiftKey: true });
-assert.equal(detail.document.activeElement, closeButton, 'Shift+Tab from the first arrow wraps to the last control');
-fire(closeButton, 'click');
-
-const single = {
-  id: 'single-lightbox', name: 'Single Lightbox Test', cat: 'Test', img: 'assets/img/single.png',
-  images: ['assets/img/single.png'], slug: 'single-lightbox', formats: 'PNG', price: 1, order: 99,
-  summary: 'A single-frame lightbox product.'
-};
-const singleDetail = render('product', siteRoot + 'product.html?id=single-lightbox', products.concat([single]));
-assert.match(singleDetail.markup, /id="product-lightbox-close"/, 'single-image viewer keeps close');
-assert.doesNotMatch(singleDetail.markup, /id="product-lightbox-prev"|id="product-lightbox-next"/,
-  'single-image viewer does not show navigation arrows');
-assert.doesNotMatch(singleDetail.markup, /id="product-lightbox-count"/, 'single-image viewer does not show an image count');
-const singleTrigger = singleDetail.element('product-main-trigger');
-const singleDialog = singleDetail.element('product-lightbox');
-singleTrigger.focus();
-fire(singleTrigger, 'click');
-assert.equal(singleDialog.open, true, 'single-image viewer opens');
-assert.equal(singleDetail.element('product-lightbox-image').src, single.images[0], 'single-image viewer shows its only frame');
-const singleStage = singleDetail.element('product-lightbox-stage');
-const singleImage = singleDetail.element('product-lightbox-image');
-mouseClick(singleStage, singleDialog, singleImage, 1, 600, 400, 22000, 93);
-assert.equal(singleDialog.getAttribute('data-zoom'), '2', 'single-image viewer supports single-click zoom');
-mouseClick(singleStage, singleDialog, singleImage, 1, 600, 400, 23000, 94);
-assert.equal(singleDialog.getAttribute('data-zoom'), '1', 'single-image viewer single-click resets to 1x');
-fire(singleStage, 'wheel', { deltaY: -100, clientX: 600, clientY: 400 });
-assert.equal(singleDialog.getAttribute('data-zoom'), '1.5', 'single-image viewer supports wheel zoom');
-fire(singleStage, 'dblclick', { target: singleDetail.element('product-lightbox-image'), clientX: 600, clientY: 400 });
-assert.equal(singleDialog.getAttribute('data-zoom'), '1', 'single-image viewer double-click resets zoom');
-fire(singleDialog, 'keydown', { key: '+' });
-assert.equal(singleDialog.getAttribute('data-zoom'), '1.5', 'single-image viewer supports keyboard zoom');
-fire(singleDialog, 'keydown', { key: '0' });
-assert.equal(singleDialog.getAttribute('data-zoom'), '1', 'single-image viewer keyboard reset works');
-touchSwipe(singleStage, -80, 0, 91, 20000);
-assert.equal(singleDetail.element('product-lightbox-image').src, single.images[0], 'a single-image viewer ignores a left touch swipe');
-assert.equal(singleDialog.open, true, 'a single-image viewer stays open after a left touch swipe');
-touchSwipe(singleStage, 80, 0, 92, 21000);
-assert.equal(singleDetail.element('product-lightbox-image').src, single.images[0], 'a single-image viewer ignores a right touch swipe');
-assert.equal(singleDialog.open, true, 'a single-image viewer stays open after a right touch swipe');
-fire(singleDetail.element('product-lightbox-close'), 'click');
-
-const catalog = render('catalog', siteRoot, products);
-assert.equal((catalog.markup.match(/<article class="card"/g) || []).length, 5, 'all five home cards still render');
-assert.equal((catalog.markup.match(/<img\b[^>]*class="card-slide/g) || []).length, 17, 'all 17 home card images still render');
-assert.doesNotMatch(catalog.markup, /product-main-trigger|product-lightbox/, 'home cards do not get the detail viewer');
-for (const product of products) {
-  const cardTag = catalog.markup.match(new RegExp('<a class="card-media"[^>]*href="product\\.html\\?id=' + product.id + '"[^>]*>'));
-  assert.ok(cardTag, product.id + ' home card still links directly to its product page');
-  assert.equal(attr(cardTag[0], 'data-gallery-index'), '0', product.id + ' home card still starts at its first image');
-}
-const firstCardGallery = catalog.catalog.galleries[0];
-swipe(firstCardGallery.media, -60, 0, 3);
-assert.equal(firstCardGallery.media.getAttribute('data-gallery-index'), '1', 'home card swipe still advances images');
-assert.equal(firstCardGallery.slides[1].classList.contains('is-active'), true, 'home card swipe still swaps slides');
-assert.equal(firstCardGallery.dots[1].classList.contains('is-active'), true, 'home card swipe still synchronizes dots');
-
-const firstBuyTag = catalog.markup.match(/<a class="card-btn" href="([^"]+)"[^>]*>/);
-assert.ok(firstBuyTag, 'home card Buy link still renders');
-const buyURL = new URL(decode(firstBuyTag[1]));
-assert.equal(buyURL.origin + buyURL.pathname, checkoutRoot, 'home card checkout host is unchanged');
-assert.equal(buyURL.searchParams.get('product'), products[0].slug, 'home card checkout slug is unchanged');
-assert.equal(buyURL.searchParams.get('quantity'), '1', 'home card checkout quantity is unchanged');
-assert.equal(buyURL.searchParams.get('referrer'), siteRoot + '#product-card-' + encodeURIComponent(products[0].id),
-  'home card checkout referrer is unchanged');
-
-for (const path of ['../index.html', '../product.html']) {
-  const html = fs.readFileSync(require.resolve(path), 'utf8');
-  assert.match(html, /assets\/main\.js\?v=36/, path + ' loads the cache-busted minimal viewer renderer');
-  assert.match(html, /assets\/style\.css\?v=35/, path + ' loads the cache-busted minimal viewer styles');
-  assert.match(html, /assets\/data\.js\?v=24/, path + ' keeps the unchanged data cache version');
-}
-
-process.stdout.write('PASS detail image opens a minimal full-screen viewer with no toolbar and stays synchronized with the gallery\n');
+run().catch(error => {
+  console.error(error);
+  process.exitCode = 1;
+});

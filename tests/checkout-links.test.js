@@ -274,7 +274,7 @@ assert.equal(singleImageProduct.productDots.length, 0, 'single-image gallery rem
 for (const path of htmlFiles) {
   const html = fs.readFileSync(require.resolve(path), 'utf8');
   assert.doesNotMatch(html, /cart-fab|cart-drawer|cart-toggle|cart-clear|assets\/cart-(?:core|ui)\.js/);
-  assert.match(html, /assets\/data\.js\?v=20/);
+  assert.match(html, /assets\/data\.js\?v=21/);
   assert.match(html, /assets\/main\.js\?v=27/);
   assert.match(html, /assets\/style\.css\?v=28/);
 }

@@ -598,12 +598,38 @@
             + ' aria-label="Show image ' + (i + 1) + ' of ' + images.length + '"></button>';
         }).join('') + '</div>'
       : '';
+    var lightboxNav = images.length > 1
+      ? '<button type="button" class="product-lightbox-control product-lightbox-prev" id="product-lightbox-prev" aria-label="Previous image"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>'
+        + '<button type="button" class="product-lightbox-control product-lightbox-next" id="product-lightbox-next" aria-label="Next image"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>'
+      : '';
+    var lightboxMarkup =
+      '<dialog class="product-lightbox" id="product-lightbox" aria-modal="true" aria-labelledby="product-lightbox-title" aria-describedby="product-lightbox-hint">'
+      + '<div class="product-lightbox-panel" id="product-lightbox-panel">'
+      + '<div class="product-lightbox-head">'
+      + '<div class="product-lightbox-copy">'
+      + '<h2 class="product-lightbox-title" id="product-lightbox-title">' + esc(p.name) + ' — image 1 of ' + images.length + '</h2>'
+      + '<p class="product-lightbox-hint" id="product-lightbox-hint">Pinch or use the zoom buttons, then drag or scroll to explore.</p>'
+      + '</div>'
+      + '<button type="button" class="product-lightbox-control product-lightbox-close" id="product-lightbox-close" aria-label="Close enlarged image"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>'
+      + '</div>'
+      + '<div class="product-lightbox-stage" id="product-lightbox-stage"><img class="product-lightbox-image" id="product-lightbox-image" draggable="false" src="' + esc(images[0]) + '" alt="' + esc(p.name) + ' — image 1 of ' + images.length + '"></div>'
+      + '<div class="product-lightbox-controls" role="group" aria-label="Image zoom and navigation">'
+      + lightboxNav
+      + '<button type="button" class="product-lightbox-control product-lightbox-zoom" id="product-lightbox-zoom-out" aria-label="Zoom out"><i class="fa-solid fa-magnifying-glass-minus" aria-hidden="true"></i></button>'
+      + '<span class="product-lightbox-zoom-value" id="product-lightbox-zoom-value" aria-live="polite">1×</span>'
+      + '<button type="button" class="product-lightbox-control product-lightbox-reset" id="product-lightbox-reset" aria-label="Reset zoom">Reset</button>'
+      + '<button type="button" class="product-lightbox-control product-lightbox-zoom" id="product-lightbox-zoom-in" aria-label="Zoom in"><i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i></button>'
+      + '</div></div></dialog>';
     // Product fields are escaped and gallery indices are generated integers.
     page.innerHTML =
       '<div class="product-layout" id="product-card-' + esc(p.id) + '">'
       + '<div class="product-visual">'
       + '<div class="product-gallery">'
-      + '<div class="product-media" data-gallery-index="0" data-gallery-count="' + images.length + '"><img id="product-main-image" draggable="false" src="' + esc(images[0]) + '" alt="' + esc(p.name) + ' — image 1 of ' + images.length + '"></div>'
+      + '<div class="product-media" data-gallery-index="0" data-gallery-count="' + images.length + '">'
+      + '<button type="button" class="product-main-trigger" id="product-main-trigger" aria-haspopup="dialog" aria-controls="product-lightbox" aria-label="Open larger view of ' + esc(p.name) + ' — image 1 of ' + images.length + '">'
+      + '<img id="product-main-image" draggable="false" src="' + esc(images[0]) + '" alt="' + esc(p.name) + ' — image 1 of ' + images.length + '">'
+      + '<span class="product-zoom-hint" aria-hidden="true"><i class="fa-solid fa-magnifying-glass-plus"></i> Zoom</span>'
+      + '</button></div>'
       + dots
       + '<div class="product-thumbs" role="group" aria-label="Product images">' + thumbs + '</div>'
       + '</div>'
@@ -632,13 +658,156 @@
       + '</div></div>'
       + '<section class="product-related"><h2>You may also like</h2><div class="grid">'
       + related.map(function (x) { return cardHTML(x, cardReferrer(x.id)); }).join('')
-      + '</div></section>';
+      + '</div></section>'
+      + lightboxMarkup;
 
     var mainImage = document.getElementById('product-main-image');
     var media = page.querySelector('.product-media');
     var thumbButtons = page.querySelectorAll('.product-thumb');
     var dotButtons = page.querySelectorAll('.product-dot');
+    var trigger = document.getElementById('product-main-trigger');
+    var lightbox = document.getElementById('product-lightbox');
+    var lightboxImage = document.getElementById('product-lightbox-image');
+    var lightboxStage = document.getElementById('product-lightbox-stage');
+    var lightboxTitle = document.getElementById('product-lightbox-title');
+    var zoomValue = document.getElementById('product-lightbox-zoom-value');
+    var closeButton = document.getElementById('product-lightbox-close');
+    var zoomInButton = document.getElementById('product-lightbox-zoom-in');
+    var zoomOutButton = document.getElementById('product-lightbox-zoom-out');
+    var resetButton = document.getElementById('product-lightbox-reset');
+    var prevButton = document.getElementById('product-lightbox-prev');
+    var nextButton = document.getElementById('product-lightbox-next');
     var current = 0;
+    var ZOOM_MIN = 1;
+    var ZOOM_MAX = 4;
+    var ZOOM_STEP = 0.5;
+    var lightboxZoom = ZOOM_MIN;
+    var lightboxOpen = false;
+    var lightboxLastTrigger = null;
+    var savedBodyOverflow = '';
+    var panStart = null;
+
+    function zoomLabel(value) {
+      return String(value).replace(/\.0$/, '') + '×';
+    }
+
+    function updateLightboxImage() {
+      if (lightboxImage && images[current]) {
+        lightboxImage.src = images[current];
+        lightboxImage.alt = p.name + ' — image ' + (current + 1) + ' of ' + images.length;
+      }
+      if (lightboxTitle) {
+        lightboxTitle.textContent = p.name + ' — image ' + (current + 1) + ' of ' + images.length;
+      }
+      if (lightboxStage) {
+        lightboxStage.scrollLeft = 0;
+        lightboxStage.scrollTop = 0;
+      }
+    }
+
+    function applyZoom() {
+      var zoomed = lightboxZoom > ZOOM_MIN;
+      if (lightboxImage) {
+        if (zoomed) {
+          lightboxImage.style.width = (lightboxZoom * 100) + '%';
+          lightboxImage.style.maxWidth = 'none';
+          lightboxImage.style.maxHeight = 'none';
+          lightboxImage.style.cursor = 'grab';
+        } else {
+          lightboxImage.style.width = 'auto';
+          lightboxImage.style.maxWidth = '100%';
+          lightboxImage.style.maxHeight = '100%';
+          lightboxImage.style.cursor = 'zoom-in';
+        }
+      }
+      if (lightboxStage) lightboxStage.classList.toggle('is-zoomed', zoomed);
+      if (lightbox) lightbox.setAttribute('data-zoom', String(lightboxZoom));
+      if (zoomOutButton) zoomOutButton.disabled = lightboxZoom <= ZOOM_MIN;
+      if (resetButton) resetButton.disabled = lightboxZoom <= ZOOM_MIN;
+      if (zoomInButton) zoomInButton.disabled = lightboxZoom >= ZOOM_MAX;
+      if (zoomValue) zoomValue.textContent = zoomLabel(lightboxZoom);
+    }
+
+    function setZoom(next) {
+      lightboxZoom = Math.round(Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, next)) * 2) / 2;
+      applyZoom();
+    }
+
+    function cleanupLightbox() {
+      if (document.body) {
+        document.body.style.overflow = savedBodyOverflow;
+        document.body.classList.remove('lightbox-open');
+      }
+      if (lightbox) lightbox.classList.remove('is-open', 'product-lightbox--fallback');
+      if (lightboxStage) lightboxStage.classList.remove('is-panning');
+      panStart = null;
+    }
+
+    function returnLightboxFocus() {
+      var target = lightboxLastTrigger || trigger;
+      lightboxLastTrigger = null;
+      if (target && typeof target.focus === 'function') target.focus();
+    }
+
+    function closeLightbox() {
+      if (!lightboxOpen) return;
+      lightboxOpen = false;
+      cleanupLightbox();
+      if (lightbox) {
+        if (typeof lightbox.close === 'function' && lightbox.open) {
+          try { lightbox.close(); } catch (err) { lightbox.removeAttribute('open'); }
+        } else if (typeof lightbox.removeAttribute === 'function') {
+          lightbox.removeAttribute('open');
+        }
+      }
+      returnLightboxFocus();
+    }
+
+    function openLightbox() {
+      if (!lightbox || !lightboxImage) return;
+      lightboxOpen = true;
+      lightboxLastTrigger = trigger || document.activeElement;
+      savedBodyOverflow = document.body && document.body.style ? document.body.style.overflow : '';
+      if (document.body) {
+        document.body.style.overflow = 'hidden';
+        document.body.classList.add('lightbox-open');
+      }
+      updateLightboxImage();
+      setZoom(ZOOM_MIN);
+      lightbox.classList.add('is-open');
+      var modalShown = false;
+      if (typeof lightbox.showModal === 'function') {
+        try {
+          if (!lightbox.open) lightbox.showModal();
+          modalShown = true;
+        } catch (err) {
+          modalShown = false;
+        }
+      }
+      if (!modalShown) {
+        lightbox.classList.add('product-lightbox--fallback');
+        if (typeof lightbox.setAttribute === 'function') lightbox.setAttribute('open', '');
+      }
+      var focusTarget = closeButton || zoomInButton || lightboxImage;
+      if (focusTarget && typeof focusTarget.focus === 'function') focusTarget.focus();
+    }
+
+    function trapLightboxFocus(e) {
+      var focusable = [prevButton, zoomOutButton, resetButton, zoomInButton, nextButton, closeButton].filter(function (el) {
+        return el && !el.disabled && !el.hidden;
+      });
+      if (!focusable.length) return;
+      var first = focusable[0];
+      var last = focusable[focusable.length - 1];
+      var active = document.activeElement;
+      if (e.shiftKey && active === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
 
     function showImage(index) {
       index = wrapIndex(index, images.length);
@@ -646,6 +815,9 @@
       if (mainImage && images[index]) {
         mainImage.src = images[index];
         mainImage.alt = p.name + ' — image ' + (index + 1) + ' of ' + images.length;
+      }
+      if (trigger && typeof trigger.setAttribute === 'function') {
+        trigger.setAttribute('aria-label', 'Open larger view of ' + p.name + ' — image ' + (index + 1) + ' of ' + images.length);
       }
       if (media) media.setAttribute('data-gallery-index', String(index));
       thumbButtons.forEach(function (b) {
@@ -658,6 +830,10 @@
         b.classList.toggle('is-active', active);
         b.setAttribute('aria-pressed', active ? 'true' : 'false');
       });
+      if (lightboxOpen) {
+        updateLightboxImage();
+        setZoom(ZOOM_MIN);
+      }
     }
 
     thumbButtons.forEach(function (btn) {
@@ -672,6 +848,79 @@
     });
     if (media && images.length > 1) {
       bindSwipe(media, function (dir) { showImage(current + dir); });
+    }
+    function listen(el, type, fn) {
+      if (el && typeof el.addEventListener === 'function') el.addEventListener(type, fn);
+    }
+
+    if (trigger && lightbox) {
+      listen(trigger, 'click', openLightbox);
+    }
+    if (lightbox) {
+      listen(lightbox, 'click', function (e) {
+        if (e.target === lightbox) closeLightbox();
+      });
+      listen(lightbox, 'cancel', function (e) {
+        if (e && e.preventDefault) e.preventDefault();
+        closeLightbox();
+      });
+      listen(lightbox, 'close', function () {
+        if (!lightboxOpen) return;
+        lightboxOpen = false;
+        cleanupLightbox();
+        returnLightboxFocus();
+      });
+      listen(lightbox, 'keydown', function (e) {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          closeLightbox();
+          return;
+        }
+        if (e.key === 'Tab' && lightbox.classList.contains('product-lightbox--fallback')) {
+          trapLightboxFocus(e);
+        }
+      });
+    }
+    if (closeButton) {
+      listen(closeButton, 'click', function (e) {
+        if (e && e.preventDefault) e.preventDefault();
+        closeLightbox();
+      });
+    }
+    listen(zoomInButton, 'click', function () { setZoom(lightboxZoom + ZOOM_STEP); });
+    listen(zoomOutButton, 'click', function () { setZoom(lightboxZoom - ZOOM_STEP); });
+    listen(resetButton, 'click', function () { setZoom(ZOOM_MIN); });
+    listen(prevButton, 'click', function () { showImage(current - 1); });
+    listen(nextButton, 'click', function () { showImage(current + 1); });
+    if (lightboxStage) {
+      listen(lightboxStage, 'pointerdown', function (e) {
+        if (lightboxZoom <= ZOOM_MIN) return;
+        if (e.pointerType !== 'mouse' && e.pointerType !== 'pen') return;
+        if (e.button !== undefined && e.button !== 0) return;
+        panStart = {
+          id: e.pointerId,
+          x: e.clientX,
+          y: e.clientY,
+          left: lightboxStage.scrollLeft || 0,
+          top: lightboxStage.scrollTop || 0
+        };
+        if (lightboxStage.setPointerCapture) {
+          try { lightboxStage.setPointerCapture(e.pointerId); } catch (err) {}
+        }
+        lightboxStage.classList.add('is-panning');
+      });
+      listen(lightboxStage, 'pointermove', function (e) {
+        if (!panStart || e.pointerId !== panStart.id) return;
+        if (e.preventDefault) e.preventDefault();
+        lightboxStage.scrollLeft = panStart.left - (e.clientX - panStart.x);
+        lightboxStage.scrollTop = panStart.top - (e.clientY - panStart.y);
+      });
+      var endPan = function () {
+        panStart = null;
+        lightboxStage.classList.remove('is-panning');
+      };
+      listen(lightboxStage, 'pointerup', endPan);
+      listen(lightboxStage, 'pointercancel', endPan);
     }
     bindCardGalleries(page);
 

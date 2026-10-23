@@ -26,10 +26,10 @@ const expected = {
 
 const expectedImages = {
   'white-wolf': [
-    ['assets/img/white-wolf.png', '7d2c5911c574a9756c0fe070e98f9e7692cda02af87d93c3405c4aed42d58661'],
-    ['assets/img/white-wolf-2.jpg', '658d13e504722b53ebd2dc5a4d355dbd1d1e6e0a0ee9b0f3cdd0dea9884b815b'],
-    ['assets/img/white-wolf-3.jpg', '3cd9935387c0fa3841486169cd4186f4c686114128d80e7d54eddc0ab6d2aec6'],
-    ['assets/img/white-wolf-4.jpg', '5b3d31ede9d3d56b28522b2685baad215e3d60b73ac07c838d7b7740a377afc6']
+    ['assets/img/white-wolf.png', 'aa51c0bd4297c1b45aca27601a84d99a2a8e086f8340dd9184171ca655cf6fbf'],
+    ['assets/img/white-wolf-2.jpg', '55790672aca97a5df21a13528920a4cd12ba04104c926268d3e5793e16e20d1e'],
+    ['assets/img/white-wolf-3.jpg', 'c6e5dad0b763095312caa08a5b8095ea101a8f62124c30b1f34c85b21b17c2d3'],
+    ['assets/img/white-wolf-4.jpg', 'fb7e19a78636fe4c08fdb82bd73bab0a6506665c3f241a5dea2746549916d43f']
   ],
   'baby-tiger': [
     ['assets/img/baby-tiger.png', '3d804aeb9107c8d4bb5e7604a85708c1494d98bba33221371a1589641bffba25'],

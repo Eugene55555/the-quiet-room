@@ -1,6 +1,2547 @@
 /* The Quiet Room catalog — synced from the public BlackSea storefront */
 window.TQR_PRODUCTS = [
   {
+    "id": "crystal-winter-fawn",
+    "name": "Crystal Winter Fawn — Magical Ice Deer Digital PNG Art PNG PDF",
+    "cat": "Wildlife",
+    "img": "assets/img/crystal-winter-fawn-1.webp",
+    "images": [
+      "assets/img/crystal-winter-fawn-1.webp",
+      "assets/img/crystal-winter-fawn-2.webp",
+      "assets/img/crystal-winter-fawn-3.webp",
+      "assets/img/crystal-winter-fawn-4.webp",
+      "assets/img/crystal-winter-fawn-5.webp",
+      "assets/img/crystal-winter-fawn-6.webp"
+    ],
+    "formats": "PNG + PDF",
+    "price": 1.95,
+    "slug": "jeg",
+    "order": 1,
+    "summary": "Discover the enchanting beauty of winter with Crystal Winter Fawn, a magical digital artwork featuring an adorable…",
+    "description": [
+      {
+        "type": "h1",
+        "content": [
+          {
+            "t": "text",
+            "v": "Crystal Winter Fawn — Magical Ice Deer Digital PNG Art"
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "Product Description"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Discover the enchanting beauty of winter with "
+          },
+          {
+            "t": "strong",
+            "v": "Crystal Winter Fawn"
+          },
+          {
+            "t": "text",
+            "v": ", a magical digital artwork featuring an adorable baby deer surrounded by sparkling ice crystals, delicate snowflakes, and frosted evergreen branches."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "At the heart of this captivating design is a charming little fawn with magnificent sapphire-blue eyes, soft caramel-brown fur, delicate white spots, and beautifully detailed oversized ears. Its gentle expression captures the innocence, wonder, and peaceful magic of a winter fairytale."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Behind the little deer, magnificent translucent ice crystals rise like a frozen crown, reflecting soft silver and icy-blue highlights. Intricate snowflakes, frosted pine branches, and shimmering winter particles surround the fawn, creating a breathtaking composition inspired by the beauty of an enchanted winter forest."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "The combination of warm brown fur, brilliant blue eyes, crystalline textures, and delicate silver-white details creates a beautiful contrast between warmth and frost."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Every element is carefully arranged to capture the magical atmosphere of winter, making this artwork a charming addition to seasonal creative projects."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Perfect for those who love adorable woodland animals, winter fantasy, Christmas aesthetics, and beautifully detailed wildlife illustrations."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "✨ Design Highlights"
+          }
+        ]
+      },
+      {
+        "type": "ul",
+        "items": [
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Adorable baby deer"
+            },
+            {
+              "t": "text",
+              "v": " with mesmerizing sapphire-blue eyes."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Soft caramel-brown fur"
+            },
+            {
+              "t": "text",
+              "v": " with delicate white spots."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Magnificent ice crystals"
+            },
+            {
+              "t": "text",
+              "v": " forming an elegant frozen crown."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Intricate snowflakes"
+            },
+            {
+              "t": "text",
+              "v": " with beautiful crystalline details."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Frosted evergreen branches"
+            },
+            {
+              "t": "text",
+              "v": " adding natural winter charm."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Sparkling icy accents"
+            },
+            {
+              "t": "text",
+              "v": " creating a magical frozen atmosphere."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Elegant winter color palette"
+            },
+            {
+              "t": "text",
+              "v": " combining icy blue, silver, white, and warm caramel."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Fantasy-inspired wildlife illustration"
+            },
+            {
+              "t": "text",
+              "v": " with detailed textures and a dreamy seasonal aesthetic."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "👕 Suggested Applications"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "This digital artwork is suitable for preparing designs for:"
+          }
+        ]
+      },
+      {
+        "type": "ul",
+        "items": [
+          [
+            {
+              "t": "text",
+              "v": "Christmas and winter T-shirts."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Oversized graphic tees."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Hoodies and sweatshirts."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Winter-themed tote bags."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Holiday apparel collections."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Seasonal accessories."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Personalized gifts and decorative projects."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Other suitable printable products."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "The design can look especially striking on black, navy blue, charcoal gray, and other dark-colored garments, where the icy crystals and pale winter details create a beautiful contrast."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "📐 Digital File Specifications"
+          }
+        ]
+      },
+      {
+        "type": "ul",
+        "items": [
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Product Type:"
+            },
+            {
+              "t": "text",
+              "v": " Digital Download."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "File Format:"
+            },
+            {
+              "t": "text",
+              "v": " PNG."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Image Dimensions:"
+            },
+            {
+              "t": "text",
+              "v": " 4500 × 5786 pixels."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Resolution:"
+            },
+            {
+              "t": "text",
+              "v": " 300 DPI."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Background:"
+            },
+            {
+              "t": "text",
+              "v": " Transparent, if verified in the supplied PNG file."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Artwork Style:"
+            },
+            {
+              "t": "text",
+              "v": " Winter Fantasy, Wildlife Illustration, Christmas Art."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Main Colors:"
+            },
+            {
+              "t": "text",
+              "v": " Ice Blue, Silver, White, Caramel Brown."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Intended Use:"
+            },
+            {
+              "t": "text",
+              "v": " Preparing artwork for printing on apparel, accessories, and other suitable products."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "⚠️ IMPORTANT — DIGITAL PRODUCT ONLY"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "strong",
+            "v": "THIS LISTING IS FOR A DIGITAL FILE, NOT A PHYSICAL PRODUCT."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Please read carefully before purchasing."
+          }
+        ]
+      },
+      {
+        "type": "ul",
+        "items": [
+          [
+            {
+              "t": "text",
+              "v": "You are purchasing a digital artwork file only."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "No physical products will be shipped."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "T-shirts, hoodies, sweatshirts, tote bags, and other items are NOT included."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Any product mockups are for demonstration purposes only."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "The purchase does not include a finished or printed item."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "You will receive a digital design file for your creative printing projects."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "strong",
+            "v": "IMPORTANT: This is a DIGITAL DOWNLOAD ONLY. No physical merchandise will be delivered."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Please ensure the file is compatible with your preferred printing service before production."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "❄️ The Story Behind the Design"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Deep within an enchanted winter forest, where snowflakes sparkle like tiny diamonds and ancient trees shimmer beneath layers of frost, lives a little deer with extraordinary sapphire-blue eyes."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Surrounded by magnificent ice crystals and delicate evergreen branches, the young fawn discovers the mysterious beauty of its frozen kingdom."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Every snowflake carries a little magic, and every sparkling crystal reflects the peaceful wonder of winter."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "The gentle deer symbolizes innocence, hope, purity, and the quiet beauty of nature during the coldest season."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "em",
+            "v": "Crystal Winter Fawn"
+          },
+          {
+            "t": "text",
+            "v": " captures a magical moment where wildlife and winter fantasy come together in a beautiful artistic composition."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "strong",
+            "v": "Crystal Winter Fawn — Where Winter Magic Comes to Life."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "christmas-little-fawn",
+    "name": "Christmas Little Fawn — Magical Holiday Deer PNG Design PNG PDF",
+    "cat": "Wildlife",
+    "img": "assets/img/christmas-little-fawn-1.webp",
+    "images": [
+      "assets/img/christmas-little-fawn-1.webp",
+      "assets/img/christmas-little-fawn-2.webp",
+      "assets/img/christmas-little-fawn-3.webp",
+      "assets/img/christmas-little-fawn-4.webp"
+    ],
+    "formats": "PNG + PDF",
+    "price": 1.17,
+    "slug": "ech",
+    "order": 2,
+    "summary": "Bring the warmth and magic of Christmas to your creative projects with Christmas Little Fawn, an adorable…",
+    "description": [
+      {
+        "type": "h1",
+        "content": [
+          {
+            "t": "text",
+            "v": "Christmas Little Fawn — Magical Holiday Deer PNG Design"
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "Product Description"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Bring the warmth and magic of Christmas to your creative projects with "
+          },
+          {
+            "t": "strong",
+            "v": "Christmas Little Fawn"
+          },
+          {
+            "t": "text",
+            "v": ", an adorable holiday-themed digital artwork featuring a charming baby deer dressed in festive winter accessories."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "At the center of this delightful illustration sits a sweet little fawn with enormous sparkling brown eyes, soft caramel-colored fur, delicate white spots, and oversized velvety ears. Its gentle smile and innocent expression create a heartwarming character filled with Christmas charm."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "The little deer wears a cozy bright-red knitted scarf decorated with elegant golden snowflakes. A beautiful Christmas wreath made of evergreen branches, holly leaves, and vibrant red berries rests between its ears, adding a traditional festive touch."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Delicate white snowflakes, glowing golden stars, tiny Christmas ornaments, and magical sparkling particles surround the character, creating a joyful holiday atmosphere."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "The combination of warm caramel tones, festive red, forest green, and shimmering gold makes this design especially charming and visually appealing."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "This adorable Christmas illustration is perfect for anyone who loves woodland animals, cozy winter aesthetics, cute holiday characters, and festive creative designs."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "✨ Design Highlights"
+          }
+        ]
+      },
+      {
+        "type": "ul",
+        "items": [
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Adorable baby deer"
+            },
+            {
+              "t": "text",
+              "v": " with large expressive brown eyes and a sweet smile."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Soft caramel-colored fur"
+            },
+            {
+              "t": "text",
+              "v": " with delicate white spots."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Festive red scarf"
+            },
+            {
+              "t": "text",
+              "v": " decorated with golden snowflake patterns."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Beautiful Christmas wreath"
+            },
+            {
+              "t": "text",
+              "v": " featuring evergreen leaves and bright red berries."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Magical snowflakes and golden stars"
+            },
+            {
+              "t": "text",
+              "v": " surrounding the little fawn."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Traditional Christmas color palette"
+            },
+            {
+              "t": "text",
+              "v": " combining red, green, gold, cream, and warm brown."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Charming cartoon illustration"
+            },
+            {
+              "t": "text",
+              "v": " with clean outlines and delightful details."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Cute holiday aesthetic"
+            },
+            {
+              "t": "text",
+              "v": " suitable for Christmas-themed creative projects."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "👕 Suggested Applications"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "This digital design is ideal for preparing artwork for:"
+          }
+        ]
+      },
+      {
+        "type": "ul",
+        "items": [
+          [
+            {
+              "t": "text",
+              "v": "Christmas T-shirts and oversized graphic tees."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Holiday hoodies and sweatshirts."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Festive tote bags."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Christmas pajamas and seasonal clothing."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Holiday gift bags."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Personalized Christmas decorations."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Other suitable products that can be decorated with printed artwork."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "The design can look especially beautiful on black, white, cream, red, and dark-green garments."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Its bright festive colors and charming character make it a lovely choice for holiday-inspired fashion and creative projects."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "📐 Digital File Specifications"
+          }
+        ]
+      },
+      {
+        "type": "ul",
+        "items": [
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Product Type:"
+            },
+            {
+              "t": "text",
+              "v": " Digital Download."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "File Format:"
+            },
+            {
+              "t": "text",
+              "v": " PNG."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Image Dimensions:"
+            },
+            {
+              "t": "text",
+              "v": " 4500 × 5786 pixels."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Resolution:"
+            },
+            {
+              "t": "text",
+              "v": " 300 DPI."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Background:"
+            },
+            {
+              "t": "text",
+              "v": " Transparent, if verified in the supplied PNG file."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Design Theme:"
+            },
+            {
+              "t": "text",
+              "v": " Christmas, Baby Deer, Winter Holidays, Cute Woodland Animal."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Intended Use:"
+            },
+            {
+              "t": "text",
+              "v": " Preparing artwork for printing on apparel, accessories, and other suitable products."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "⚠️ IMPORTANT — DIGITAL DOWNLOAD ONLY"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "strong",
+            "v": "THIS IS A DIGITAL PRODUCT — NOT A PHYSICAL ITEM."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Please read carefully before purchasing:"
+          }
+        ]
+      },
+      {
+        "type": "ul",
+        "items": [
+          [
+            {
+              "t": "text",
+              "v": "You are purchasing a digital artwork file only."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "No physical products will be shipped."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "T-shirts, hoodies, sweatshirts, and other items shown in mockups are NOT included."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "The purchase does not include a printed or finished product."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "You will receive a digital PNG design for your creative printing projects."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Please verify compatibility with your preferred printing service before production."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "strong",
+            "v": "Please note: You are buying digital artwork, NOT clothing or any other physical merchandise."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "🎄 The Story Behind the Design"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Deep in a magical winter forest, where snowflakes dance among the evergreen trees, lives a tiny deer with a heart full of Christmas wonder."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Wearing its favorite red scarf and a festive wreath decorated with bright berries, the little fawn waits excitedly for the most magical night of the year."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Golden stars sparkle around it, delicate snowflakes drift through the air, and the entire forest seems to glow with holiday happiness."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "This sweet character represents innocence, kindness, warmth, and the joyful spirit of Christmas."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "em",
+            "v": "Christmas Little Fawn"
+          },
+          {
+            "t": "text",
+            "v": " captures the magic of childhood memories, cozy winter evenings, and the simple happiness of the holiday season."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "strong",
+            "v": "Christmas Little Fawn — A Little Magic, A Lot of Christmas Joy!"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "autumn-spirit",
+    "name": "Autumn Spirit — Elegant Fox Wildlife Art Print PDF PNG",
+    "cat": "Wildlife",
+    "img": "assets/img/autumn-spirit-1.webp",
+    "images": [
+      "assets/img/autumn-spirit-1.webp",
+      "assets/img/autumn-spirit-2.webp",
+      "assets/img/autumn-spirit-3.webp",
+      "assets/img/autumn-spirit-4.webp"
+    ],
+    "formats": "PNG + PDF",
+    "price": 1.56,
+    "slug": "ayb",
+    "order": 3,
+    "summary": "Bring the enchanting beauty of the autumn wilderness to your creative projects with Autumn Spirit, an artistic…",
+    "description": [
+      {
+        "type": "h1",
+        "content": [
+          {
+            "t": "text",
+            "v": "Autumn Spirit — Elegant Fox Wildlife Art Print"
+          }
+        ]
+      },
+      {
+        "type": "h3",
+        "content": [
+          {
+            "t": "text",
+            "v": "Product Description"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Bring the enchanting beauty of the autumn wilderness to your creative projects with "
+          },
+          {
+            "t": "strong",
+            "v": "Autumn Spirit"
+          },
+          {
+            "t": "text",
+            "v": ", an artistic wildlife illustration featuring a magnificent red fox surrounded by delicate botanical details."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "The fox is portrayed in a graceful seated pose, with its head turned to the side, alert golden eyes, and a luxurious copper-red coat. Its fluffy tail curves elegantly around its body, creating a flowing silhouette that adds movement and harmony to the composition."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Rich shades of burnt orange, copper, russet, cream, and deep brown blend beautifully throughout the artwork. Delicate botanical branches, golden leaves, fine fern details, and tiny autumn berries are intricately woven into the fox's fur, creating a sophisticated fusion of wildlife illustration and natural artistry."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "The darker decorative elements contrast with the warm reddish fur, emphasizing the fox's elegant shape and giving the design a mysterious woodland atmosphere."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "This artwork captures the spirit of autumn: warmth, independence, natural beauty, and the quiet magic of the forest. Its detailed textures and distinctive composition make it an excellent choice for animal lovers, nature-inspired fashion, and creative printing projects."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "✨ Design Features"
+          }
+        ]
+      },
+      {
+        "type": "ul",
+        "items": [
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Beautiful red fox illustration"
+            },
+            {
+              "t": "text",
+              "v": " with a graceful pose and expressive golden eyes."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Luxurious copper-red fur"
+            },
+            {
+              "t": "text",
+              "v": " with realistic textures and fine details."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Elegant botanical ornaments"
+            },
+            {
+              "t": "text",
+              "v": " featuring fern leaves, delicate branches, and autumn berries."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Warm autumn color palette"
+            },
+            {
+              "t": "text",
+              "v": " combining copper, rust, orange, cream, and deep brown."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Artistic composition"
+            },
+            {
+              "t": "text",
+              "v": " with a flowing, curved fox tail."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Nature-inspired aesthetic"
+            },
+            {
+              "t": "text",
+              "v": " combining wildlife art with botanical elements."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Distinctive visual style"
+            },
+            {
+              "t": "text",
+              "v": " suitable for original apparel and creative design projects."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "👕 Suggested Uses"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "This digital artwork is ideal for creating designs for:"
+          }
+        ]
+      },
+      {
+        "type": "ul",
+        "items": [
+          [
+            {
+              "t": "text",
+              "v": "T-shirts and oversized graphic tees."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Hoodies and sweatshirts."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Tote bags and fabric accessories."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Nature-inspired fashion collections."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Gifts for fox lovers and wildlife enthusiasts."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Posters, wall art, and other suitable printed products."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "The warm autumn colors can look especially striking on black, cream, beige, brown, and dark-green backgrounds."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "📐 Digital File Specifications"
+          }
+        ]
+      },
+      {
+        "type": "ul",
+        "items": [
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "File format:"
+            },
+            {
+              "t": "text",
+              "v": " PNG."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Image dimensions:"
+            },
+            {
+              "t": "text",
+              "v": " 4500 × 5786 pixels."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Resolution:"
+            },
+            {
+              "t": "text",
+              "v": " 300 DPI."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Artwork theme:"
+            },
+            {
+              "t": "text",
+              "v": " Red fox, autumn forest, botanical wildlife."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Intended use:"
+            },
+            {
+              "t": "text",
+              "v": " Printing on apparel and other suitable products."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "⚠️ IMPORTANT — DIGITAL DOWNLOAD ONLY"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "strong",
+            "v": "This listing is for a digital file, NOT a physical product."
+          }
+        ]
+      },
+      {
+        "type": "ul",
+        "items": [
+          [
+            {
+              "t": "text",
+              "v": "No physical items will be shipped."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "T-shirts, hoodies, tote bags, and other products shown in examples are not included."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "You will receive a digital artwork file for use in your creative printing projects."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Please check the compatibility of the file with your chosen printing service before production."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "strong",
+            "v": "Please note:"
+          },
+          {
+            "t": "text",
+            "v": " A transparent background is available only if the supplied PNG file contains a genuine alpha channel."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "🍂 The Inspiration Behind the Artwork"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "The red fox symbolizes cleverness, adaptability, independence, and the mysterious beauty of the wild."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Inspired by autumn forests, this artwork combines the fox's natural elegance with delicate botanical details and rich seasonal colors. The flowing tail and intricate foliage create a sense of movement, as if the spirit of the forest itself has taken the shape of this magnificent animal."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "strong",
+            "v": "Autumn Spirit — Where wild beauty meets autumn magic."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "arctic-phantom-iqc",
+    "name": "Arctic Phantom — Majestic Snow Leopard Wildlife Art PNG PDF",
+    "cat": "Wildlife",
+    "img": "assets/img/arctic-phantom-iqc-1.webp",
+    "images": [
+      "assets/img/arctic-phantom-iqc-1.webp",
+      "assets/img/arctic-phantom-iqc-2.webp",
+      "assets/img/arctic-phantom-iqc-3.webp",
+      "assets/img/arctic-phantom-iqc-4.webp"
+    ],
+    "formats": "PNG + PDF",
+    "price": 1.3,
+    "slug": "iqc",
+    "order": 4,
+    "summary": "Discover the breathtaking beauty of the wild with Arctic Phantom, a striking wildlife art print featuring a majestic…",
+    "description": [
+      {
+        "type": "h1",
+        "content": [
+          {
+            "t": "text",
+            "v": "Arctic Phantom — Majestic Snow Leopard Wildlife Art"
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "Product Description"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Discover the breathtaking beauty of the wild with "
+          },
+          {
+            "t": "strong",
+            "v": "Arctic Phantom"
+          },
+          {
+            "t": "text",
+            "v": ", a striking wildlife art print featuring a majestic snow leopard portrayed in extraordinary detail."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "The powerful feline gazes directly ahead with piercing ice-blue eyes that convey mystery, strength, and quiet confidence. Its luxurious silver-white fur is covered with distinctive charcoal-black rosettes and delicate markings, capturing the natural elegance of one of the world's most elusive wild cats."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Subtle icy-blue highlights shimmer across the thick fur, creating the impression of frozen crystals and glacial light. Fine whiskers, realistic fur textures, and carefully rendered facial features bring remarkable depth and lifelike character to the portrait."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "The monochromatic palette of silver, white, charcoal, and cool blue gives the artwork a sophisticated winter aesthetic. Frost-inspired accents and crystalline details enhance the atmosphere, making the snow leopard appear as though it has emerged from a mysterious frozen wilderness."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Combining realistic wildlife illustration with imaginative icy textures, this design celebrates the untamed spirit, resilience, and extraordinary beauty of nature."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "✨ Design Highlights"
+          }
+        ]
+      },
+      {
+        "type": "ul",
+        "items": [
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Majestic snow leopard portrait"
+            },
+            {
+              "t": "text",
+              "v": " with captivating ice-blue eyes."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Intricately detailed fur"
+            },
+            {
+              "t": "text",
+              "v": " featuring natural black rosettes and silver-white textures."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Frost-inspired accents"
+            },
+            {
+              "t": "text",
+              "v": " with delicate icy-blue highlights."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Powerful facial expression"
+            },
+            {
+              "t": "text",
+              "v": " conveying confidence, mystery, and independence."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Cool winter color palette"
+            },
+            {
+              "t": "text",
+              "v": " combining silver, white, charcoal, and glacial blue."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Wildlife realism"
+            },
+            {
+              "t": "text",
+              "v": " enhanced by artistic fantasy elements."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Distinctive composition"
+            },
+            {
+              "t": "text",
+              "v": " designed to stand out on apparel and creative printed products."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "👕 Suggested Applications"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "This digital artwork can be used to prepare designs for:"
+          }
+        ]
+      },
+      {
+        "type": "ul",
+        "items": [
+          [
+            {
+              "t": "text",
+              "v": "Oversized T-shirts and graphic tees."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Hoodies and sweatshirts."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Tote bags and fabric accessories."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Wildlife-inspired fashion collections."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Creative gifts for snow leopard and big-cat enthusiasts."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Other suitable products that can be decorated with printed artwork."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "The cool silver and icy-blue tones can look especially striking on black, charcoal, navy, and other dark-colored garments. White and light-gray fabrics can create a more subtle, elegant winter-inspired look."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "📐 Digital File Specifications"
+          }
+        ]
+      },
+      {
+        "type": "ul",
+        "items": [
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Product type:"
+            },
+            {
+              "t": "text",
+              "v": " Digital download."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "File format:"
+            },
+            {
+              "t": "text",
+              "v": " PNG."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Image dimensions:"
+            },
+            {
+              "t": "text",
+              "v": " 4500 × 5786 pixels."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Resolution:"
+            },
+            {
+              "t": "text",
+              "v": " 300 DPI."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Background:"
+            },
+            {
+              "t": "text",
+              "v": " Transparent, provided the supplied file contains a genuine alpha channel."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Intended use:"
+            },
+            {
+              "t": "text",
+              "v": " Preparing artwork for printing on apparel and accessories."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "⚠️ IMPORTANT — DIGITAL PRODUCT ONLY"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "strong",
+            "v": "This listing is for a digital file, NOT a physical product."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "No physical items will be shipped."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "T-shirts, hoodies, and other products shown as examples of how the artwork may be used are not included in the purchase."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "You are purchasing a digital artwork file that can be used to prepare your own printed products."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Please check the requirements of your chosen printing service before production to ensure compatibility with the file format, dimensions, and printing process."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "💎 The Inspiration Behind the Design"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "The snow leopard is a symbol of strength, independence, resilience, and quiet elegance."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Adapted to some of the world's harshest mountain environments, this remarkable animal embodies the beauty of survival and the power of nature. Its pale fur blends with snowy landscapes, while its piercing eyes reveal a spirit that remains untamed."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "em",
+            "v": "Arctic Phantom"
+          },
+          {
+            "t": "text",
+            "v": " captures this extraordinary presence through icy colors, intricate textures, and a powerful portrait that brings the mystery of the wilderness into artistic form."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "strong",
+            "v": "Arctic Phantom — Silent strength. Untamed beauty."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "arctic-phantom-xkw",
+    "name": "Arctic Phantom — Majestic Snow Leopard Wildlife Art PNG PDF",
+    "cat": "Wildlife",
+    "img": "assets/img/arctic-phantom-xkw-1.webp",
+    "images": [
+      "assets/img/arctic-phantom-xkw-1.webp",
+      "assets/img/arctic-phantom-xkw-2.webp",
+      "assets/img/arctic-phantom-xkw-3.webp"
+    ],
+    "formats": "PNG + PDF",
+    "price": 1.95,
+    "slug": "xkw",
+    "order": 5,
+    "summary": "Discover the breathtaking beauty of the wild with Arctic Phantom, a striking wildlife art print featuring a majestic…",
+    "description": [
+      {
+        "type": "h1",
+        "content": [
+          {
+            "t": "text",
+            "v": "Arctic Phantom — Majestic Snow Leopard Wildlife Art"
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "Product Description"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Discover the breathtaking beauty of the wild with "
+          },
+          {
+            "t": "strong",
+            "v": "Arctic Phantom"
+          },
+          {
+            "t": "text",
+            "v": ", a striking wildlife art print featuring a majestic snow leopard portrayed in extraordinary detail."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "The powerful feline gazes directly ahead with piercing ice-blue eyes that convey mystery, strength, and quiet confidence. Its luxurious silver-white fur is covered with distinctive charcoal-black rosettes and delicate markings, capturing the natural elegance of one of the world's most elusive wild cats."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Subtle icy-blue highlights shimmer across the thick fur, creating the impression of frozen crystals and glacial light. Fine whiskers, realistic fur textures, and carefully rendered facial features bring remarkable depth and lifelike character to the portrait."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "The monochromatic palette of silver, white, charcoal, and cool blue gives the artwork a sophisticated winter aesthetic. Frost-inspired accents and crystalline details enhance the atmosphere, making the snow leopard appear as though it has emerged from a mysterious frozen wilderness."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Combining realistic wildlife illustration with imaginative icy textures, this design celebrates the untamed spirit, resilience, and extraordinary beauty of nature."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "✨ Design Highlights"
+          }
+        ]
+      },
+      {
+        "type": "ul",
+        "items": [
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Majestic snow leopard portrait"
+            },
+            {
+              "t": "text",
+              "v": " with captivating ice-blue eyes."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Intricately detailed fur"
+            },
+            {
+              "t": "text",
+              "v": " featuring natural black rosettes and silver-white textures."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Frost-inspired accents"
+            },
+            {
+              "t": "text",
+              "v": " with delicate icy-blue highlights."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Powerful facial expression"
+            },
+            {
+              "t": "text",
+              "v": " conveying confidence, mystery, and independence."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Cool winter color palette"
+            },
+            {
+              "t": "text",
+              "v": " combining silver, white, charcoal, and glacial blue."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Wildlife realism"
+            },
+            {
+              "t": "text",
+              "v": " enhanced by artistic fantasy elements."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Distinctive composition"
+            },
+            {
+              "t": "text",
+              "v": " designed to stand out on apparel and creative printed products."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "👕 Suggested Applications"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "This digital artwork can be used to prepare designs for:"
+          }
+        ]
+      },
+      {
+        "type": "ul",
+        "items": [
+          [
+            {
+              "t": "text",
+              "v": "Oversized T-shirts and graphic tees."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Hoodies and sweatshirts."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Tote bags and fabric accessories."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Wildlife-inspired fashion collections."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Creative gifts for snow leopard and big-cat enthusiasts."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Other suitable products that can be decorated with printed artwork."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "The cool silver and icy-blue tones can look especially striking on black, charcoal, navy, and other dark-colored garments. White and light-gray fabrics can create a more subtle, elegant winter-inspired look."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "📐 Digital File Specifications"
+          }
+        ]
+      },
+      {
+        "type": "ul",
+        "items": [
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Product type:"
+            },
+            {
+              "t": "text",
+              "v": " Digital download."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "File format:"
+            },
+            {
+              "t": "text",
+              "v": " PNG."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Image dimensions:"
+            },
+            {
+              "t": "text",
+              "v": " 4500 × 5786 pixels."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Resolution:"
+            },
+            {
+              "t": "text",
+              "v": " 300 DPI."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Background:"
+            },
+            {
+              "t": "text",
+              "v": " Transparent, provided the supplied file contains a genuine alpha channel."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Intended use:"
+            },
+            {
+              "t": "text",
+              "v": " Preparing artwork for printing on apparel and accessories."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "⚠️ IMPORTANT — DIGITAL PRODUCT ONLY"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "strong",
+            "v": "This listing is for a digital file, NOT a physical product."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "No physical items will be shipped."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "T-shirts, hoodies, and other products shown as examples of how the artwork may be used are not included in the purchase."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "You are purchasing a digital artwork file that can be used to prepare your own printed products."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Please check the requirements of your chosen printing service before production to ensure compatibility with the file format, dimensions, and printing process."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "💎 The Inspiration Behind the Design"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "The snow leopard is a symbol of strength, independence, resilience, and quiet elegance."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Adapted to some of the world's harshest mountain environments, this remarkable animal embodies the beauty of survival and the power of nature. Its pale fur blends with snowy landscapes, while its piercing eyes reveal a spirit that remains untamed."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "em",
+            "v": "Arctic Phantom"
+          },
+          {
+            "t": "text",
+            "v": " captures this extraordinary presence through icy colors, intricate textures, and a powerful portrait that brings the mystery of the wilderness into artistic form."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "strong",
+            "v": "Arctic Phantom — Silent strength. Untamed beauty."
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "white-wolf",
     "name": "White Wolf Digital Art Print PNG PDF",
     "cat": "Wildlife",
@@ -14,7 +2555,7 @@ window.TQR_PRODUCTS = [
     "formats": "PNG + PDF",
     "price": 2.35,
     "slug": "rldr",
-    "order": 1,
+    "order": 6,
     "summary": "A majestic white wolf in an icy world of swirling frost and snow crystals.",
     "description": [
       {
@@ -393,7 +2934,7 @@ window.TQR_PRODUCTS = [
     "formats": "PNG + PDF",
     "price": 2.6,
     "slug": "lek",
-    "order": 2,
+    "order": 7,
     "summary": "A curious tiger cub surrounded by lush leaves, delicate flowers, and blue butterflies.",
     "description": [
       {
@@ -821,7 +3362,7 @@ window.TQR_PRODUCTS = [
     "formats": "PNG + PDF",
     "price": 1.3,
     "slug": "ksi",
-    "order": 3,
+    "order": 8,
     "summary": "A honey-gold cat with ornate jewelry and graceful butterflies in a dreamy scene.",
     "description": [
       {
@@ -1208,34 +3749,34 @@ window.TQR_PRODUCTS = [
   },
   {
     "id": "enchanted-rainbow-cat",
-    "name": "Enchanted Rainbow Cat — Whispers of Autumn PNG PDF",
+    "name": "Rainbow Autumn Cat — Magical Fantasy Cat Digital PNG Art PNG PDF",
     "cat": "Rainbow",
-    "img": "assets/img/enchanted-rainbow-cat.png",
+    "img": "assets/img/rainbow-autumn-cat-1.webp",
     "images": [
-      "assets/img/enchanted-rainbow-cat.png",
-      "assets/img/enchanted-rainbow-cat-2.jpg",
-      "assets/img/enchanted-rainbow-cat-3.jpg"
+      "assets/img/rainbow-autumn-cat-1.webp",
+      "assets/img/rainbow-autumn-cat-2.webp",
+      "assets/img/rainbow-autumn-cat-3.webp"
     ],
     "formats": "PNG + PDF",
     "price": 1.95,
     "slug": "oko",
-    "order": 4,
-    "summary": "A vivid, multicolored cat rests on a twisted branch in an enchanted autumn forest.",
+    "order": 9,
+    "summary": "Step into a magical world of vibrant colors and autumn enchantment with Rainbow Autumn Cat, a captivating digital…",
     "description": [
       {
         "type": "h1",
         "content": [
           {
             "t": "text",
-            "v": "Enchanted Rainbow Cat — Whispers of Autumn"
+            "v": "Rainbow Autumn Cat — Magical Fantasy Cat Digital PNG Art"
           }
         ]
       },
       {
-        "type": "p",
+        "type": "h2",
         "content": [
           {
-            "t": "strong",
+            "t": "text",
             "v": "Product Description"
           }
         ]
@@ -1245,50 +3786,77 @@ window.TQR_PRODUCTS = [
         "content": [
           {
             "t": "text",
-            "v": "Step into a magical autumn world with "
+            "v": "Step into a magical world of vibrant colors and autumn enchantment with "
           },
-          {
-            "t": "em",
-            "v": "Enchanted Rainbow Cat"
-          },
-          {
-            "t": "text",
-            "v": ", an extraordinary artistic print celebrating color, mystery, and the beauty of nature."
-          }
-        ]
-      },
-      {
-        "type": "p",
-        "content": [
-          {
-            "t": "text",
-            "v": "At the heart of this captivating design sits a magnificent long-haired cat with mesmerizing golden eyes and a luxurious coat flowing with vibrant shades of electric blue, violet, magenta, turquoise, emerald green, and fiery orange. The cat rests gracefully on a twisted, sculptural tree branch, surrounded by delicate autumn leaves and whimsical, curling branches."
-          }
-        ]
-      },
-      {
-        "type": "p",
-        "content": [
-          {
-            "t": "text",
-            "v": "Behind the cat, a glowing circular backdrop blends rich sunset pink, purple, and deep blue tones, creating a dreamy atmosphere reminiscent of an enchanted forest. Every detail — from the intricate wood textures and flowing fur to the floating leaves and luminous color accents — adds depth, movement, and personality to this unique artwork."
-          }
-        ]
-      },
-      {
-        "type": "p",
-        "content": [
-          {
-            "t": "text",
-            "v": "The combination of fantasy illustration, autumn aesthetics, and vivid rainbow colors makes this design a striking choice for anyone who loves expressive, imaginative art."
-          }
-        ]
-      },
-      {
-        "type": "p",
-        "content": [
           {
             "t": "strong",
+            "v": "Rainbow Autumn Cat"
+          },
+          {
+            "t": "text",
+            "v": ", a captivating digital artwork featuring a magnificent multicolored cat sitting gracefully on an ancient, beautifully twisted tree."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "At the center of this extraordinary composition is a fluffy, long-haired cat with mesmerizing golden-yellow eyes and luxurious fur shimmering in brilliant shades of violet, turquoise, sapphire blue, emerald green, pink, and warm orange."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Its expressive gaze and majestic posture create a mysterious yet charming character, combining the elegance of a feline with the magic of fantasy art."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Behind the cat, a glowing circular sunset blends rich crimson, magenta, purple, and deep blue tones, creating a dramatic contrast with the colorful fur."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "The ancient tree features intricate swirling branches and richly textured bark illuminated by vibrant purple, pink, and blue highlights. Delicate autumn leaves in shades of orange, red, copper, and burgundy float gracefully around the composition."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Every detail brings this enchanting artwork to life, creating a beautiful harmony between wildlife, fantasy, and the magical atmosphere of autumn."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "This distinctive illustration is perfect for cat lovers, fantasy art enthusiasts, and anyone who appreciates colorful, imaginative designs."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
             "v": "✨ Design Highlights"
           }
         ]
@@ -1299,43 +3867,381 @@ window.TQR_PRODUCTS = [
           [
             {
               "t": "text",
-              "v": "A stunning multicolored cat with golden eyes."
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Magnificent rainbow-colored cat"
+            },
+            {
+              "t": "text",
+              "v": " with expressive golden-yellow eyes."
             }
           ],
           [
             {
               "t": "text",
-              "v": "Intricate flowing fur with vibrant rainbow-inspired colors."
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Luxurious flowing fur"
+            },
+            {
+              "t": "text",
+              "v": " featuring violet, turquoise, pink, emerald, and sapphire tones."
             }
           ],
           [
             {
               "t": "text",
-              "v": "A beautifully twisted tree with detailed organic textures."
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Magical autumn sunset"
+            },
+            {
+              "t": "text",
+              "v": " with glowing crimson, purple, and blue gradients."
             }
           ],
           [
             {
               "t": "text",
-              "v": "Floating autumn leaves in warm seasonal shades."
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Ancient twisted tree"
+            },
+            {
+              "t": "text",
+              "v": " with intricate bark textures and decorative branches."
             }
           ],
           [
             {
               "t": "text",
-              "v": "A magical circular sunset backdrop."
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Floating autumn leaves"
+            },
+            {
+              "t": "text",
+              "v": " in warm orange, red, copper, and burgundy shades."
             }
           ],
           [
             {
               "t": "text",
-              "v": "Bold outlines and rich colors for a striking visual effect."
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Fantasy-inspired artistic style"
+            },
+            {
+              "t": "text",
+              "v": " with vivid colors and beautiful details."
             }
           ],
           [
             {
               "t": "text",
-              "v": "A fantasy-inspired composition with a playful yet mysterious mood."
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Eye-catching composition"
+            },
+            {
+              "t": "text",
+              "v": " combining magical nature and elegant animal illustration."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Rich contrasting colors"
+            },
+            {
+              "t": "text",
+              "v": " that can stand out beautifully on dark-colored apparel."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "👕 Suggested Applications"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "This digital artwork can be used to prepare designs for:"
+          }
+        ]
+      },
+      {
+        "type": "ul",
+        "items": [
+          [
+            {
+              "t": "text",
+              "v": "Oversized T-shirts and graphic tees."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Hoodies and sweatshirts."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Tote bags and fabric accessories."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Cat-themed fashion collections."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Posters and decorative wall art."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Creative gifts for cat lovers."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Other suitable printable products."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "The vibrant colors can look especially striking on black, charcoal, navy blue, white, and other neutral-colored garments."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "📐 Digital File Specifications"
+          }
+        ]
+      },
+      {
+        "type": "ul",
+        "items": [
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Product Type:"
+            },
+            {
+              "t": "text",
+              "v": " Digital Download."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "File Format:"
+            },
+            {
+              "t": "text",
+              "v": " PNG."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Image Dimensions:"
+            },
+            {
+              "t": "text",
+              "v": " 5000 × 5000 pixels."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Resolution:"
+            },
+            {
+              "t": "text",
+              "v": " 300 DPI."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Artwork Theme:"
+            },
+            {
+              "t": "text",
+              "v": " Fantasy Cat, Rainbow Animal, Magical Autumn, Enchanted Nature."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Color Palette:"
+            },
+            {
+              "t": "text",
+              "v": " Purple, Violet, Turquoise, Emerald Green, Pink, Orange, Crimson, and Sapphire Blue."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Background:"
+            },
+            {
+              "t": "text",
+              "v": " Transparent, if confirmed in the supplied PNG file."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "\n"
+            },
+            {
+              "t": "strong",
+              "v": "Intended Use:"
+            },
+            {
+              "t": "text",
+              "v": " Preparing artwork for printing on apparel, accessories, and other suitable products."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "⚠️ IMPORTANT — DIGITAL PRODUCT ONLY"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "strong",
+            "v": "THIS LISTING IS FOR A DIGITAL FILE, NOT A PHYSICAL PRODUCT."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Please read carefully before purchasing:"
+          }
+        ]
+      },
+      {
+        "type": "ul",
+        "items": [
+          [
+            {
+              "t": "text",
+              "v": "You are purchasing a digital artwork file only."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "No physical products will be shipped."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "T-shirts, hoodies, sweatshirts, tote bags, posters, and other physical products are NOT included."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Any product mockups are for demonstration purposes only."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "The purchase does not include a finished or printed item."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "You will receive a digital PNG artwork file for your creative printing projects."
             }
           ]
         ]
@@ -1345,7 +4251,7 @@ window.TQR_PRODUCTS = [
         "content": [
           {
             "t": "strong",
-            "v": "👕 Perfect For"
+            "v": "IMPORTANT: DIGITAL DOWNLOAD ONLY — NO PHYSICAL ITEMS WILL BE DELIVERED."
           }
         ]
       },
@@ -1354,16 +4260,16 @@ window.TQR_PRODUCTS = [
         "content": [
           {
             "t": "text",
-            "v": "This artwork is ideal for T-shirts, oversized T-shirts, hoodies, sweatshirts, tote bags, and other creative fashion products. Its vivid palette makes it especially eye-catching on black and other dark-colored garments."
+            "v": "Please check the file requirements of your chosen printing service before production."
           }
         ]
       },
       {
-        "type": "p",
+        "type": "h2",
         "content": [
           {
-            "t": "strong",
-            "v": "🎨 Style & Inspiration"
+            "t": "text",
+            "v": "🌈 The Inspiration Behind the Design"
           }
         ]
       },
@@ -1372,16 +4278,7 @@ window.TQR_PRODUCTS = [
         "content": [
           {
             "t": "text",
-            "v": "Fantasy Art • Rainbow Aesthetic • Whimsical Illustration • Autumn Magic • Colorful Animal Art • Mystical Nature • Artistic Streetwear"
-          }
-        ]
-      },
-      {
-        "type": "p",
-        "content": [
-          {
-            "t": "strong",
-            "v": "💫 The Story Behind the Design"
+            "v": "Deep within an enchanted autumn forest, where ancient trees glow with magical colors and golden leaves dance in the wind, lives an extraordinary rainbow cat."
           }
         ]
       },
@@ -1390,7 +4287,7 @@ window.TQR_PRODUCTS = [
         "content": [
           {
             "t": "text",
-            "v": "Somewhere between the last golden leaves of autumn and the first whispers of winter, a magical cat guards an enchanted tree. Its colorful fur reflects the hidden magic of the forest, while its golden eyes seem to hold ancient secrets. Surrounded by swirling branches and drifting leaves, this mysterious creature invites you into a world where imagination has no limits."
+            "v": "Its magnificent fur reflects every color of the changing seasons, while its bright golden eyes hold the secrets of a mysterious woodland world."
           }
         ]
       },
@@ -1398,8 +4295,8 @@ window.TQR_PRODUCTS = [
         "type": "p",
         "content": [
           {
-            "t": "strong",
-            "v": "Make your style magical. Wear a little wonder."
+            "t": "text",
+            "v": "Perched upon an ancient tree beneath a glowing autumn sunset, the magical feline watches the leaves drift through the air, surrounded by the beauty of nature and imagination."
           }
         ]
       },
@@ -1408,7 +4305,11 @@ window.TQR_PRODUCTS = [
         "content": [
           {
             "t": "em",
-            "v": "An expressive fantasy artwork created for those who love bold colors, mystical creatures, and designs that stand out from the ordinary."
+            "v": "Rainbow Autumn Cat"
+          },
+          {
+            "t": "text",
+            "v": " celebrates individuality, creativity, freedom, and the extraordinary magic hidden within the natural world."
           }
         ]
       },
@@ -1417,44 +4318,7 @@ window.TQR_PRODUCTS = [
         "content": [
           {
             "t": "strong",
-            "v": "Product Type:"
-          },
-          {
-            "t": "text",
-            "v": " Artistic Digital Print"
-          },
-          {
-            "t": "br"
-          },
-          {
-            "t": "strong",
-            "v": "Theme:"
-          },
-          {
-            "t": "text",
-            "v": " Fantasy Cat / Autumn / Magical Forest"
-          },
-          {
-            "t": "br"
-          },
-          {
-            "t": "strong",
-            "v": "Recommended Background:"
-          },
-          {
-            "t": "text",
-            "v": " Black or dark-colored apparel"
-          },
-          {
-            "t": "br"
-          },
-          {
-            "t": "strong",
-            "v": "Suggested Uses:"
-          },
-          {
-            "t": "text",
-            "v": " T-shirts, hoodies, sweatshirts, and accessories"
+            "v": "Rainbow Autumn Cat — Where Autumn Colors Meet Feline Magic."
           }
         ]
       }
@@ -1473,7 +4337,7 @@ window.TQR_PRODUCTS = [
     "formats": "PNG + PDF",
     "price": 2.2,
     "slug": "xmv",
-    "order": 5,
+    "order": 10,
     "summary": "A fluffy, multicolored cat rests on a twisted tree branch beneath a glowing sunset.",
     "description": [
       {

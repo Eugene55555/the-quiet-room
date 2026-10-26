@@ -8,28 +8,38 @@ const context = { window: {} };
 vm.runInNewContext(fs.readFileSync(require.resolve('../assets/data.js'), 'utf8'), context);
 const products = context.window.TQR_PRODUCTS;
 
-assert.equal(products.length, 5, 'catalog mirrors all five public BlackSea listings');
+assert.equal(products.length, 10, 'catalog mirrors all ten public BlackSea listings');
 assert.deepEqual(
   JSON.parse(JSON.stringify(products.map(product => product.name))),
   [
+    'Crystal Winter Fawn — Magical Ice Deer Digital PNG Art PNG PDF',
+    'Christmas Little Fawn — Magical Holiday Deer PNG Design PNG PDF',
+    'Autumn Spirit — Elegant Fox Wildlife Art Print PDF PNG',
+    'Arctic Phantom — Majestic Snow Leopard Wildlife Art PNG PDF',
+    'Arctic Phantom — Majestic Snow Leopard Wildlife Art PNG PDF',
     'White Wolf Digital Art Print PNG PDF',
     'Wild Blossom Tiger Cub — Enchanted Nature Digital Art Print PDF PNG',
     'Golden Butterfly Cat — Golden Elegance PNG PDF',
-    'Enchanted Rainbow Cat — Whispers of Autumn PNG PDF',
+    'Rainbow Autumn Cat — Magical Fantasy Cat Digital PNG Art PNG PDF',
     'Enchanted Sunset Cat — Magical Fantasy Art Print PNG PDF'
   ],
-  'all five display titles exactly match the BlackSea source order and punctuation'
+  'all ten display titles exactly match the BlackSea source order and punctuation'
 );
 assert.deepEqual(
   JSON.parse(JSON.stringify(products.map(({ id, slug, price }) => [id, slug, price]))),
   [
+    ['crystal-winter-fawn', 'jeg', 1.95],
+    ['christmas-little-fawn', 'ech', 1.17],
+    ['autumn-spirit', 'ayb', 1.56],
+    ['arctic-phantom-iqc', 'iqc', 1.30],
+    ['arctic-phantom-xkw', 'xkw', 1.95],
     ['white-wolf', 'rldr', 2.35],
     ['baby-tiger', 'lek', 2.60],
     ['golden-butterfly-cat', 'ksi', 1.30],
     ['enchanted-rainbow-cat', 'oko', 1.95],
     ['cat-tree-dreams', 'xmv', 2.20]
   ],
-  'catalog IDs, checkout slugs, order, and prices match the source storefront'
+  'catalog IDs, checkout slugs, source order, and prices match the storefront'
 );
 for (const product of products) {
   assert.ok(Array.isArray(product.description) && product.description.length > 0,
@@ -44,6 +54,6 @@ for (const product of products) {
 
 const homepage = fs.readFileSync(require.resolve('../index.html'), 'utf8');
 assert.equal((homepage.match(/value="Wildlife"/g) || []).length, 2,
-  'the new Wildlife product is available in desktop and mobile theme filters');
+  'Wildlife products remain available in desktop and mobile theme filters');
 
-process.stdout.write('PASS five source products, prices, and descriptions\n');
+process.stdout.write('PASS ten source products, prices, and descriptions\n');

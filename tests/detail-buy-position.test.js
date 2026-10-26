@@ -300,8 +300,17 @@ assert.ok(desktopGalleryRule, 'desktop gallery uses rows that can fit within the
 assert.match(desktopGalleryRule.body, /grid-template-rows\s*:\s*minmax\(0,\s*1fr\)\s+auto\s+auto/);
 const desktopTriggerRule = cssRulesList.find(rule => rule.selector === '.product-main-trigger' && /height\s*:\s*100%/.test(rule.body));
 assert.ok(desktopTriggerRule, 'desktop main image stage fills its responsive gallery row');
-assert.match(cssSource, /\.product-main-trigger\s+img\s*\{[^}]*max-height\s*:\s*100%[^}]*object-fit\s*:\s*contain/,
-  'large product images preserve their full aspect ratio inside the desktop stage');
+const relativeTriggerRule = cssRulesList.find(rule => rule.selector === '.product-main-trigger' && /position\s*:\s*relative/.test(rule.body));
+assert.ok(relativeTriggerRule, 'the fixed-size image stage anchors its contained image');
+const mainImageRules = cssRulesList.filter(rule => rule.selector === '.product-main-trigger img');
+assert.equal(mainImageRules.length, 1, 'all breakpoints share one non-cropping main-image rule');
+assert.match(mainImageRules[0].body, /position\s*:\s*absolute/,
+  'the image is removed from intrinsic sizing so it cannot enlarge or overflow the stage');
+assert.match(mainImageRules[0].body, /inset\s*:\s*0/);
+assert.match(mainImageRules[0].body, /width\s*:\s*100%/);
+assert.match(mainImageRules[0].body, /height\s*:\s*100%/);
+assert.match(mainImageRules[0].body, /object-fit\s*:\s*contain/,
+  'the full image is scaled inside the unchanged stage instead of being cropped');
 const thumbRule = cssRulesList.find(rule => rule.selector === '.product-thumb');
 const thumbImageRule = cssRulesList.find(rule => rule.selector === '.product-thumb img');
 const thumbsStripRule = cssRulesList.find(rule => rule.selector === '.product-thumbs');
@@ -344,7 +353,7 @@ for (const path of ['../index.html', '../product.html']) {
   const html = fs.readFileSync(require.resolve(path), 'utf8');
   assert.match(html, /assets\/data\.js\?v=25/, path + ' loads the cache-busted ten source titles');
   assert.match(html, /assets\/main\.js\?v=41/, path + ' loads the cache-busted relocated-button renderer');
-  assert.match(html, /assets\/style\.css\?v=40/, path + ' loads the cache-busted desktop layout CSS');
+  assert.match(html, /assets\/style\.css\?v=41/, path + ' loads the cache-busted full-fit product image CSS');
 }
 
 process.stdout.write('PASS all ten detail pages keep the Buy button below the sticky gallery and the full description in the right column, with checkout links and catalog cards unchanged\n');

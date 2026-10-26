@@ -400,10 +400,10 @@
       + '<div class="card-body">'
       + '<a class="card-title" href="product.html?id=' + esc(p.id) + '">' + esc(p.name) + '</a>'
       + (summary ? '<p class="card-desc">' + esc(summary) + '</p>' : '')
+      + '<div class="card-actions">'
       + '<div class="card-price-row">'
       + '<span class="price-sale">' + money(p.price) + '</span>'
       + '</div>'
-      + '<div class="card-actions">'
       + '<a class="card-btn" href="' + esc(buyURL(p, referrer)) + '" data-return-url="' + esc(referrer) + '">Buy now</a>'
       + '</div>'
       + '</div></article>';

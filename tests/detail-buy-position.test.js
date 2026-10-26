@@ -139,9 +139,9 @@ for (const product of products) {
   assert.ok(layoutOpen >= 0 && visualOpen > layoutOpen, product.id + ': detail has a gallery/action column');
   assert.ok(galleryOpen > visualOpen, product.id + ': gallery is the first block in the image column');
   assert.ok(infoOpen > visualOpen, product.id + ': product information follows the image column');
-  assert.ok(buyRowOpen > infoOpen, product.id + ': Buy row follows price and format details in the information column');
+  assert.ok(buyRowOpen > galleryOpen, product.id + ': Buy row follows the gallery thumbnails');
   assert.ok(buyAnchor > buyRowOpen, product.id + ': Buy link is inside the Buy row');
-  assert.ok(detailsOpen > buyRowOpen && relatedOpen > detailsOpen, product.id + ': description follows the Buy row and related products follow the layout');
+  assert.ok(detailsOpen > infoOpen && relatedOpen > detailsOpen, product.id + ': description follows product information and related products follow the layout');
 
   const galleryEnd = elementEnd(markup, galleryOpen);
   const visualEnd = elementEnd(markup, visualOpen);
@@ -149,11 +149,12 @@ for (const product of products) {
   const buyRowEnd = elementEnd(markup, buyRowOpen);
   const infoEnd = elementEnd(markup, infoOpen);
   assert.ok(galleryEnd > 0 && galleryEnd <= visualEnd && visualEnd <= infoOpen, product.id + ': gallery stays entirely in the left image column');
-  assert.ok(buyRowEnd > buyRowOpen && buyRowEnd <= detailsOpen, product.id + ': Buy row stays inside the right column before the description');
+  assert.ok(buyRowEnd > buyRowOpen && buyRowEnd <= visualEnd, product.id + ': Buy row stays in the sticky image column below the gallery');
+  assert.ok(visualEnd <= infoOpen, product.id + ': product information follows the complete sticky image and Buy column');
   assert.ok(infoEnd > detailsOpen && infoEnd <= layoutEnd, product.id + ': complete description stays inside the right information column');
   assert.ok(relatedOpen >= layoutEnd, product.id + ': related products follow the two-column product area');
-  assert.ok(markup.slice(infoOpen, buyRowOpen).includes('class="product-formats"'),
-    product.id + ': Buy button follows the format information');
+  assert.ok(markup.slice(infoOpen, detailsOpen).includes('class="product-formats"'),
+    product.id + ': price and format information stay in the reading column');
 
   assert.equal((markup.match(/class="product-buy"/g) || []).length, 1,
     product.id + ': exactly one primary Buy button renders');
@@ -288,8 +289,41 @@ assert.match(cssSource, /@media\s*\(min-width:\s*901px\)\s*\{[\s\S]*?\.product-l
   'desktop gives the information column more width than the gallery');
 assert.match(cssSource, /@media\s*\(min-width:\s*901px\)\s*\{[\s\S]*?\.product-visual\s*\{[^}]*position\s*:\s*sticky/,
   'desktop keeps the product gallery visible while reading long descriptions');
+const stickyVisualRule = cssRulesList.find(rule => rule.selector === '.product-visual' && /position\s*:\s*sticky/.test(rule.body));
+assert.ok(stickyVisualRule, 'desktop sticky column has a dedicated viewport-fit rule');
+assert.match(stickyVisualRule.body, /height\s*:\s*min\(800px\s*,\s*calc\(100svh\s*-\s*160px\)\)/,
+  'sticky gallery reserves the header, initial page offset and bottom breathing room');
+assert.match(stickyVisualRule.body, /grid-template-rows\s*:\s*minmax\(0,\s*1fr\)\s+auto/,
+  'the desktop image stage can shrink to keep thumbnails and Buy visible');
+const desktopGalleryRule = cssRulesList.find(rule => rule.selector === '.product-gallery' && /grid-template-rows/.test(rule.body));
+assert.ok(desktopGalleryRule, 'desktop gallery uses rows that can fit within the sticky viewport');
+assert.match(desktopGalleryRule.body, /grid-template-rows\s*:\s*minmax\(0,\s*1fr\)\s+auto\s+auto/);
+const desktopTriggerRule = cssRulesList.find(rule => rule.selector === '.product-main-trigger' && /height\s*:\s*100%/.test(rule.body));
+assert.ok(desktopTriggerRule, 'desktop main image stage fills its responsive gallery row');
 assert.match(cssSource, /\.product-main-trigger\s+img\s*\{[^}]*max-height\s*:\s*100%[^}]*object-fit\s*:\s*contain/,
   'large product images preserve their full aspect ratio inside the desktop stage');
+const thumbRule = cssRulesList.find(rule => rule.selector === '.product-thumb');
+const thumbImageRule = cssRulesList.find(rule => rule.selector === '.product-thumb img');
+const thumbsStripRule = cssRulesList.find(rule => rule.selector === '.product-thumbs');
+assert.match(thumbRule.body, /aspect-ratio\s*:\s*1\s*\/\s*1/,
+  'thumbnail buttons reserve a square crop instead of inheriting portrait image height');
+assert.match(thumbsStripRule.body, /max-width\s*:\s*420px/,
+  'large tablet widths do not inflate thumbnails beyond a compact strip');
+assert.match(thumbsStripRule.body, /margin-inline\s*:\s*auto/);
+assert.match(thumbsStripRule.body, /padding\s*:\s*4px/,
+  'scrollable strip leaves room around each keyboard-focus outline');
+assert.match(thumbsStripRule.body, /grid-template-rows\s*:\s*1fr/,
+  'all thumbnails stay in one row so extra images do not push Buy below short screens');
+assert.match(thumbsStripRule.body, /grid-auto-flow\s*:\s*column/,
+  'additional thumbnails extend horizontally instead of creating a second row');
+assert.match(thumbsStripRule.body, /grid-auto-columns\s*:\s*calc\(\(100%\s*-\s*24px\)\s*\/\s*4\)/,
+  'four square thumbnails fit in the visible strip at once');
+assert.match(thumbsStripRule.body, /overflow-x\s*:\s*auto/,
+  'extra thumbnails remain reachable in the horizontally scrollable strip');
+assert.match(thumbImageRule.body, /height\s*:\s*100%/);
+assert.match(thumbImageRule.body, /object-fit\s*:\s*cover/);
+assert.match(cssSource, /@media\s*\(max-width:\s*900px\)\s*\{[\s\S]*?\.product-main-trigger\s*\{[^}]*height\s*:\s*min\(34svh\s*,\s*420px\)/,
+  'small screens cap the image height while keeping the button under the gallery in normal flow');
 const buyLayoutRule = cssRulesList.find(rule => rule.selector === '.product-buy-row .product-buy');
 assert.ok(buyLayoutRule, 'detail Buy layout hook follows the relocated button');
 assert.match(buyLayoutRule.body, /flex\s*:\s*1\b/);
@@ -297,12 +331,20 @@ assert.doesNotMatch(cssSource, /\.product-buy[^{}]*\{[^}]*display\s*:\s*none/,
   'the primary Buy button is never hidden, including mobile layouts');
 assert.match(cssSource, /@media\s*\(max-width:\s*900px\)\s*\{[\s\S]*?\.product-layout\s*\{\s*grid-template-columns\s*:\s*1fr/,
   'mobile keeps a single-column product layout');
+assert.match(cssSource, /@media\s*\(max-width:\s*900px\)\s*\{[\s\S]*?\.product-visual\s*\{[^}]*flex-direction\s*:\s*column/,
+  'mobile stacks the image gallery above its Buy button');
+assert.match(cssSource, /@media\s*\(max-width:\s*640px\)\s*and\s*\(max-height:\s*520px\)\s*\{[\s\S]*?\.product-main-trigger\s*\{[^}]*height\s*:\s*min\(25svh\s*,\s*160px\)/,
+  'short phone screens reduce the image area enough to keep the gallery and Buy visible');
+assert.match(cssSource, /@media\s*\(min-width:\s*641px\)\s*and\s*\(max-width:\s*900px\)\s*and\s*\(max-height:\s*520px\)\s*\{[\s\S]*?\.product-layout\s*\{[^}]*grid-template-columns\s*:\s*minmax\(0,\s*\.8fr\)\s+minmax\(0,\s*1\.2fr\)[\s\S]*?\.product-visual\s*\{[^}]*position\s*:\s*sticky/,
+  'short tablet landscape screens use the two-column sticky layout');
+assert.match(cssSource, /@media\s*\(min-width:\s*641px\)\s*and\s*\(max-height:\s*520px\)\s*\{[\s\S]*?\.product-thumbs\s*\{[^}]*max-width\s*:\s*240px[\s\S]*?\.product-dots\s*\{\s*display\s*:\s*none/,
+  'short tablet and desktop windows compact thumbnails and hide redundant dots to preserve image height');
 
 for (const path of ['../index.html', '../product.html']) {
   const html = fs.readFileSync(require.resolve(path), 'utf8');
   assert.match(html, /assets\/data\.js\?v=25/, path + ' loads the cache-busted ten source titles');
-  assert.match(html, /assets\/main\.js\?v=40/, path + ' loads the cache-busted relocated-button renderer');
-  assert.match(html, /assets\/style\.css\?v=38/, path + ' loads the cache-busted desktop layout CSS');
+  assert.match(html, /assets\/main\.js\?v=41/, path + ' loads the cache-busted relocated-button renderer');
+  assert.match(html, /assets\/style\.css\?v=40/, path + ' loads the cache-busted desktop layout CSS');
 }
 
-process.stdout.write('PASS all ten detail pages place the Buy button and full description in the wider information column, with checkout links and catalog cards unchanged\n');
+process.stdout.write('PASS all ten detail pages keep the Buy button below the sticky gallery and the full description in the right column, with checkout links and catalog cards unchanged\n');

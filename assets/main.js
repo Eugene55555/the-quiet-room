@@ -626,6 +626,9 @@
       + dots
       + '<div class="product-thumbs" role="group" aria-label="Product images">' + thumbs + '</div>'
       + '</div>'
+      + '<div class="product-buy-row">'
+      + '<a class="product-buy" href="' + esc(buyURL(p, cardReferrer(p.id))) + '" data-return-url="' + esc(cardReferrer(p.id)) + '">Buy now — ' + money(p.price) + '</a>'
+      + '</div>'
       + '</div>'
       + '<div class="product-info">'
       + '<p class="product-cat">' + esc(p.cat) + '</p>'
@@ -634,9 +637,6 @@
       + '<span class="price-sale">' + money(p.price) + '</span>'
       + '</div>'
       + '<p class="product-formats">Formats: ' + esc(p.formats) + '</p>'
-      + '<div class="product-buy-row">'
-      + '<a class="product-buy" href="' + esc(buyURL(p, cardReferrer(p.id))) + '" data-return-url="' + esc(cardReferrer(p.id)) + '">Buy now — ' + money(p.price) + '</a>'
-      + '</div>'
       + '<section class="product-details">'
       + '<div class="product-desc">'
       + detailDescriptionHTML

@@ -265,8 +265,8 @@ for (const path of htmlFiles) {
   const html = fs.readFileSync(require.resolve(path), 'utf8');
   assert.doesNotMatch(html, /cart-fab|cart-drawer|cart-toggle|cart-clear|assets\/cart-(?:core|ui)\.js/);
   assert.match(html, /assets\/data\.js\?v=25/);
-  assert.match(html, /assets\/main\.js\?v=40/);
-  assert.match(html, /assets\/style\.css\?v=38/);
+  assert.match(html, /assets\/main\.js\?v=41/);
+  assert.match(html, /assets\/style\.css\?v=40/);
 }
 assert.doesNotMatch(mainSource, /TQR_CLOSE_CART|data-cart-add|cart-drawer|cart-toggle/);
 assert.doesNotMatch(cssSource, /cart-fab|cart-drawer|cart-count|cart-items|cart-clear|cart-checkout/);

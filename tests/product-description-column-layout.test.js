@@ -157,6 +157,7 @@ for (const product of products) {
   const layoutOpen = openingTag(markup, 'product-layout', 'div');
   const layoutEnd = elementEnd(markup, layoutOpen, 'div');
   const visualOpen = openingTag(markup, 'product-visual', 'div');
+  const visualEnd = elementEnd(markup, visualOpen, 'div');
   const infoOpen = openingTag(markup, 'product-info', 'div');
   const infoEnd = elementEnd(markup, infoOpen, 'div');
   const detailsOpen = openingTag(markup, 'product-details', 'section');
@@ -171,10 +172,10 @@ for (const product of products) {
   assert.ok(layoutOpen >= 0 && layoutEnd > layoutOpen, product.id + ': product layout renders');
   assert.ok(infoOpen > layoutOpen && infoEnd > infoOpen && infoEnd <= layoutEnd,
     product.id + ': information column stays inside the two-column product layout');
-  assert.ok(buyRowOpen > infoOpen && buyAnchor > buyRowOpen && buyRowEnd > buyRowOpen && buyRowEnd <= detailsOpen,
-    product.id + ': primary Buy button is in the right information column before the description');
-  assert.ok(detailsOpen >= buyRowEnd && detailsEnd > detailsOpen && detailsEnd <= infoEnd,
-    product.id + ': full product details are nested inside the right information column');
+  assert.ok(buyRowOpen > visualOpen && buyAnchor > buyRowOpen && buyRowEnd > buyRowOpen && buyRowEnd <= visualEnd,
+    product.id + ': primary Buy button follows the gallery in the sticky left column');
+  assert.ok(infoOpen > buyRowEnd && detailsOpen >= infoOpen && detailsEnd > detailsOpen && detailsEnd <= infoEnd,
+    product.id + ': full product details stay nested in the right information column');
   assert.ok(relatedOpen >= layoutEnd,
     product.id + ': related products follow the complete two-column product layout');
   assert.ok(descOpen > detailsOpen && descEnd <= detailsEnd && descEnd <= infoEnd,
@@ -204,8 +205,10 @@ for (const product of products) {
 
   const galleryOpen = openingTag(markup, 'product-gallery', 'div');
   const galleryEnd = elementEnd(markup, galleryOpen, 'div');
-  assert.ok(galleryOpen > visualOpen && galleryEnd < infoOpen,
-    product.id + ': gallery stays in the left image column, separate from the Buy row');
+  assert.ok(galleryOpen > visualOpen && galleryEnd <= buyRowOpen,
+    product.id + ': gallery thumbnails precede the Buy row');
+  assert.ok(buyRowOpen >= galleryEnd && buyRowEnd <= visualEnd,
+    product.id + ': Buy row stays in the sticky left column after the gallery');
 
   const thumbCount = (markup.match(/class="product-thumb(?: is-active)?"/g) || []).length;
   assert.equal(thumbCount, images.length,
@@ -234,8 +237,8 @@ assert.match(cssSource, /@media\s*\(max-width:\s*900px\)\s*\{[\s\S]*?\.product-l
 
 for (const [file, label] of [['../index.html', 'home'], ['../product.html', 'product']]) {
   const html = fs.readFileSync(require.resolve(file), 'utf8');
-  assert.match(html, /assets\/main\.js\?v=40/, label + ' loads the cache-busted right-column detail renderer');
-  assert.match(html, /assets\/style\.css\?v=38/, label + ' loads the cache-busted desktop layout CSS');
+  assert.match(html, /assets\/main\.js\?v=41/, label + ' loads the cache-busted right-column detail renderer');
+  assert.match(html, /assets\/style\.css\?v=40/, label + ' loads the cache-busted desktop layout CSS');
   assert.match(html, /assets\/data\.js\?v=25/, label + ' loads the updated catalog data');
 }
 

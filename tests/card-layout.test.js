@@ -78,6 +78,10 @@ assert.ok(buttonRule, 'catalog Buy button is styled');
 assert.match(buttonRule.body, /width\s*:\s*100%/);
 assert.match(buttonRule.body, /display\s*:\s*flex\b/);
 
+const cardPriceRule = findRule('.card-price-row .price-sale');
+requirement(cardPriceRule, /font-size\s*:\s*16px\b/i,
+  'homepage product prices use a larger, clearly legible size');
+
 for (const selector of ['.card-title', '.card-desc']) {
   const rule = findRule(selector);
   assert.ok(rule, selector + ' is styled');
@@ -184,7 +188,8 @@ for (const product of products) {
   const actions = bodyMarkup.indexOf('<div class="card-actions">');
   const button = bodyMarkup.indexOf('<a class="card-btn"');
   assert.ok(title >= 0 && title < desc, product.id + ' renders its title before its subtitle');
-  assert.ok(desc < price && price < actions, product.id + ' renders subtitle and price before its CTA row');
+  assert.ok(desc < actions && actions < price && price < button,
+    product.id + ' keeps the price inside the bottom CTA row directly above Buy');
   assert.ok(actions < button, product.id + ' keeps the Buy button inside the bottom CTA row');
   assert.ok(bodyMarkup.indexOf('</div>', button) > button, product.id + ' closes the CTA row after the Buy button');
 }

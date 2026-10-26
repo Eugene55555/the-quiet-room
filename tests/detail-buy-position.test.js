@@ -267,8 +267,8 @@ for (const match of catalogMarkup.matchAll(/<article class="card"[\s\S]*?<\/arti
   const actions = card.indexOf('<div class="card-actions">');
   const button = card.indexOf('<a class="card-btn"');
   const priceRow = card.indexOf('<div class="card-price-row">');
-  assert.ok(actions > priceRow && button > actions,
-    'catalog Buy button stays in the card actions after the card details');
+  assert.ok(actions >= 0 && priceRow > actions && button > priceRow,
+    'catalog price sits inside the bottom actions immediately above Buy');
 }
 
 function cssRules(source) {
@@ -301,8 +301,8 @@ assert.match(cssSource, /@media\s*\(max-width:\s*900px\)\s*\{[\s\S]*?\.product-l
 for (const path of ['../index.html', '../product.html']) {
   const html = fs.readFileSync(require.resolve(path), 'utf8');
   assert.match(html, /assets\/data\.js\?v=25/, path + ' loads the cache-busted ten source titles');
-  assert.match(html, /assets\/main\.js\?v=39/, path + ' loads the cache-busted relocated-button renderer');
-  assert.match(html, /assets\/style\.css\?v=37/, path + ' loads the cache-busted desktop layout CSS');
+  assert.match(html, /assets\/main\.js\?v=40/, path + ' loads the cache-busted relocated-button renderer');
+  assert.match(html, /assets\/style\.css\?v=38/, path + ' loads the cache-busted desktop layout CSS');
 }
 
 process.stdout.write('PASS all ten detail pages place the Buy button and full description in the wider information column, with checkout links and catalog cards unchanged\n');

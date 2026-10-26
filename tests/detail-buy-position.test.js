@@ -12,7 +12,7 @@ const cssSource = fs.readFileSync(require.resolve('../assets/style.css'), 'utf8'
 const dataContext = { window: {} };
 vm.runInNewContext(fs.readFileSync(require.resolve('../assets/data.js'), 'utf8'), dataContext);
 const products = dataContext.window.TQR_PRODUCTS;
-assert.equal(products.length, 5, 'the five live detail pages share the same renderer');
+assert.equal(products.length, 10, 'all ten live detail pages share the same renderer');
 
 function makeElement() {
   const classes = new Set();
@@ -184,10 +184,15 @@ for (const product of products) {
 }
 
 const expectedTitles = {
+  'crystal-winter-fawn': 'Crystal Winter Fawn — Magical Ice Deer Digital PNG Art PNG PDF',
+  'christmas-little-fawn': 'Christmas Little Fawn — Magical Holiday Deer PNG Design PNG PDF',
+  'autumn-spirit': 'Autumn Spirit — Elegant Fox Wildlife Art Print PDF PNG',
+  'arctic-phantom-iqc': 'Arctic Phantom — Majestic Snow Leopard Wildlife Art PNG PDF',
+  'arctic-phantom-xkw': 'Arctic Phantom — Majestic Snow Leopard Wildlife Art PNG PDF',
   'white-wolf': 'White Wolf Digital Art Print PNG PDF',
   'baby-tiger': 'Wild Blossom Tiger Cub — Enchanted Nature Digital Art Print PDF PNG',
   'golden-butterfly-cat': 'Golden Butterfly Cat — Golden Elegance PNG PDF',
-  'enchanted-rainbow-cat': 'Enchanted Rainbow Cat — Whispers of Autumn PNG PDF',
+  'enchanted-rainbow-cat': 'Rainbow Autumn Cat — Magical Fantasy Cat Digital PNG Art PNG PDF',
   'cat-tree-dreams': 'Enchanted Sunset Cat — Magical Fantasy Art Print PNG PDF'
 };
 for (const product of products) {
@@ -228,6 +233,7 @@ const catalogDocument = {
 catalogContext.window.location = new URL(siteRoot);
 catalogContext.window.history = { state: null, replaceState() {} };
 catalogContext.window.pageYOffset = 0;
+catalogContext.window.scrollTo = function () {};
 catalogContext.window.localStorage = { removeItem() {} };
 catalogContext.window.addEventListener = function () {};
 catalogContext.window.requestAnimationFrame = fn => fn();
@@ -237,9 +243,20 @@ vm.runInNewContext(mainSource, {
   URL, URLSearchParams, Date, Number, Math, Object, Array, String
 });
 catalogDocument.listeners.DOMContentLoaded();
-const catalogMarkup = catalogPage.innerHTML;
-assert.equal((catalogMarkup.match(/class="card-btn"/g) || []).length, 5,
-  'all five catalog cards keep their Buy buttons');
+const firstCatalogPage = catalogPage.innerHTML;
+assert.equal((firstCatalogPage.match(/<article class="card"[\s\S]*?<\/article>/g) || []).length, 8,
+  'the first catalog page renders eight cards');
+assert.equal(catalogCount.textContent, '10 products', 'catalog count includes products on later pages');
+const nextPage = catalogPagination.innerHTML.match(/<button\b[^>]*data-p="(\d+)"[^>]*aria-label="Next page"/);
+assert.ok(nextPage, 'catalog provides a next-page control');
+const nextButton = { getAttribute(name) { return name === 'data-p' ? nextPage[1] : null; } };
+catalogPagination.listeners.click({ target: { closest() { return nextButton; } } });
+const secondCatalogPage = catalogPage.innerHTML;
+assert.equal((secondCatalogPage.match(/<article class="card"[\s\S]*?<\/article>/g) || []).length, 2,
+  'the second catalog page renders the remaining two cards');
+const catalogMarkup = firstCatalogPage + secondCatalogPage;
+assert.equal((catalogMarkup.match(/class="card-btn"/g) || []).length, 10,
+  'all ten catalog cards across both pages keep their Buy buttons');
 for (const product of products) {
   const expectedTitle = expectedTitles[product.id];
   assert.ok(catalogMarkup.includes('class="card-title" href="product.html?id=' + product.id + '">' + expectedTitle + '</a>'),
@@ -283,9 +300,9 @@ assert.match(cssSource, /@media\s*\(max-width:\s*900px\)\s*\{[\s\S]*?\.product-l
 
 for (const path of ['../index.html', '../product.html']) {
   const html = fs.readFileSync(require.resolve(path), 'utf8');
-  assert.match(html, /assets\/data\.js\?v=24/, path + ' loads the cache-busted five source titles');
+  assert.match(html, /assets\/data\.js\?v=25/, path + ' loads the cache-busted ten source titles');
   assert.match(html, /assets\/main\.js\?v=39/, path + ' loads the cache-busted relocated-button renderer');
   assert.match(html, /assets\/style\.css\?v=37/, path + ' loads the cache-busted desktop layout CSS');
 }
 
-process.stdout.write('PASS all five detail pages place the Buy button and full description in the wider information column, with checkout links and catalog cards unchanged\n');
+process.stdout.write('PASS all ten detail pages place the Buy button and full description in the wider information column, with checkout links and catalog cards unchanged\n');

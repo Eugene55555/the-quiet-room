@@ -17,14 +17,50 @@ vm.runInNewContext(dataSource, dataContext);
 const products = dataContext.window.TQR_PRODUCTS;
 
 const expected = {
+  'crystal-winter-fawn': { h1: 1, h2: 6, p: 18, ul: 4, li: 30, strong: 20, em: 1, br: 0, h3: 0, ol: 0 },
+  'christmas-little-fawn': { h1: 1, h2: 6, p: 18, ul: 4, li: 28, strong: 19, em: 1, br: 0, h3: 0, ol: 0 },
+  'autumn-spirit': { h1: 1, h2: 5, h3: 1, p: 12, ul: 4, li: 22, strong: 16, em: 0, br: 0, ol: 0 },
+  'arctic-phantom-iqc': { h1: 1, h2: 6, p: 16, ul: 3, li: 19, strong: 16, em: 1, br: 0, h3: 0, ol: 0 },
+  'arctic-phantom-xkw': { h1: 1, h2: 6, p: 16, ul: 3, li: 19, strong: 16, em: 1, br: 0, h3: 0, ol: 0 },
   'white-wolf': { h1: 1, h2: 6, p: 14, ul: 3, li: 16, strong: 14, em: 2, br: 0, h3: 0, ol: 0 },
   'baby-tiger': { h1: 1, h2: 6, p: 16, ul: 3, li: 20, strong: 16, em: 2, br: 0, h3: 0, ol: 0 },
   'golden-butterfly-cat': { h1: 1, h2: 6, p: 19, ul: 2, li: 12, strong: 15, em: 1, br: 0, h3: 0, ol: 0 },
-  'enchanted-rainbow-cat': { h1: 1, h2: 0, p: 15, ul: 1, li: 7, strong: 10, em: 2, br: 3, h3: 0, ol: 0 },
+  'enchanted-rainbow-cat': { h1: 1, h2: 6, p: 18, ul: 4, li: 29, strong: 20, em: 1, br: 0, h3: 0, ol: 0 },
   'cat-tree-dreams': { h1: 1, h2: 6, p: 16, ul: 3, li: 18, strong: 15, em: 2, br: 0, h3: 0, ol: 0 }
 };
 
 const expectedImages = {
+  'crystal-winter-fawn': [
+    ['assets/img/crystal-winter-fawn-1.webp', '9f37f6ad0c82d62a8f80a3e0fa44305e7067bf7e9344dd2b9d54e39c2ec8a5e0'],
+    ['assets/img/crystal-winter-fawn-2.webp', '390a614f9f81392124939d2ad1ba12bcd38c3ec882eb8f89960b4009875ae8d3'],
+    ['assets/img/crystal-winter-fawn-3.webp', 'ca1d1602d6b0bbffdf3c4301a5a9b906a62c4acbb54a7be3a6df3ad79743dd64'],
+    ['assets/img/crystal-winter-fawn-4.webp', '9d0759d7d2b68aba67094fd270db88f33006f9b6c128cdcb3efa46feb9a5a809'],
+    ['assets/img/crystal-winter-fawn-5.webp', '805b61ad5c7a5abb9bd3b4cc9510eae1f9400684da29c6864552be3dc3a60a35'],
+    ['assets/img/crystal-winter-fawn-6.webp', 'd618a0bee0c21847451c739b9eba3e5af86e50ef569c309d6e78ceddb9c020a1']
+  ],
+  'christmas-little-fawn': [
+    ['assets/img/christmas-little-fawn-1.webp', 'a147e6f1042e0260e4200159a8bec3620366ac24ebeaa6454ffcaf4b09d780a2'],
+    ['assets/img/christmas-little-fawn-2.webp', '1cc10bcc130479a34ba289af3bd4b549fa241123f424ac8c93de65f0cb643c19'],
+    ['assets/img/christmas-little-fawn-3.webp', '27173815e9f41ff8b4fe8b602ac321fb582ce4a2da7cd0e222fda41d8851b182'],
+    ['assets/img/christmas-little-fawn-4.webp', '0e9df24f633cb910d8dbcf9f9895b4b402ddf7572720def547cb1ecf144025d2']
+  ],
+  'autumn-spirit': [
+    ['assets/img/autumn-spirit-1.webp', '42df222ebcff9005107f011fbfa929fefa01a120e24c3abe84702e20d7d4640f'],
+    ['assets/img/autumn-spirit-2.webp', 'd1558bca531cd46ca992a176a57c87fa079e740954ad5442eb8e0496e4c41921'],
+    ['assets/img/autumn-spirit-3.webp', '6ac91f3f907d3ae2c919e592d566df9dfd37e0438157a7143682bc7ebfdc444e'],
+    ['assets/img/autumn-spirit-4.webp', 'd98c0d487c32bddf237970d9b1577f794ec86ea5c11a71464b657b152d8f6707']
+  ],
+  'arctic-phantom-iqc': [
+    ['assets/img/arctic-phantom-iqc-1.webp', 'ac4e6ed7fe1cad8674eb6417b1d4a388716212654990981289e706a656182448'],
+    ['assets/img/arctic-phantom-iqc-2.webp', '2feeaf5ab9e922d438c055f569b762d9a1703701edaf53a4b5213bc706f5bae7'],
+    ['assets/img/arctic-phantom-iqc-3.webp', '703f90761cf9f7d89fd1f3d5c5766580121fdd44600ef00493867594e4074c40'],
+    ['assets/img/arctic-phantom-iqc-4.webp', 'fb43e55fb25458e1e731abc73ed947672a5ceeaef2c0902f8b4d930fe2e0081b']
+  ],
+  'arctic-phantom-xkw': [
+    ['assets/img/arctic-phantom-xkw-1.webp', 'edb178ddb2e83b590d1aaa9c0d3a3dada31f104baa18a8636e6de0648227faa6'],
+    ['assets/img/arctic-phantom-xkw-2.webp', 'b540636e9005adc6288d6e3e1445784b56fa7bbc3d105e3c15050adef228b4c1'],
+    ['assets/img/arctic-phantom-xkw-3.webp', 'b9d613645b43770f44641da17ec49185287ee1ee065db240d40be65417ee9388']
+  ],
   'white-wolf': [
     ['assets/img/white-wolf.png', 'aa51c0bd4297c1b45aca27601a84d99a2a8e086f8340dd9184171ca655cf6fbf'],
     ['assets/img/white-wolf-2.jpg', '55790672aca97a5df21a13528920a4cd12ba04104c926268d3e5793e16e20d1e'],
@@ -43,9 +79,9 @@ const expectedImages = {
     ['assets/img/golden-butterfly-cat-3.jpg', '0577bfeb48ccddb3cde4edc06b8056e50ca68e7da90093278ce1d2f50e360660']
   ],
   'enchanted-rainbow-cat': [
-    ['assets/img/enchanted-rainbow-cat.png', 'ae72581a5b47fd524931776a1f05b5bf6d535c1c436386f725b308c6bb1e6de0'],
-    ['assets/img/enchanted-rainbow-cat-2.jpg', 'ccb0dc10cf49f5cef2558fad13c537f69c130b158699af5fecde0458d69f5216'],
-    ['assets/img/enchanted-rainbow-cat-3.jpg', 'dff3d43e30e2e17bdb67447575dfd9432af95bca8358c4aa81c55b597e16393c']
+    ['assets/img/rainbow-autumn-cat-1.webp', '90d422eff842a0ab1d589cb02ecc1243f4c46f6c2447bcccf7600de15d6f6f94'],
+    ['assets/img/rainbow-autumn-cat-2.webp', '3d76c4a83a2bcc085abcd9dbe0266321dbd260893e216291bd97fa2c1da9002a'],
+    ['assets/img/rainbow-autumn-cat-3.webp', '0f94532d191c8648b630f03982232bd0334b2694a1ac014ab6e8d7a58950a47f']
   ],
   'cat-tree-dreams': [
     ['assets/img/cat-tree-dreams.jpg', 'ef03ec0a0fdb3cc9e7daedf6398fcfefaf428c7cf648e55d079755a1bed5438b'],
@@ -55,10 +91,15 @@ const expectedImages = {
 };
 
 const sourceSignals = {
+  'crystal-winter-fawn': ['✨ Design Highlights', '👕 Suggested Applications', '📐 Digital File Specifications', '⚠️ IMPORTANT — DIGITAL PRODUCT ONLY', '❄️ The Story Behind the Design', 'Crystal Winter Fawn — Where Winter Magic Comes to Life.'],
+  'christmas-little-fawn': ['✨ Design Highlights', '👕 Suggested Applications', '📐 Digital File Specifications', '⚠️ IMPORTANT — DIGITAL DOWNLOAD ONLY', '🎄 The Story Behind the Design', 'Christmas Little Fawn — A Little Magic, A Lot of Christmas Joy!'],
+  'autumn-spirit': ['✨ Design Features', '👕 Suggested Uses', '📐 Digital File Specifications', '⚠️ IMPORTANT — DIGITAL DOWNLOAD ONLY', '🍂 The Inspiration Behind the Artwork', 'Autumn Spirit — Where wild beauty meets autumn magic.'],
+  'arctic-phantom-iqc': ['✨ Design Highlights', '👕 Suggested Applications', '📐 Digital File Specifications', '⚠️ IMPORTANT — DIGITAL PRODUCT ONLY', '💎 The Inspiration Behind the Design', 'Arctic Phantom — Silent strength. Untamed beauty.'],
+  'arctic-phantom-xkw': ['✨ Design Highlights', '👕 Suggested Applications', '📐 Digital File Specifications', '⚠️ IMPORTANT — DIGITAL PRODUCT ONLY', '💎 The Inspiration Behind the Design', 'Arctic Phantom — Silent strength. Untamed beauty.'],
   'white-wolf': ['✨ Design Highlights', '👕 Suggested Applications', '📐 Digital File Specifications', '⚠️ IMPORTANT — DIGITAL PRODUCT ONLY', '💎 The Inspiration Behind the Design', 'Arctic Spirit — The untamed beauty of the wild.'],
   'baby-tiger': ['✨ Design Highlights', '👕 Suggested Applications', '📐 Digital File Specifications', '⚠️ IMPORTANT — DIGITAL PRODUCT ONLY', '💫 The Inspiration Behind the Design', 'Wild at heart. Beautiful by nature.'],
   'golden-butterfly-cat': ['✨ Design Highlights', '👕 Perfect For', '🎨 Art Style & Inspiration', '💫 The Story Behind the Design', 'Product Details', 'Ideal For: Cat lovers, fans of elegant aesthetics, golden accents, and distinctive artistic designs.'],
-  'enchanted-rainbow-cat': ['✨ Design Highlights', '👕 Perfect For', '🎨 Style & Inspiration', '💫 The Story Behind the Design', 'Make your style magical. Wear a little wonder.'],
+  'enchanted-rainbow-cat': ['✨ Design Highlights', '👕 Suggested Applications', '📐 Digital File Specifications', '⚠️ IMPORTANT — DIGITAL PRODUCT ONLY', '🌈 The Inspiration Behind the Design', 'Rainbow Autumn Cat — Where Autumn Colors Meet Feline Magic.'],
   'cat-tree-dreams': ['✨ Design Highlights', '👕 Suggested Applications', '📐 Digital File Specifications', '⚠️ IMPORTANT — DIGITAL PRODUCT ONLY', '💫 The Inspiration Behind the Design', 'A little magic. A world of color. An extraordinary spirit.']
 };
 
@@ -170,7 +211,7 @@ function counts(blocks) {
   return result;
 }
 
-assert.equal(products.length, 5, 'catalog has five source products');
+assert.equal(products.length, 10, 'catalog has ten source products');
 
 for (const product of products) {
   assert.ok(Array.isArray(product.description) && product.description.length > 0,
@@ -289,4 +330,4 @@ for (const selector of ['.product-desc h2', '.product-desc p', '.product-desc ul
   assert.ok(cssSource.includes(selector), 'detail description styles ' + selector);
 }
 
-process.stdout.write('PASS five detail pages render complete structured source descriptions safely\n');
+process.stdout.write('PASS ten detail pages render complete structured source descriptions safely\n');

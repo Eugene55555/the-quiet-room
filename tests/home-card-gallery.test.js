@@ -141,6 +141,7 @@ function render(type, list, href) {
     pageYOffset: 0,
     localStorage: { removeItem() {} },
     addEventListener() {},
+    scrollTo() {},
     requestAnimationFrame(fn) { fn(); }
   };
 
@@ -160,7 +161,10 @@ function render(type, list, href) {
 
   return {
     markup: type === 'catalog' ? elements.catalog.innerHTML : elements['product-page'].innerHTML,
-    galleries
+    galleries,
+    catalog: elements.catalog,
+    pagination: elements.pagination,
+    count: elements.count
   };
 }
 
@@ -218,19 +222,31 @@ function click(gallery) {
   return { prevented, stopped };
 }
 
-const expectedCounts = { 'white-wolf': 4, 'baby-tiger': 4, 'golden-butterfly-cat': 3, 'enchanted-rainbow-cat': 3, 'cat-tree-dreams': 3 };
+const expectedCounts = { 'crystal-winter-fawn': 6, 'christmas-little-fawn': 4, 'autumn-spirit': 4, 'arctic-phantom-iqc': 4, 'arctic-phantom-xkw': 3, 'white-wolf': 4, 'baby-tiger': 4, 'golden-butterfly-cat': 3, 'enchanted-rainbow-cat': 3, 'cat-tree-dreams': 3 };
 assert.deepEqual(Object.fromEntries(products.map(product => [product.id, imagesOf(product).length])), expectedCounts,
-  'home catalog covers all 17 source images: White Wolf 4, Tiger Cub 4, three remaining products by 3');
-assert.equal(products.reduce((sum, product) => sum + imagesOf(product).length, 0), 17);
+  'home catalog covers all 38 source images in source order');
+assert.equal(products.reduce((sum, product) => sum + imagesOf(product).length, 0), 38);
 
 const catalog = render('catalog', products, siteRoot);
-const cards = cardsFromMarkup(catalog.markup);
-assert.equal(cards.length, 5, 'all five home cards render');
-assert.equal((catalog.markup.match(/<img\b[^>]*class="card-slide/g) || []).length, 17,
-  'home cards render every source image, not only the cover');
+const firstPageCards = cardsFromMarkup(catalog.markup);
+assert.equal(firstPageCards.length, 8, 'first catalog page renders the eight-card page size');
+assert.equal((catalog.markup.match(/<img\b[^>]*class="card-slide/g) || []).length, 32,
+  'first catalog page renders all source images for its eight cards');
+assert.equal(catalog.count.textContent, '10 products', 'catalog count includes products on later pages');
+const nextPage = catalog.pagination.innerHTML.match(/<button\b[^>]*data-p="(\d+)"[^>]*aria-label="Next page"/);
+assert.ok(nextPage, 'catalog exposes a next-page control for the remaining products');
+const nextButton = { getAttribute(name) { return name === 'data-p' ? nextPage[1] : null; } };
+catalog.pagination.listeners.click({ target: { closest() { return nextButton; } } });
+const secondPageMarkup = catalog.catalog.innerHTML;
+const secondPageCards = cardsFromMarkup(secondPageMarkup);
+assert.equal(secondPageCards.length, 2, 'second catalog page renders the remaining two cards');
+assert.equal((secondPageMarkup.match(/<img\b[^>]*class="card-slide/g) || []).length, 6,
+  'second catalog page renders every image for the remaining cards');
+const allCards = new Map([...firstPageCards, ...secondPageCards].map(card => [card.id, card]));
+assert.equal(allCards.size, 10, 'pagination exposes all ten catalog cards');
 
 for (const product of products) {
-  const card = cards.find(item => item.id === product.id);
+  const card = allCards.get(product.id);
   assert.ok(card, product.id + ' home card renders');
   const images = imagesOf(product);
   const rendered = imagesIn(card.html);
@@ -298,12 +314,12 @@ assert.equal(firstGallery.media.getAttribute('data-gallery-index'), '0', 'a shor
 swipe(firstGallery, 10, -80, 4);
 assert.equal(firstGallery.media.getAttribute('data-gallery-index'), '0', 'vertical scrolling does not change the gallery');
 
-const singleProducts = products.concat([{
+const singleProduct = {
   id: 'single-image-card', name: 'Single Image Card', cat: 'Test', img: 'assets/img/single.png',
   slug: 'single', formats: 'PNG', price: 1, order: 99,
   summary: 'A single-frame card.'
-}]);
-const singleRender = render('catalog', singleProducts, siteRoot);
+};
+const singleRender = render('catalog', [singleProduct], siteRoot);
 const singleCard = cardsFromMarkup(singleRender.markup).find(card => card.id === 'single-image-card');
 assert.ok(singleCard, 'the fallback single-image card renders');
 assert.deepEqual(imagesIn(singleCard.html).map(image => image.src), ['assets/img/single.png'], 'a card without images falls back to product.img');

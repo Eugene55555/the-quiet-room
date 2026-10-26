@@ -55,6 +55,7 @@ function renderCatalog() {
     pageYOffset: 0,
     localStorage: { removeItem() {} },
     addEventListener() {},
+    scrollTo() {},
     requestAnimationFrame(fn) { fn(); }
   };
 
@@ -71,7 +72,7 @@ function renderCatalog() {
     String
   });
   document.listeners.DOMContentLoaded();
-  return elements.catalog.innerHTML;
+  return elements;
 }
 
 function esc(value) {
@@ -94,14 +95,26 @@ function blockText(block) {
   return block ? inlineText(block.content) : '';
 }
 
-const markup = renderCatalog();
+const catalogElements = renderCatalog();
+const firstPage = catalogElements.catalog.innerHTML;
+assert.equal((firstPage.match(/<article class="card"[\s\S]*?<\/article>/g) || []).length, 8,
+  'the first catalog page renders eight cards');
+assert.equal(catalogElements.count.textContent, '10 products', 'catalog count includes later-page products');
+const nextPage = catalogElements.pagination.innerHTML.match(/<button\b[^>]*data-p="(\d+)"[^>]*aria-label="Next page"/);
+assert.ok(nextPage, 'catalog exposes a next-page control');
+const nextButton = { getAttribute(name) { return name === 'data-p' ? nextPage[1] : null; } };
+catalogElements.pagination.listeners.click({ target: { closest() { return nextButton; } } });
+const secondPage = catalogElements.catalog.innerHTML;
+assert.equal((secondPage.match(/<article class="card"[\s\S]*?<\/article>/g) || []).length, 2,
+  'the second catalog page renders the remaining cards');
+const markup = firstPage + secondPage;
 const cards = {};
 for (const match of markup.matchAll(/<article class="card" id="product-card-([^"]+)">([\s\S]*?)<\/article>/g)) {
   cards[match[1]] = match[2];
 }
 
-assert.equal(products.length, 5, 'catalog has five source products');
-assert.equal(Object.keys(cards).length, 5, 'all five product cards render');
+assert.equal(products.length, 10, 'catalog has ten source products');
+assert.equal(Object.keys(cards).length, 10, 'all ten product cards render');
 
 for (const product of products) {
   assert.equal(typeof product.summary, 'string', product.id + ' has a summary');

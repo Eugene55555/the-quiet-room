@@ -238,7 +238,7 @@ assert.match(cssSource, /@media\s*\(max-width:\s*900px\)\s*\{[\s\S]*?\.product-l
 for (const [file, label] of [['../index.html', 'home'], ['../product.html', 'product']]) {
   const html = fs.readFileSync(require.resolve(file), 'utf8');
   assert.match(html, /assets\/main\.js\?v=41/, label + ' loads the cache-busted right-column detail renderer');
-  assert.match(html, /assets\/style\.css\?v=41/, label + ' loads the cache-busted responsive image-fit CSS');
+  assert.match(html, /assets\/style\.css\?v=42/, label + ' loads the cache-busted responsive image-fit CSS');
   assert.match(html, /assets\/data\.js\?v=25/, label + ' loads the updated catalog data');
 }
 

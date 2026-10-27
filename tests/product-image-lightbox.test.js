@@ -419,10 +419,10 @@ async function run() {
   assert.match(productHtml, /assets\/vendor\/photoswipe\/photoswipe\.css\?v=1/, 'product page loads the local PhotoSwipe stylesheet');
   assert.match(productHtml, /photoswipe\.umd\.min\.js\?v=1[\s\S]*photoswipe-lightbox\.umd\.min\.js\?v=1[\s\S]*assets\/main\.js\?v=41/,
     'product page loads the pinned PhotoSwipe UMD files before the site logic');
-  assert.match(productHtml, /assets\/style\.css\?v=41/, 'product page loads the full-fit image stylesheet');
+  assert.match(productHtml, /assets\/style\.css\?v=42/, 'product page loads the full-fit image stylesheet');
   const indexHtml = fs.readFileSync(require.resolve('../index.html'), 'utf8');
   assert.match(indexHtml, /assets\/main\.js\?v=41/, 'home page uses the cache-busted renderer');
-  assert.match(indexHtml, /assets\/style\.css\?v=41/, 'home page uses the latest stylesheet version');
+  assert.match(indexHtml, /assets\/style\.css\?v=42/, 'home page uses the latest stylesheet version');
   assert.doesNotMatch(indexHtml, /photoswipe/, 'the gallery library is only loaded on product pages');
 
   process.stdout.write('PASS product image gallery uses PhotoSwipe for zoom, navigation, and touch gestures\n');

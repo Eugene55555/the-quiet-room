@@ -162,7 +162,7 @@ for (const path of htmlFiles) {
   const html = fs.readFileSync(require.resolve(path), 'utf8');
   assert.match(html, /assets\/data\.js\?v=25/, path + ' loads the cache-busted ten source titles');
   assert.match(html, /assets\/main\.js\?v=41/, path + ' loads the cache-busted relocated-button renderer');
-  assert.match(html, /assets\/style\.css\?v=41/, path + ' loads the cache-busted site CSS');
+  assert.match(html, /assets\/style\.css\?v=42/, path + ' loads the cache-busted site CSS');
 }
 
 process.stdout.write('PASS both Buy CTA variants are bright wine-red, high-contrast, and visibly interactive; href, checkout return URL, labels, and prices are unchanged\n');

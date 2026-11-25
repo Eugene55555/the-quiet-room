@@ -11,7 +11,7 @@ const dataContext = { window: {} };
 vm.runInNewContext(fs.readFileSync(require.resolve('../assets/data.js'), 'utf8'), dataContext);
 const products = dataContext.window.TQR_PRODUCTS;
 
-assert.equal(products.length, 10, 'all ten product routes are covered');
+assert.equal(products.length, 11, 'all eleven product routes are covered');
 
 function makeElement() {
   return {
@@ -215,7 +215,7 @@ for (const product of products) {
     product.id + ': every source image is preserved in the gallery');
 }
 
-assert.equal(renderedImageTotal, 38, 'all 38 gallery images across the ten product routes are preserved');
+assert.equal(renderedImageTotal, 42, 'all 42 gallery images across the eleven product routes are preserved');
 
 const detailsRule = ruleBody('.product-details');
 assert.ok(detailsRule, 'the right-column detail section has a CSS rule');
@@ -239,7 +239,7 @@ for (const [file, label] of [['../index.html', 'home'], ['../product.html', 'pro
   const html = fs.readFileSync(require.resolve(file), 'utf8');
   assert.match(html, /assets\/main\.js\?v=41/, label + ' loads the cache-busted right-column detail renderer');
   assert.match(html, /assets\/style\.css\?v=42/, label + ' loads the cache-busted responsive image-fit CSS');
-  assert.match(html, /assets\/data\.js\?v=25/, label + ' loads the updated catalog data');
+  assert.match(html, /assets\/data\.js\?v=26/, label + ' loads the updated catalog data');
 }
 
-process.stdout.write('PASS product descriptions render in the information column with features, payment and checkout notes in order for all ten routes\n');
+process.stdout.write('PASS product descriptions render in the information column with features, payment and checkout notes in order for all eleven routes\n');

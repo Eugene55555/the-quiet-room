@@ -1,6 +1,540 @@
 /* The Quiet Room catalog — synced from the public BlackSea storefront */
 window.TQR_PRODUCTS = [
   {
+    "id": "golden-royal-panther",
+    "name": "Golden Royal Panther — Luxury Christmas Digital PNG PDF",
+    "cat": "Wildlife",
+    "img": "assets/img/golden-royal-panther-1.webp",
+    "images": [
+      "assets/img/golden-royal-panther-1.webp",
+      "assets/img/golden-royal-panther-2.webp",
+      "assets/img/golden-royal-panther-3.webp",
+      "assets/img/golden-royal-panther-4.webp"
+    ],
+    "formats": "PNG + PDF",
+    "price": 2.6,
+    "slug": "szb",
+    "order": 0,
+    "summary": "Discover the magic of Christmas luxury with Golden Royal Panther, an exquisite digital artwork featuring a majestic…",
+    "description": [
+      {
+        "type": "h1",
+        "content": [
+          {
+            "t": "text",
+            "v": "Golden Royal Panther — Luxury Christmas Digital PNG Art"
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "Product Description"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Discover the magic of Christmas luxury with "
+          },
+          {
+            "t": "strong",
+            "v": "Golden Royal Panther"
+          },
+          {
+            "t": "text",
+            "v": ", an exquisite digital artwork featuring a majestic black panther adorned with intricate golden ornaments and surrounded by a magnificent festive wreath."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "At the center of this luxurious composition stands a powerful black panther with captivating emerald-green eyes, a glossy midnight-black coat, and an elegant royal expression."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Intricate golden filigree patterns decorate the panther's body, enhanced by sparkling ruby-red gemstones and delicate jewelry-inspired details. An emerald-green velvet scarf with golden trim adds a sophisticated festive touch."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Behind the panther, a radiant golden celestial halo with sparkling stars creates an atmosphere of mystery, elegance, and magical Christmas wonder."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "The composition is beautifully framed by lush evergreen branches, golden holly leaves, vibrant red berries, delicate snowflakes, and ornate golden Christmas baubles. A luxurious ruby-red velvet bow completes the festive design."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "The combination of midnight black, radiant gold, emerald green, and ruby red creates a rich, eye-catching aesthetic that blends the beauty of wildlife with royal Christmas elegance."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "This distinctive fantasy-inspired artwork is perfect for animal lovers, luxury fashion enthusiasts, and anyone who appreciates sophisticated holiday designs."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "✨ Design Highlights"
+          }
+        ]
+      },
+      {
+        "type": "ul",
+        "items": [
+          [
+            {
+              "t": "strong",
+              "v": "Majestic black panther"
+            },
+            {
+              "t": "text",
+              "v": " with mesmerizing emerald-green eyes."
+            }
+          ],
+          [
+            {
+              "t": "strong",
+              "v": "Luxurious golden filigree"
+            },
+            {
+              "t": "text",
+              "v": " decorating the panther's powerful silhouette."
+            }
+          ],
+          [
+            {
+              "t": "strong",
+              "v": "Ruby-red gemstones"
+            },
+            {
+              "t": "text",
+              "v": " adding elegant royal accents."
+            }
+          ],
+          [
+            {
+              "t": "strong",
+              "v": "Emerald-green velvet scarf"
+            },
+            {
+              "t": "text",
+              "v": " with delicate golden edging."
+            }
+          ],
+          [
+            {
+              "t": "strong",
+              "v": "Radiant golden halo"
+            },
+            {
+              "t": "text",
+              "v": " surrounded by celestial stars."
+            }
+          ],
+          [
+            {
+              "t": "strong",
+              "v": "Festive evergreen wreath"
+            },
+            {
+              "t": "text",
+              "v": " with holly leaves and red berries."
+            }
+          ],
+          [
+            {
+              "t": "strong",
+              "v": "Intricate golden Christmas ornaments"
+            },
+            {
+              "t": "text",
+              "v": " and sparkling snowflakes."
+            }
+          ],
+          [
+            {
+              "t": "strong",
+              "v": "Luxurious red velvet bow"
+            },
+            {
+              "t": "text",
+              "v": " with golden details."
+            }
+          ],
+          [
+            {
+              "t": "strong",
+              "v": "Premium color palette"
+            },
+            {
+              "t": "text",
+              "v": " combining black, gold, emerald green, and ruby red."
+            }
+          ],
+          [
+            {
+              "t": "strong",
+              "v": "Detailed fantasy wildlife illustration"
+            },
+            {
+              "t": "text",
+              "v": " with an elegant Christmas atmosphere."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "👕 Suggested Applications"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "This digital artwork can be used to prepare designs for:"
+          }
+        ]
+      },
+      {
+        "type": "ul",
+        "items": [
+          [
+            {
+              "t": "text",
+              "v": "Christmas T-shirts and oversized graphic tees."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Hoodies and sweatshirts."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Tote bags and fashion accessories."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Festive clothing collections."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Decorative posters and wall art."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Personalized Christmas gifts."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Other suitable printable products."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "The design can look especially striking on black, white, cream, emerald-green, and burgundy-colored garments."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "📐 Digital File Specifications"
+          }
+        ]
+      },
+      {
+        "type": "ul",
+        "items": [
+          [
+            {
+              "t": "strong",
+              "v": "Product Type:"
+            },
+            {
+              "t": "text",
+              "v": " Digital Download Only"
+            }
+          ],
+          [
+            {
+              "t": "strong",
+              "v": "File Format:"
+            },
+            {
+              "t": "text",
+              "v": " PNG"
+            }
+          ],
+          [
+            {
+              "t": "strong",
+              "v": "Image Dimensions:"
+            },
+            {
+              "t": "text",
+              "v": " 4500 × 5786 pixels"
+            }
+          ],
+          [
+            {
+              "t": "strong",
+              "v": "Resolution:"
+            },
+            {
+              "t": "text",
+              "v": " 300 DPI"
+            }
+          ],
+          [
+            {
+              "t": "strong",
+              "v": "Background:"
+            },
+            {
+              "t": "text",
+              "v": " Transparent, if confirmed in the supplied PNG file"
+            }
+          ],
+          [
+            {
+              "t": "strong",
+              "v": "Artwork Theme:"
+            },
+            {
+              "t": "text",
+              "v": " Luxury Christmas, Royal Panther, Golden Wildlife, Festive Fantasy"
+            }
+          ],
+          [
+            {
+              "t": "strong",
+              "v": "Color Palette:"
+            },
+            {
+              "t": "text",
+              "v": " Midnight Black, Metallic Gold, Emerald Green, Ruby Red"
+            }
+          ],
+          [
+            {
+              "t": "strong",
+              "v": "Intended Use:"
+            },
+            {
+              "t": "text",
+              "v": " Preparing artwork for printing on apparel, accessories, and other suitable products"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "⚠️ IMPORTANT — DIGITAL PRODUCT ONLY"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "strong",
+            "v": "THIS LISTING IS FOR A DIGITAL FILE, NOT A PHYSICAL PRODUCT."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Please read carefully before purchasing:"
+          }
+        ]
+      },
+      {
+        "type": "ul",
+        "items": [
+          [
+            {
+              "t": "text",
+              "v": "You are purchasing a digital PNG artwork file only."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "No physical products will be shipped."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "T-shirts, hoodies, sweatshirts, tote bags, posters, and other physical merchandise are NOT included."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Any product mockups are for demonstration purposes only."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "The purchase does not include a finished or printed item."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "You will receive a digital artwork file for your creative printing projects."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "strong",
+            "v": "IMPORTANT: DIGITAL DOWNLOAD ONLY — NO PHYSICAL ITEMS WILL BE DELIVERED."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Please ensure the file is compatible with your preferred printing service before production."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "💎 The Inspiration Behind the Design"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "In a magical kingdom illuminated by golden Christmas stars, a magnificent black panther stands as a symbol of strength, confidence, and royal elegance."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Its emerald eyes reflect the mystery of the winter night, while elaborate golden ornaments shimmer across its powerful body."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Surrounded by festive evergreen branches, sparkling decorations, and celestial golden light, the panther embodies the perfect combination of wild beauty and luxurious holiday magic."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "em",
+            "v": "Golden Royal Panther"
+          },
+          {
+            "t": "text",
+            "v": " celebrates individuality, power, sophistication, and the enchanting spirit of Christmas."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "strong",
+            "v": "Golden Royal Panther — Where Wild Power Meets Christmas Luxury."
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "crystal-winter-fawn",
     "name": "Crystal Winter Fawn — Magical Ice Deer Digital PNG Art PNG PDF",
     "cat": "Wildlife",
@@ -3366,11 +3900,11 @@ window.TQR_PRODUCTS = [
     "summary": "A honey-gold cat with ornate jewelry and graceful butterflies in a dreamy scene.",
     "description": [
       {
-        "type": "h1",
+        "type": "p",
         "content": [
           {
             "t": "text",
-            "v": "Golden Butterfly Cat — Golden Elegance"
+            "v": ".Golden Butterfly Cat — Luxury Cat Digital PNG Art"
           }
         ]
       },
@@ -3388,15 +3922,15 @@ window.TQR_PRODUCTS = [
         "content": [
           {
             "t": "text",
-            "v": "Discover a world of elegance, magic, and delicate beauty with "
+            "v": "Discover the enchanting beauty of "
           },
           {
-            "t": "em",
+            "t": "strong",
             "v": "Golden Butterfly Cat"
           },
           {
             "t": "text",
-            "v": " — an enchanting artistic print that combines a luxurious fluffy cat, exquisite golden jewelry, and graceful butterflies in a dreamy, fairytale-inspired composition."
+            "v": ", an elegant digital artwork featuring a magnificent fluffy golden cat surrounded by delicate butterflies, sparkling golden particles, and luxurious jewelry-inspired details."
           }
         ]
       },
@@ -3405,7 +3939,7 @@ window.TQR_PRODUCTS = [
         "content": [
           {
             "t": "text",
-            "v": "At the center of this artwork sits a magnificent long-haired cat with a beautiful honey-golden coat. Its soft, voluminous fur blends warm cream, caramel, and amber tones, while its large golden eyes create a captivating and expressive look. With one paw gracefully raised, the cat appears to welcome the magical butterflies floating around it."
+            "v": "At the center of the composition sits a beautiful long-haired cat with soft golden-cream fur, expressive amber eyes, and a charming, graceful expression. Its silky coat is rendered with delicate details, creating a luxurious and realistic appearance."
           }
         ]
       },
@@ -3414,7 +3948,7 @@ window.TQR_PRODUCTS = [
         "content": [
           {
             "t": "text",
-            "v": "Delicate golden chains, decorative pendants, and intricate ornamental details adorn the cat's chest and paws, adding a touch of royal sophistication. Elegant cream-colored butterflies with fine golden patterns on their wings surround the feline, while sparkling golden particles create a magical atmosphere filled with warmth and light."
+            "v": "The cat gently raises one paw as if reaching toward the beautiful butterflies fluttering around it. Delicate ivory-and-gold butterflies add a magical sense of movement, while shimmering golden particles create a dreamy and sophisticated atmosphere."
           }
         ]
       },
@@ -3423,7 +3957,25 @@ window.TQR_PRODUCTS = [
         "content": [
           {
             "t": "text",
-            "v": "The beauty of this design lies in the combination of realistic fur textures, refined decorative elements, and a soft golden color palette. The result is an artwork that feels luxurious, gentle, and expressive without being overly bold."
+            "v": "Elegant golden chains, sparkling pendants, and intricate ornamental jewelry decorate the cat's neck and paws, giving the artwork a distinctive royal aesthetic."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "The combination of warm champagne, soft cream, ivory, and radiant gold creates a harmonious and luxurious color palette."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "This artwork beautifully combines the natural charm of cats with refined fantasy elements, making it perfect for cat lovers, elegant fashion designs, and creative printing projects."
           }
         ]
       },
@@ -3442,71 +3994,81 @@ window.TQR_PRODUCTS = [
           [
             {
               "t": "strong",
-              "v": "Luxurious fluffy cat"
+              "v": "Beautiful fluffy golden cat"
             },
             {
               "t": "text",
-              "v": " with mesmerizing amber-gold eyes."
+              "v": " with expressive amber eyes."
             }
           ],
           [
             {
               "t": "strong",
-              "v": "Elegant golden color palette"
+              "v": "Luxurious long fur"
             },
             {
               "t": "text",
-              "v": " featuring champagne, caramel, cream, and honey tones."
+              "v": " featuring soft cream, honey, and champagne tones."
             }
           ],
           [
             {
               "t": "strong",
-              "v": "Exquisite jewelry details"
+              "v": "Elegant golden jewelry"
             },
             {
               "t": "text",
-              "v": ", including delicate chains and decorative pendants."
+              "v": " with delicate chains, pendants, and ornamental details."
             }
           ],
           [
             {
               "t": "strong",
-              "v": "Graceful butterflies"
+              "v": "Delicate ivory-and-gold butterflies"
             },
             {
               "t": "text",
-              "v": " with intricate golden patterns on their wings."
+              "v": " surrounding the cat."
             }
           ],
           [
             {
               "t": "strong",
-              "v": "Magical sparkling accents"
+              "v": "Magical golden sparkles"
             },
             {
               "t": "text",
-              "v": " that create a soft, luminous effect."
+              "v": " adding light and elegance."
             }
           ],
           [
             {
               "t": "strong",
-              "v": "Quiet luxury aesthetic"
+              "v": "Charming raised paw"
             },
             {
               "t": "text",
-              "v": " combining elegance, softness, and sophistication."
+              "v": " creating a playful and graceful pose."
             }
           ],
           [
             {
               "t": "strong",
-              "v": "Versatile artistic composition"
+              "v": "Sophisticated color palette"
             },
             {
               "t": "text",
-              "v": " suitable for fashion and accessories."
+              "v": " combining gold, ivory, cream, and warm beige."
+            }
+          ],
+          [
+            {
+              "t": "strong",
+              "v": "Detailed fantasy-inspired illustration"
+            },
+            {
+              "t": "text",
+              "v": " blending realism with luxurious decorative elements."
             }
           ]
         ]
@@ -3516,7 +4078,7 @@ window.TQR_PRODUCTS = [
         "content": [
           {
             "t": "text",
-            "v": "👕 Perfect For"
+            "v": "👕 Suggested Applications"
           }
         ]
       },
@@ -3525,7 +4087,7 @@ window.TQR_PRODUCTS = [
         "content": [
           {
             "t": "text",
-            "v": "This artwork is ideal for creating distinctive fashion pieces and accessories, including:"
+            "v": "This digital artwork is suitable for preparing designs for:"
           }
         ]
       },
@@ -3535,7 +4097,7 @@ window.TQR_PRODUCTS = [
           [
             {
               "t": "text",
-              "v": "Oversized T-shirts and classic graphic tees."
+              "v": "T-shirts and oversized graphic tees."
             }
           ],
           [
@@ -3547,19 +4109,31 @@ window.TQR_PRODUCTS = [
           [
             {
               "t": "text",
-              "v": "Women's casual and statement apparel."
-            }
-          ],
-          [
-            {
-              "t": "text",
               "v": "Tote bags and fabric accessories."
             }
           ],
           [
             {
               "t": "text",
-              "v": "Unique gifts for cat lovers and admirers of elegant artwork."
+              "v": "Fashion collections featuring animal artwork."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Personalized gifts for cat lovers."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Posters and decorative prints."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Other suitable printable products."
             }
           ]
         ]
@@ -3569,7 +4143,7 @@ window.TQR_PRODUCTS = [
         "content": [
           {
             "t": "text",
-            "v": "The design looks especially beautiful on black, white, ivory, cream, and beige garments. On dark fabrics, the golden details stand out with a luxurious contrast, while on light-colored fabrics, the artwork creates a soft, delicate, and airy appearance."
+            "v": "The golden and cream tones can look especially beautiful on black, white, beige, brown, and other neutral-colored garments."
           }
         ]
       },
@@ -3578,7 +4152,110 @@ window.TQR_PRODUCTS = [
         "content": [
           {
             "t": "text",
-            "v": "🎨 Art Style & Inspiration"
+            "v": "📐 Digital File Specifications"
+          }
+        ]
+      },
+      {
+        "type": "ul",
+        "items": [
+          [
+            {
+              "t": "strong",
+              "v": "Product Type:"
+            },
+            {
+              "t": "text",
+              "v": " Digital Download."
+            }
+          ],
+          [
+            {
+              "t": "strong",
+              "v": "File Format:"
+            },
+            {
+              "t": "text",
+              "v": " PNG."
+            }
+          ],
+          [
+            {
+              "t": "strong",
+              "v": "Image Dimensions:"
+            },
+            {
+              "t": "text",
+              "v": " 5000 × 5000 pixels."
+            }
+          ],
+          [
+            {
+              "t": "strong",
+              "v": "Resolution:"
+            },
+            {
+              "t": "text",
+              "v": " 300 DPI."
+            }
+          ],
+          [
+            {
+              "t": "strong",
+              "v": "Artwork Theme:"
+            },
+            {
+              "t": "text",
+              "v": " Luxury Cat, Golden Butterflies, Elegant Animal Art."
+            }
+          ],
+          [
+            {
+              "t": "strong",
+              "v": "Color Palette:"
+            },
+            {
+              "t": "text",
+              "v": " Champagne Gold, Cream, Ivory, Honey, Warm Beige."
+            }
+          ],
+          [
+            {
+              "t": "strong",
+              "v": "Background:"
+            },
+            {
+              "t": "text",
+              "v": " Transparent, if verified in the supplied PNG file."
+            }
+          ],
+          [
+            {
+              "t": "strong",
+              "v": "Intended Use:"
+            },
+            {
+              "t": "text",
+              "v": " Preparing artwork for printing on apparel, accessories, and other suitable products."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "h2",
+        "content": [
+          {
+            "t": "text",
+            "v": "⚠️ IMPORTANT — DIGITAL PRODUCT ONLY"
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "strong",
+            "v": "THIS LISTING IS FOR A DIGITAL FILE, NOT A PHYSICAL PRODUCT."
           }
         ]
       },
@@ -3587,7 +4264,66 @@ window.TQR_PRODUCTS = [
         "content": [
           {
             "t": "text",
-            "v": "Luxury Art • Golden Aesthetic • Realistic Illustration • Whimsical Fantasy • Elegant Design • Butterfly Art • Animal-Inspired Artwork."
+            "v": "Please read carefully before purchasing:"
+          }
+        ]
+      },
+      {
+        "type": "ul",
+        "items": [
+          [
+            {
+              "t": "text",
+              "v": "You are purchasing a digital artwork file only."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "No physical products will be shipped."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "T-shirts, hoodies, tote bags, posters, and other physical items are NOT included."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "Any product mockups are for demonstration purposes only."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "The purchase does not include a finished or printed product."
+            }
+          ],
+          [
+            {
+              "t": "text",
+              "v": "You will receive a digital PNG artwork file for your creative printing projects."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "strong",
+            "v": "IMPORTANT: DIGITAL DOWNLOAD ONLY — NO PHYSICAL ITEMS WILL BE DELIVERED."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "content": [
+          {
+            "t": "text",
+            "v": "Please check compatibility with your preferred printing service before production."
           }
         ]
       },
@@ -3596,7 +4332,7 @@ window.TQR_PRODUCTS = [
         "content": [
           {
             "t": "text",
-            "v": "💫 The Story Behind the Design"
+            "v": "💎 The Inspiration Behind the Design"
           }
         ]
       },
@@ -3605,7 +4341,7 @@ window.TQR_PRODUCTS = [
         "content": [
           {
             "t": "text",
-            "v": "Legend says that in a garden where golden sunlight never fades, lives an extraordinary cat — the guardian of a world filled with wonder."
+            "v": "In a magical world filled with golden light, an elegant cat discovers a garden of shimmering butterflies."
           }
         ]
       },
@@ -3614,7 +4350,7 @@ window.TQR_PRODUCTS = [
         "content": [
           {
             "t": "text",
-            "v": "Its soft golden fur holds the warmth of the sun, while its amber eyes reflect a thousand little miracles. Adorned with delicate golden jewelry, the cat carries the elegance of an ancient magical kingdom."
+            "v": "With its soft golden fur, sparkling jewelry, and gentle amber eyes, the cat embodies grace, beauty, curiosity, and quiet confidence."
           }
         ]
       },
@@ -3623,7 +4359,7 @@ window.TQR_PRODUCTS = [
         "content": [
           {
             "t": "text",
-            "v": "Graceful butterflies travel from every corner of the enchanted garden to gather around their feline guardian. Whenever the cat raises its paw, tiny golden sparks appear in the air, as if nature itself were greeting its little royal companion."
+            "v": "As delicate butterflies dance around its raised paw, tiny golden particles illuminate the scene, creating an atmosphere of elegance and wonder."
           }
         ]
       },
@@ -3631,39 +4367,12 @@ window.TQR_PRODUCTS = [
         "type": "p",
         "content": [
           {
-            "t": "text",
-            "v": "This magical image symbolizes harmony, tenderness, inner grace, and the beauty hidden in the smallest details."
-          }
-        ]
-      },
-      {
-        "type": "p",
-        "content": [
-          {
-            "t": "strong",
-            "v": "Let your style shine with golden elegance. A little magic in every detail."
-          }
-        ]
-      },
-      {
-        "type": "h2",
-        "content": [
-          {
-            "t": "text",
-            "v": "Product Details"
-          }
-        ]
-      },
-      {
-        "type": "p",
-        "content": [
-          {
-            "t": "strong",
-            "v": "Design Name:"
+            "t": "em",
+            "v": "Golden Butterfly Cat"
           },
           {
             "t": "text",
-            "v": " Golden Butterfly Cat — Golden Elegance"
+            "v": " celebrates the timeless charm of cats, the delicate beauty of nature, and the enchanting world of artistic imagination."
           }
         ]
       },
@@ -3672,76 +4381,7 @@ window.TQR_PRODUCTS = [
         "content": [
           {
             "t": "strong",
-            "v": "Product Type:"
-          },
-          {
-            "t": "text",
-            "v": " Artistic Print Design"
-          }
-        ]
-      },
-      {
-        "type": "p",
-        "content": [
-          {
-            "t": "strong",
-            "v": "Theme:"
-          },
-          {
-            "t": "text",
-            "v": " Cat, Golden Jewelry, Butterflies, Fantasy, Magic"
-          }
-        ]
-      },
-      {
-        "type": "p",
-        "content": [
-          {
-            "t": "strong",
-            "v": "Main Colors:"
-          },
-          {
-            "t": "text",
-            "v": " Gold, Cream, Honey, Caramel, Beige"
-          }
-        ]
-      },
-      {
-        "type": "p",
-        "content": [
-          {
-            "t": "strong",
-            "v": "Recommended Garment Colors:"
-          },
-          {
-            "t": "text",
-            "v": " Black, White, Ivory, Cream, Beige"
-          }
-        ]
-      },
-      {
-        "type": "p",
-        "content": [
-          {
-            "t": "strong",
-            "v": "Suggested Applications:"
-          },
-          {
-            "t": "text",
-            "v": " T-shirts, Hoodies, Sweatshirts, Tote Bags, and Accessories"
-          }
-        ]
-      },
-      {
-        "type": "p",
-        "content": [
-          {
-            "t": "strong",
-            "v": "Ideal For:"
-          },
-          {
-            "t": "text",
-            "v": " Cat lovers, fans of elegant aesthetics, golden accents, and distinctive artistic designs."
+            "v": "Golden Butterfly Cat — Where Elegance Meets Magic."
           }
         ]
       }

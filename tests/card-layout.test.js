@@ -165,16 +165,16 @@ document.listeners.DOMContentLoaded();
 const firstPage = catalog.innerHTML;
 assert.equal((firstPage.match(/<article class="card"[\s\S]*?<\/article>/g) || []).length, 8,
   'the first page renders eight equal-height cards');
-assert.equal(count.textContent, '10 products', 'catalog count includes cards on the next page');
+assert.equal(count.textContent, '11 products', 'catalog count includes cards on the next page');
 const nextPage = pagination.innerHTML.match(/<button\b[^>]*data-p="(\d+)"[^>]*aria-label="Next page"/);
 assert.ok(nextPage, 'catalog exposes pagination for the remaining cards');
 const nextButton = { getAttribute(name) { return name === 'data-p' ? nextPage[1] : null; } };
 pagination.listeners.click({ target: { closest() { return nextButton; } } });
 const secondPage = catalog.innerHTML;
-assert.equal((secondPage.match(/<article class="card"[\s\S]*?<\/article>/g) || []).length, 2,
-  'the second page renders the final two equal-height cards');
+assert.equal((secondPage.match(/<article class="card"[\s\S]*?<\/article>/g) || []).length, 3,
+  'the second page renders the final three equal-height cards');
 const cards = [...(firstPage + secondPage).matchAll(/<article class="card"[\s\S]*?<\/article>/g)].map(match => match[0]);
-assert.equal(cards.length, 10, 'all ten equal-height cards are reachable across pages');
+assert.equal(cards.length, 11, 'all eleven equal-height cards are reachable across pages');
 
 for (const product of products) {
   const card = cards.find(markup => markup.includes('id="product-card-' + product.id + '"'));

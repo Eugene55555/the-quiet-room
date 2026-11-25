@@ -222,28 +222,29 @@ function click(gallery) {
   return { prevented, stopped };
 }
 
-const expectedCounts = { 'crystal-winter-fawn': 6, 'christmas-little-fawn': 4, 'autumn-spirit': 4, 'arctic-phantom-iqc': 4, 'arctic-phantom-xkw': 3, 'white-wolf': 4, 'baby-tiger': 4, 'golden-butterfly-cat': 3, 'enchanted-rainbow-cat': 3, 'cat-tree-dreams': 3 };
+const expectedCounts = { 'golden-royal-panther': 4, 'crystal-winter-fawn': 6, 'christmas-little-fawn': 4, 'autumn-spirit': 4, 'arctic-phantom-iqc': 4, 'arctic-phantom-xkw': 3, 'white-wolf': 4, 'baby-tiger': 4, 'golden-butterfly-cat': 3, 'enchanted-rainbow-cat': 3, 'cat-tree-dreams': 3 };
 assert.deepEqual(Object.fromEntries(products.map(product => [product.id, imagesOf(product).length])), expectedCounts,
-  'home catalog covers all 38 source images in source order');
-assert.equal(products.reduce((sum, product) => sum + imagesOf(product).length, 0), 38);
+  'home catalog preserves all galleries in product order, including destination-only extras');
+assert.equal(products.reduce((sum, product) => sum + imagesOf(product).length, 0), 42,
+  'home catalog includes 42 images across all eleven products');
 
 const catalog = render('catalog', products, siteRoot);
 const firstPageCards = cardsFromMarkup(catalog.markup);
 assert.equal(firstPageCards.length, 8, 'first catalog page renders the eight-card page size');
-assert.equal((catalog.markup.match(/<img\b[^>]*class="card-slide/g) || []).length, 32,
-  'first catalog page renders all source images for its eight cards');
-assert.equal(catalog.count.textContent, '10 products', 'catalog count includes products on later pages');
+assert.equal((catalog.markup.match(/<img\b[^>]*class="card-slide/g) || []).length, 33,
+  'first catalog page renders every gallery image for its eight cards');
+assert.equal(catalog.count.textContent, '11 products', 'catalog count includes products on later pages');
 const nextPage = catalog.pagination.innerHTML.match(/<button\b[^>]*data-p="(\d+)"[^>]*aria-label="Next page"/);
 assert.ok(nextPage, 'catalog exposes a next-page control for the remaining products');
 const nextButton = { getAttribute(name) { return name === 'data-p' ? nextPage[1] : null; } };
 catalog.pagination.listeners.click({ target: { closest() { return nextButton; } } });
 const secondPageMarkup = catalog.catalog.innerHTML;
 const secondPageCards = cardsFromMarkup(secondPageMarkup);
-assert.equal(secondPageCards.length, 2, 'second catalog page renders the remaining two cards');
-assert.equal((secondPageMarkup.match(/<img\b[^>]*class="card-slide/g) || []).length, 6,
+assert.equal(secondPageCards.length, 3, 'second catalog page renders the remaining three cards');
+assert.equal((secondPageMarkup.match(/<img\b[^>]*class="card-slide/g) || []).length, 9,
   'second catalog page renders every image for the remaining cards');
 const allCards = new Map([...firstPageCards, ...secondPageCards].map(card => [card.id, card]));
-assert.equal(allCards.size, 10, 'pagination exposes all ten catalog cards');
+assert.equal(allCards.size, 11, 'pagination exposes all eleven catalog cards');
 
 for (const product of products) {
   const card = allCards.get(product.id);

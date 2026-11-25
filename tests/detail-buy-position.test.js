@@ -12,7 +12,7 @@ const cssSource = fs.readFileSync(require.resolve('../assets/style.css'), 'utf8'
 const dataContext = { window: {} };
 vm.runInNewContext(fs.readFileSync(require.resolve('../assets/data.js'), 'utf8'), dataContext);
 const products = dataContext.window.TQR_PRODUCTS;
-assert.equal(products.length, 10, 'all ten live detail pages share the same renderer');
+assert.equal(products.length, 11, 'all eleven live detail pages share the same renderer');
 
 function makeElement() {
   const classes = new Set();
@@ -185,6 +185,7 @@ for (const product of products) {
 }
 
 const expectedTitles = {
+  'golden-royal-panther': 'Golden Royal Panther — Luxury Christmas Digital PNG PDF',
   'crystal-winter-fawn': 'Crystal Winter Fawn — Magical Ice Deer Digital PNG Art PNG PDF',
   'christmas-little-fawn': 'Christmas Little Fawn — Magical Holiday Deer PNG Design PNG PDF',
   'autumn-spirit': 'Autumn Spirit — Elegant Fox Wildlife Art Print PDF PNG',
@@ -247,17 +248,17 @@ catalogDocument.listeners.DOMContentLoaded();
 const firstCatalogPage = catalogPage.innerHTML;
 assert.equal((firstCatalogPage.match(/<article class="card"[\s\S]*?<\/article>/g) || []).length, 8,
   'the first catalog page renders eight cards');
-assert.equal(catalogCount.textContent, '10 products', 'catalog count includes products on later pages');
+assert.equal(catalogCount.textContent, '11 products', 'catalog count includes products on later pages');
 const nextPage = catalogPagination.innerHTML.match(/<button\b[^>]*data-p="(\d+)"[^>]*aria-label="Next page"/);
 assert.ok(nextPage, 'catalog provides a next-page control');
 const nextButton = { getAttribute(name) { return name === 'data-p' ? nextPage[1] : null; } };
 catalogPagination.listeners.click({ target: { closest() { return nextButton; } } });
 const secondCatalogPage = catalogPage.innerHTML;
-assert.equal((secondCatalogPage.match(/<article class="card"[\s\S]*?<\/article>/g) || []).length, 2,
-  'the second catalog page renders the remaining two cards');
+assert.equal((secondCatalogPage.match(/<article class="card"[\s\S]*?<\/article>/g) || []).length, 3,
+  'the second catalog page renders the remaining three cards');
 const catalogMarkup = firstCatalogPage + secondCatalogPage;
-assert.equal((catalogMarkup.match(/class="card-btn"/g) || []).length, 10,
-  'all ten catalog cards across both pages keep their Buy buttons');
+assert.equal((catalogMarkup.match(/class="card-btn"/g) || []).length, 11,
+  'all eleven catalog cards across both pages keep their Buy buttons');
 for (const product of products) {
   const expectedTitle = expectedTitles[product.id];
   assert.ok(catalogMarkup.includes('class="card-title" href="product.html?id=' + product.id + '">' + expectedTitle + '</a>'),
@@ -351,9 +352,9 @@ assert.match(cssSource, /@media\s*\(min-width:\s*641px\)\s*and\s*\(max-height:\s
 
 for (const path of ['../index.html', '../product.html']) {
   const html = fs.readFileSync(require.resolve(path), 'utf8');
-  assert.match(html, /assets\/data\.js\?v=25/, path + ' loads the cache-busted ten source titles');
+  assert.match(html, /assets\/data\.js\?v=26/, path + ' loads the cache-busted eleven source titles');
   assert.match(html, /assets\/main\.js\?v=41/, path + ' loads the cache-busted relocated-button renderer');
   assert.match(html, /assets\/style\.css\?v=42/, path + ' loads the cache-busted full-fit product image CSS');
 }
 
-process.stdout.write('PASS all ten detail pages keep the Buy button below the sticky gallery and the full description in the right column, with checkout links and catalog cards unchanged\n');
+process.stdout.write('PASS all eleven detail pages keep the Buy button below the sticky gallery and the full description in the right column, with checkout links and catalog cards unchanged\n');

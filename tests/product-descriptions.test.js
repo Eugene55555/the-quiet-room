@@ -17,6 +17,7 @@ vm.runInNewContext(dataSource, dataContext);
 const products = dataContext.window.TQR_PRODUCTS;
 
 const expected = {
+  'golden-royal-panther': { h1: 1, h2: 6, p: 18, ul: 4, li: 31, strong: 22, em: 1, br: 0, h3: 0, ol: 0 },
   'crystal-winter-fawn': { h1: 1, h2: 6, p: 18, ul: 4, li: 30, strong: 20, em: 1, br: 0, h3: 0, ol: 0 },
   'christmas-little-fawn': { h1: 1, h2: 6, p: 18, ul: 4, li: 28, strong: 19, em: 1, br: 0, h3: 0, ol: 0 },
   'autumn-spirit': { h1: 1, h2: 5, h3: 1, p: 12, ul: 4, li: 22, strong: 16, em: 0, br: 0, ol: 0 },
@@ -24,12 +25,18 @@ const expected = {
   'arctic-phantom-xkw': { h1: 1, h2: 6, p: 16, ul: 3, li: 19, strong: 16, em: 1, br: 0, h3: 0, ol: 0 },
   'white-wolf': { h1: 1, h2: 6, p: 14, ul: 3, li: 16, strong: 14, em: 2, br: 0, h3: 0, ol: 0 },
   'baby-tiger': { h1: 1, h2: 6, p: 16, ul: 3, li: 20, strong: 16, em: 2, br: 0, h3: 0, ol: 0 },
-  'golden-butterfly-cat': { h1: 1, h2: 6, p: 19, ul: 2, li: 12, strong: 15, em: 1, br: 0, h3: 0, ol: 0 },
+  'golden-butterfly-cat': { h1: 0, h2: 6, p: 18, ul: 4, li: 29, strong: 20, em: 1, br: 0, h3: 0, ol: 0 },
   'enchanted-rainbow-cat': { h1: 1, h2: 6, p: 18, ul: 4, li: 29, strong: 20, em: 1, br: 0, h3: 0, ol: 0 },
   'cat-tree-dreams': { h1: 1, h2: 6, p: 16, ul: 3, li: 18, strong: 15, em: 2, br: 0, h3: 0, ol: 0 }
 };
 
 const expectedImages = {
+  'golden-royal-panther': [
+    ['assets/img/golden-royal-panther-1.webp', '7ed3cfd35f6c48bab86d2ae3ca74f12f4e7236f437f72153ea83ca7853b7ab41'],
+    ['assets/img/golden-royal-panther-2.webp', '58dacc722a08929417afc3d500d0ad577213fc9cc0c1cced8277bdd8054a3455'],
+    ['assets/img/golden-royal-panther-3.webp', 'db2427767766f9d30a661b39fa516623c898908766dece5c3dc89bac7d82d7f4'],
+    ['assets/img/golden-royal-panther-4.webp', 'cc8f3bd8062cc840b039cb0afb98d9c61bd23f1230608751bd7f471300cff064']
+  ],
   'crystal-winter-fawn': [
     ['assets/img/crystal-winter-fawn-1.webp', '9f37f6ad0c82d62a8f80a3e0fa44305e7067bf7e9344dd2b9d54e39c2ec8a5e0'],
     ['assets/img/crystal-winter-fawn-2.webp', '390a614f9f81392124939d2ad1ba12bcd38c3ec882eb8f89960b4009875ae8d3'],
@@ -91,6 +98,7 @@ const expectedImages = {
 };
 
 const sourceSignals = {
+  'golden-royal-panther': ['✨ Design Highlights', '👕 Suggested Applications', '📐 Digital File Specifications', '⚠️ IMPORTANT — DIGITAL PRODUCT ONLY', '💎 The Inspiration Behind the Design', 'Golden Royal Panther — Where Wild Power Meets Christmas Luxury.', 'File Format: PNG', '4500 × 5786 pixels'],
   'crystal-winter-fawn': ['✨ Design Highlights', '👕 Suggested Applications', '📐 Digital File Specifications', '⚠️ IMPORTANT — DIGITAL PRODUCT ONLY', '❄️ The Story Behind the Design', 'Crystal Winter Fawn — Where Winter Magic Comes to Life.'],
   'christmas-little-fawn': ['✨ Design Highlights', '👕 Suggested Applications', '📐 Digital File Specifications', '⚠️ IMPORTANT — DIGITAL DOWNLOAD ONLY', '🎄 The Story Behind the Design', 'Christmas Little Fawn — A Little Magic, A Lot of Christmas Joy!'],
   'autumn-spirit': ['✨ Design Features', '👕 Suggested Uses', '📐 Digital File Specifications', '⚠️ IMPORTANT — DIGITAL DOWNLOAD ONLY', '🍂 The Inspiration Behind the Artwork', 'Autumn Spirit — Where wild beauty meets autumn magic.'],
@@ -98,7 +106,7 @@ const sourceSignals = {
   'arctic-phantom-xkw': ['✨ Design Highlights', '👕 Suggested Applications', '📐 Digital File Specifications', '⚠️ IMPORTANT — DIGITAL PRODUCT ONLY', '💎 The Inspiration Behind the Design', 'Arctic Phantom — Silent strength. Untamed beauty.'],
   'white-wolf': ['✨ Design Highlights', '👕 Suggested Applications', '📐 Digital File Specifications', '⚠️ IMPORTANT — DIGITAL PRODUCT ONLY', '💎 The Inspiration Behind the Design', 'Arctic Spirit — The untamed beauty of the wild.'],
   'baby-tiger': ['✨ Design Highlights', '👕 Suggested Applications', '📐 Digital File Specifications', '⚠️ IMPORTANT — DIGITAL PRODUCT ONLY', '💫 The Inspiration Behind the Design', 'Wild at heart. Beautiful by nature.'],
-  'golden-butterfly-cat': ['✨ Design Highlights', '👕 Perfect For', '🎨 Art Style & Inspiration', '💫 The Story Behind the Design', 'Product Details', 'Ideal For: Cat lovers, fans of elegant aesthetics, golden accents, and distinctive artistic designs.'],
+  'golden-butterfly-cat': ['✨ Design Highlights', '👕 Suggested Applications', '📐 Digital File Specifications', '⚠️ IMPORTANT — DIGITAL PRODUCT ONLY', '💎 The Inspiration Behind the Design', 'Golden Butterfly Cat — Where Elegance Meets Magic.', 'File Format: PNG', '5000 × 5000 pixels'],
   'enchanted-rainbow-cat': ['✨ Design Highlights', '👕 Suggested Applications', '📐 Digital File Specifications', '⚠️ IMPORTANT — DIGITAL PRODUCT ONLY', '🌈 The Inspiration Behind the Design', 'Rainbow Autumn Cat — Where Autumn Colors Meet Feline Magic.'],
   'cat-tree-dreams': ['✨ Design Highlights', '👕 Suggested Applications', '📐 Digital File Specifications', '⚠️ IMPORTANT — DIGITAL PRODUCT ONLY', '💫 The Inspiration Behind the Design', 'A little magic. A world of color. An extraordinary spirit.']
 };
@@ -211,7 +219,7 @@ function counts(blocks) {
   return result;
 }
 
-assert.equal(products.length, 10, 'catalog has ten source products');
+assert.equal(products.length, 11, 'catalog has eleven source products');
 
 for (const product of products) {
   assert.ok(Array.isArray(product.description) && product.description.length > 0,
@@ -330,4 +338,4 @@ for (const selector of ['.product-desc h2', '.product-desc p', '.product-desc ul
   assert.ok(cssSource.includes(selector), 'detail description styles ' + selector);
 }
 
-process.stdout.write('PASS ten detail pages render complete structured source descriptions safely\n');
+process.stdout.write('PASS eleven detail pages render complete structured source descriptions safely\n');
